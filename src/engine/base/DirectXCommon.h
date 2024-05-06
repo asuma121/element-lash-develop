@@ -42,7 +42,7 @@ public:
 	/// <summary>
 	///初期化
 	/// </summary>
-	void Initialize(MyEngine::WinApp* winApp);
+	void Initialize(WinApp* winApp);
 
 	/// <summary>
 	///初期化関連
@@ -60,19 +60,9 @@ public:
 	void PreDraw();
 
 	/// <summary>
-	///描画前処理
-	/// </summary>
-	void PreDraw1();
-
-	/// <summary>
 	///描画後処理
 	/// </summary>
 	void PostDraw();
-
-	/// <summary>
-	///描画後処理
-	/// </summary>
-	void PostDraw1();
 
 	/// <summary>
 	///imgui用のヒープ生成
@@ -83,11 +73,6 @@ public:
 	///imgui初期化
 	/// </summary>
 	void InitializeImgui();
-
-	/// <summary>
-	///imgui終了
-	/// </summary>
-	void EndImgui();
 
 	/// <summary>
 	///デバイス取得
@@ -137,7 +122,8 @@ public:
 public:
 	//メンバ変数
 	//ウィンドウ
-	MyEngine::WinApp* winApp_;
+	WinApp* winApp_;
+
 private:
 	//DirectX
 	ComPtr<ID3D12Device> device;
@@ -160,11 +146,9 @@ private:
 	D3D12_RESOURCE_BARRIER barrierDesc{};
 	//imgui用ヒープ
 	ComPtr<ID3D12DescriptorHeap> _heapForImgui;
-public:
+private:
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 	std::vector<ComPtr<ID3D12Resource>>backBuffers;
-	/*std::vector<ComPtr<IDXGIAdapter4>>adapters;
-	ComPtr<IDXGIAdapter4> tmpAdapter;*/
 
 	UINT64 fenceVal = 0;
 };

@@ -6,9 +6,6 @@
  */
 
 #include "DirectXCommon.h"
-//#include "imgui.h"
-//#include <imgui_impl_win32.h>
-//#include <imgui_impl_dx12.h>
 
 //シングルトンインスタンスを取得
 DirectXCommon* DirectXCommon::GetInstance()
@@ -19,11 +16,10 @@ DirectXCommon* DirectXCommon::GetInstance()
 
 DirectXCommon::~DirectXCommon()
 {
-	/*delete commandList.Get();*/
 }
 
 //初期化処理
-void DirectXCommon::Initialize(MyEngine::WinApp* winApp)
+void DirectXCommon::Initialize(WinApp* winApp)
 {
 	winApp_ = winApp;
 
@@ -39,22 +35,8 @@ void DirectXCommon::Initialize(MyEngine::WinApp* winApp)
 	InitializeDepthBuffer();
 	//フェンス生成
 	InitializeFence();
-
-	//imgui初期化
-	/*InitializeImgui();*/
-	/*if (ImGui::CreateContext() == nullptr)
-	{
-		assert(0);
-	}
-	[ImGui::] ;
-	_heapForImgui = CreateDescriptorForImgui();*/
-	/*if (_heapForImgui == nullptr)
-	{
-		return false;
-	}*/
 }
 
-#pragma region デバイス初期化
 void DirectXCommon::InitializeDevice()
 {
 	HRESULT result;
@@ -127,8 +109,7 @@ void DirectXCommon::InitializeDevice()
 		}
 	}
 }
-#pragma endregion
-#pragma region コマンドリスト初期化
+
 void DirectXCommon::InitializeCommand()
 {
 	HRESULT result;
@@ -153,8 +134,7 @@ void DirectXCommon::InitializeCommand()
 	result = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
 	assert(SUCCEEDED(result));
 }
-#pragma endregion
-#pragma region スワップチェーン
+
 void DirectXCommon::InitializeSwapchain()
 {
 	HRESULT result;
@@ -173,7 +153,7 @@ void DirectXCommon::InitializeSwapchain()
 	//スワップチェーンの生成 
 	result = dxgiFactory->CreateSwapChainForHwnd(
 		commandQueue.Get(),
-		winApp_->hwnd,
+		winApp_->GetHwnd(),
 		&swapChainDesc,
 		nullptr,
 		nullptr,
@@ -182,8 +162,7 @@ void DirectXCommon::InitializeSwapchain()
 	swapchain1.As(&swapChain);
 	assert(SUCCEEDED(result));
 }
-#pragma endregion
-#pragma region レンダーターゲットビュー 
+
 void DirectXCommon::InitializeRenderTargetView()
 {
 	// デスクリプタヒープの設定 
@@ -214,8 +193,7 @@ void DirectXCommon::InitializeRenderTargetView()
 		device->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);
 	}
 }
-#pragma endregion
-#pragma region 深度バッファ
+
 void DirectXCommon::InitializeDepthBuffer()
 {
 	HRESULT result;
@@ -260,24 +238,16 @@ void DirectXCommon::InitializeDepthBuffer()
 		dsvHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 }
-#pragma endregion
-#pragma region フェンス
+
 void DirectXCommon::InitializeFence()
 {
 	HRESULT result;
 	//フェンスの生成
 	result = device->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 }
-#pragma endregion
 
-#pragma region 描画前処理
 void DirectXCommon::PreDraw()
 {
-	// imgui開始
-	/*ImGui_ImplDX12_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();*/
-
 	//バックバッファの番号を取得(2つなので0番か1番)
 	UINT bbIndex = GetSwapChain()->GetCurrentBackBufferIndex();
 
@@ -318,20 +288,10 @@ void DirectXCommon::PreDraw()
 	scissorRect.bottom = scissorRect.top + window_height;
 	GetCommandList()->RSSetScissorRects(1, &scissorRect);
 }
-void DirectXCommon::PreDraw1()
-{
-}
-#pragma endregion 
-#pragma region 描画後処理
+
 void DirectXCommon::PostDraw()
 {
 	HRESULT result;
-
-	// imgui描画
-	/*ImGui::Render();
-	ID3D12DescriptorHeap* ppHeaps[] = { _heapForImgui.Get() };
-	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList.Get());*/
 
 	// 5. リソースバリアを書き込み禁止に
 	barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;	//描画状態から
@@ -371,10 +331,7 @@ void DirectXCommon::PostDraw()
 	result = GetCommandList()->Reset(GetCommandAllocator(), nullptr);
 	assert(SUCCEEDED(result));
 }
-void DirectXCommon::PostDraw1()
-{
-}
-#pragma endregion
+
 ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorForImgui()
 {
 	ComPtr<ID3D12DescriptorHeap>ret;
@@ -406,24 +363,4 @@ void DirectXCommon::InitializeImgui()
 	DXGI_SWAP_CHAIN_DESC swcDesc = {};
 	result = swapChain->GetDesc(&swcDesc);
 	assert(SUCCEEDED(result));
-
-	/*if (ImGui::CreateContext() == nullptr) {
-		assert(0);
-	}
-	if (!ImGui_ImplWin32_Init(winApp_->GetHwnd())) {
-		assert(0);
-	}
-	if (!ImGui_ImplDX12_Init(
-		GetDevice(), swcDesc.BufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, _heapForImgui.Get(),
-		_heapForImgui->GetCPUDescriptorHandleForHeapStart(),
-		_heapForImgui->GetGPUDescriptorHandleForHeapStart())) {
-		assert(0);
-	}*/
-}
-
-void DirectXCommon::EndImgui()
-{
-	/*ImGui_ImplDX12_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();*/
 }

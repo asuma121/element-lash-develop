@@ -6,7 +6,6 @@
  */
 
 #pragma once
-//#include "dxgidebug.h"
 #include <d3d12.h>
 
 class Message
@@ -23,11 +22,7 @@ public:
 	/// </summary>
 	bool Update();
 
-	/// <summary>
-	///呼び出した時のエラーを出す
-	/// </summary>
-	bool CheckError();
-public:
+private:
 	MSG msg{};
 };
 

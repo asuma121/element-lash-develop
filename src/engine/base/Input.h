@@ -33,7 +33,7 @@ public:
 	/// <summary>
 	///初期化
 	/// </summary>
-	void Initialize(MyEngine::WinApp* winApp);
+	void Initialize(WinApp* winApp);
 
 	/// <summary>
 	///更新
@@ -50,9 +50,9 @@ public:
 	/// </summary>
 	bool TriggerKey(BYTE keyNumber);
 
-public:
+private:
 	//ウィンドウ
-	MyEngine::WinApp* winApp_;
+	WinApp* winApp_;
 	ComPtr<IDirectInput8> directInput;
 	//キーボード
 	ComPtr<IDirectInputDevice8> keyboard;

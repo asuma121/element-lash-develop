@@ -14,7 +14,7 @@ Input* Input::GetInstance()
 	return &instance;
 }
 
-void Input::Initialize(MyEngine::WinApp* winApp)
+void Input::Initialize(WinApp* winApp)
 {
 	HRESULT result;
 	winApp_ = winApp;
@@ -22,7 +22,7 @@ void Input::Initialize(MyEngine::WinApp* winApp)
 	//キーボードの設定
 	//DirectInputの初期化
 	result = DirectInput8Create(
-		winApp->w.hInstance,
+		winApp->GetWNDCLASSEX().hInstance,
 		DIRECTINPUT_VERSION,
 		IID_IDirectInput8,
 		(void**)&directInput,
@@ -40,7 +40,7 @@ void Input::Initialize(MyEngine::WinApp* winApp)
 
 	//排他制御レベルのセット
 	result = keyboard->SetCooperativeLevel(
-		winApp->hwnd,
+		winApp->GetHwnd(),
 		DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY
 	);
 	assert(SUCCEEDED(result));

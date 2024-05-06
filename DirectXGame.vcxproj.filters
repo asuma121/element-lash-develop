@@ -19,6 +19,84 @@
     <Filter Include="ヘッダー ファイル\base">
       <UniqueIdentifier>{a833bbf5-2065-4607-a1c2-6cce95348ebc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\math">
+      <UniqueIdentifier>{bec5ddb1-407b-4bb1-8edc-888c735e88c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\math">
+      <UniqueIdentifier>{e0c12247-727c-4201-a001-ab562da3a498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object">
+      <UniqueIdentifier>{cb3e7c82-681f-462e-aa64-938a5821b239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\object">
+      <UniqueIdentifier>{6034c2d8-00bc-4f68-87f9-b060751dfae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\object">
+      <UniqueIdentifier>{372a2ed5-4092-4c18-bba6-01664f805cb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\postEffect">
+      <UniqueIdentifier>{e182f841-6305-43e4-889e-a79620907675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\gameObject">
+      <UniqueIdentifier>{a425f7cb-c99b-4ee1-aaeb-554b5bcf15e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\gameObject">
+      <UniqueIdentifier>{d2b5cfd3-23d4-4ba0-bef7-59029fa5b27f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\gameObject\light">
+      <UniqueIdentifier>{26f6aa5c-3ba1-4460-8aa7-36008f8258d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\gameObject\light">
+      <UniqueIdentifier>{87e6f561-a10b-45a4-ae4f-d704e92ed4c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collision">
+      <UniqueIdentifier>{1c4eeb49-ab38-41e5-b762-85c77fd2e40a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\collision">
+      <UniqueIdentifier>{12806c5f-eb35-438c-8459-1902f8e63f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\particle">
+      <UniqueIdentifier>{ebeaa0bb-1344-4914-b20c-8f25fd823e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\particle">
+      <UniqueIdentifier>{b69072c5-c7e6-48c9-8908-59db64d8ecd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\object\sprite">
+      <UniqueIdentifier>{2917f2ee-de39-4f0b-a38c-d0d24b5d8133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\particle">
+      <UniqueIdentifier>{7ed36b95-0575-41b7-86b5-5644fb1305f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\particle\explosionParticle1">
+      <UniqueIdentifier>{00762889-1078-4443-b585-511ad0e19216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\particle\explosionParticle2">
+      <UniqueIdentifier>{3b575be2-679d-4dcd-ba07-233c554feee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\particle\playerBulletParticle">
+      <UniqueIdentifier>{94878923-6de2-430b-8975-589fe11fa482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\particle\elecParticle">
+      <UniqueIdentifier>{61577fed-c210-4447-bc14-450af4f701c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\particle\enemyBulletParticle">
+      <UniqueIdentifier>{cf7bc162-a4b9-49bb-8134-08509ea27c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{532c9c11-db54-4135-94af-d64385458aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene">
+      <UniqueIdentifier>{f7429b0c-231f-4b72-8725-3bd5305100ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\postEffect">
+      <UniqueIdentifier>{6f08a49c-2f86-409e-922c-a1690068dd87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\postEffect">
+      <UniqueIdentifier>{4d0f48d4-06b9-4d2f-9b72-ddcae5a20fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\postEffect\shadowMap">
+      <UniqueIdentifier>{38b7a643-ef18-4965-9cad-b1a8ac5d0245}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\main.cpp">
@@ -39,6 +117,162 @@
     <ClCompile Include="src\engine\base\Message.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\mathOriginal.cpp">
+      <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Matrix4.cpp">
+      <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\base\ImGuiManager.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\base\TextureManager.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\Sprite.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\FbxLoader.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\FbxModel.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\BillboardSprite.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\BillboardSpriteModel.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\Camera.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\light\DirectionalLight.cpp">
+      <Filter>ソース ファイル\gameObject\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\light\Light.cpp">
+      <Filter>ソース ファイル\gameObject\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\light\LightGroup.cpp">
+      <Filter>ソース ファイル\gameObject\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\light\PointLight.cpp">
+      <Filter>ソース ファイル\gameObject\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\light\SpotLight.cpp">
+      <Filter>ソース ファイル\gameObject\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\FbxObject3D.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\base\JSONLoader.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderCubeModel.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderCubeObject.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderFrustumModel.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderFrustumObject.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderManager.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderPlaneModel.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderPlaneObject.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderSphereModel.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\collision\ColliderSphereObject .cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\particle\ElecParticle.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\particle\EnemyBulletParticle.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\particle\ExplosionParticle1.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\particle\ExplosionParticle2.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\particle\FireParticle.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\particle\PlayerBulletParticle.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\LockOn.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\Player.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\PlayerStateManager.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\PlayerBullet.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\Enemy.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\EnemyBullet.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\MiniEnemy.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\Plane.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\TutorialEnemy.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\UI.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\scene\ClearScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\scene\GameScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\scene\PhaseList.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\scene\SceneManager.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\scene\TitleScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\scene\TutorialScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\postEffect\ShadowMap.cpp">
+      <Filter>ソース ファイル\postEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\ObjModel.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\object\ObjObject3D.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\base\FPS.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\base\WinApp.h">
@@ -56,5 +290,242 @@
     <ClInclude Include="src\engine\base\Message.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\mathOriginal.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Matrix4.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\Sprite.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\FbxLoader.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\FbxModel.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\BillboardSprite.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\BillboardSpriteModel.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\Camera.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\light\CircleShadow.h">
+      <Filter>ヘッダー ファイル\gameObject\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\light\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\gameObject\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\light\Light.h">
+      <Filter>ヘッダー ファイル\gameObject\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\light\LightGroup.h">
+      <Filter>ヘッダー ファイル\gameObject\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\light\PointLight.h">
+      <Filter>ヘッダー ファイル\gameObject\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\light\SpotLight.h">
+      <Filter>ヘッダー ファイル\gameObject\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\FbxObject3D.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\base\JSONLoader.h">
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderCubeModel.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderCubeObject.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderFrustumModel.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderFrustumObject.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderManager.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderPlaneModel.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderPlaneObject.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderSphereModel.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\collision\ColliderSphereObject.h">
+      <Filter>ヘッダー ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\ElecParticle.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\EnemyBulletParticle.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\ExplosionParticle1.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\ExplosionParticle2.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\FireParticle.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\PlayerBulletParticle.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\LockOn.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\Player.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\PlayerStateManager.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\Enemy.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\MiniEnemy.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\Plane.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\TutorialEnemy.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\UI.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\scene\ClearScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\scene\GameScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\scene\PhaseList.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\scene\TutorialScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\postEffect\ShadowMap.h">
+      <Filter>ヘッダー ファイル\postEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\ObjModel.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\object\ObjObject3D.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\base\FPS.h">
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="external\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj.filters" />
+    <None Include=".editorconfig" />
+    <None Include="Resources\Shaders\Sprite\SpriteHeader.hlsli">
+      <Filter>リソース ファイル\object\sprite</Filter>
+    </None>
+    <None Include="Resources\Shaders\ExplosionParticle1\ExplosionParticle1Header.hlsli">
+      <Filter>リソース ファイル\particle\explosionParticle1</Filter>
+    </None>
+    <None Include="Resources\Shaders\ExplosionParticle2\ExplosionParticle2Header.hlsli">
+      <Filter>リソース ファイル\particle\explosionParticle2</Filter>
+    </None>
+    <None Include="Resources\Shaders\EnemyBulletParticle\EnemyBulletParticleHeader.hlsli">
+      <Filter>リソース ファイル\particle\enemyBulletParticle</Filter>
+    </None>
+    <None Include="Resources\Shaders\ElecParticle\ElecParticleHeader.hlsli">
+      <Filter>リソース ファイル\particle\elecParticle</Filter>
+    </None>
+    <None Include="Resources\Shaders\PlayerBulletParticle\PlayerBulletParticleHeader.hlsli">
+      <Filter>リソース ファイル\particle\playerBulletParticle</Filter>
+    </None>
+    <None Include="Resources\Shaders\ShadowMap\ShadowMapHeader.hlsli">
+      <Filter>リソース ファイル\postEffect\shadowMap</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Sprite\SpritePixelShader.hlsl">
+      <Filter>リソース ファイル\object\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Sprite\SpriteVertexShader.hlsl">
+      <Filter>リソース ファイル\object\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ExplosionParticle1\ExplosionParticle1GeometryShader.hlsl">
+      <Filter>リソース ファイル\particle\explosionParticle1</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ExplosionParticle1\ExplosionParticle1PixelShader.hlsl">
+      <Filter>リソース ファイル\particle\explosionParticle1</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ExplosionParticle1\ExplosionParticle1VertexShader.hlsl">
+      <Filter>リソース ファイル\particle\explosionParticle1</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ExplosionParticle2\ExplosionParticle2GeometryShader.hlsl">
+      <Filter>リソース ファイル\particle\explosionParticle2</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ExplosionParticle2\ExplosionParticle2PixelShader.hlsl">
+      <Filter>リソース ファイル\particle\explosionParticle2</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ExplosionParticle2\ExplosionParticle2VertexShader.hlsl">
+      <Filter>リソース ファイル\particle\explosionParticle2</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\EnemyBulletParticle\EnemyBulletParticleGeometryShader.hlsl">
+      <Filter>リソース ファイル\particle\enemyBulletParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\EnemyBulletParticle\EnemyBulletParticlePixelShader.hlsl">
+      <Filter>リソース ファイル\particle\enemyBulletParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\EnemyBulletParticle\EnemyBulletParticleVertexShader.hlsl">
+      <Filter>リソース ファイル\particle\enemyBulletParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ElecParticle\ElecParticleGeometryShader.hlsl">
+      <Filter>リソース ファイル\particle\elecParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ElecParticle\ElecParticlePixelShader.hlsl">
+      <Filter>リソース ファイル\particle\elecParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ElecParticle\ElecParticleVertexShader.hlsl">
+      <Filter>リソース ファイル\particle\elecParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PlayerBulletParticle\PlayerBulletParticleGeometryShader.hlsl">
+      <Filter>リソース ファイル\particle\playerBulletParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PlayerBulletParticle\PlayerBulletParticlePixelShader.hlsl">
+      <Filter>リソース ファイル\particle\playerBulletParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PlayerBulletParticle\PlayerBulletParticleVertexShader.hlsl">
+      <Filter>リソース ファイル\particle\playerBulletParticle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ShadowMap\ShadowMapPixelShader.hlsl">
+      <Filter>リソース ファイル\postEffect\shadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ShadowMap\ShadowMapVertexShader.hlsl">
+      <Filter>リソース ファイル\postEffect\shadowMap</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

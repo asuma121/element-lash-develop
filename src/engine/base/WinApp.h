@@ -40,9 +40,15 @@ public:
 	/// </summary>
 	HWND GetHwnd() { return hwnd; };
 
+	/// <summary>
+	///WNDCLASSEX取得
+	/// </summary>
+	WNDCLASSEX GetWNDCLASSEX() { return w; };
+
 private:
 	//メンバ変数
 	WNDCLASSEX w{};
 	HWND hwnd;
 
 };
+
