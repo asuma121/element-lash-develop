@@ -313,15 +313,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ui->Initialize();
 
 	//天球
-	//ObjModel* skySphereModel = nullptr;
-	//skySphereModel = new ObjModel();
-	//skySphereModel->Initialize(dxCommon->GetDevice(), "coliseum", "Resources/pictures/coliseum.png");
-	//ObjObject3D* skySphereObject = nullptr;
-	//skySphereObject = new ObjObject3D();
-	//skySphereObject->Initialize(dxCommon->GetDevice(), skySphereModel, camera);
-	//skySphereObject->setScale({ 30.0f, 15.0f, 30.0f });
-	//skySphereObject->setRotation({ 0.0f,0.0f,0.0f });
-	//skySphereObject->setPosition({ 0.0f,0.0f,0.0f });
+	ObjModel* skySphereModel = nullptr;
+	skySphereModel = new ObjModel();
+	skySphereModel->Initialize(dxCommon->GetDevice(), "coliseum", "Resources/pictures/coliseum.png");
+	ObjObject3D* skySphereObject = nullptr;
+	skySphereObject = new ObjObject3D();
+	skySphereObject->Initialize(dxCommon->GetDevice(), skySphereModel, camera);
+	skySphereObject->setScale({ 30.0f, 15.0f, 30.0f });
+	skySphereObject->setRotation({ 0.0f,0.0f,0.0f });
+	skySphereObject->setPosition({ 0.0f,0.0f,0.0f });
 
 	//ShadowMap
 	ShadowMap* shadowMap = nullptr;

@@ -258,11 +258,11 @@ void Enemy::UpdateSpriteGame2()
 void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	//ImGui
-	ImGui::Begin("Enemy");
+	/*ImGui::Begin("Enemy");
 	ImGui::SetWindowPos(ImVec2(0, 150));
 	ImGui::SetWindowSize(ImVec2(500, 150));
 	ImGui::InputInt("debugNum", debugNum);
-	ImGui::End();
+	ImGui::End();*/
 
 	if (status == Stand)
 	{

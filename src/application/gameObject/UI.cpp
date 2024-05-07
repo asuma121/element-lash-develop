@@ -1163,16 +1163,16 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	if (tutorialFlag == 11)tutorial11Sprite->Draw(cmdList);
 
 	//ImGui
-	ImGui::Begin("UI Tutorial");
-	ImGui::SetWindowPos(ImVec2(600, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	ImGui::InputFloat2("tu12Pos", debugNum1);
-	ImGui::InputFloat2("tu12Size", debugNum2);
-	ImGui::InputFloat2("escPos", debugNum3);
-	ImGui::InputFloat2("escSize", debugNum4);
-	ImGui::InputFloat2("startPos", debugNum5);
-	ImGui::InputFloat2("startSize", debugNum6);
-	ImGui::End();
+	//ImGui::Begin("UI Tutorial");
+	//ImGui::SetWindowPos(ImVec2(600, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//ImGui::InputFloat2("tu12Pos", debugNum1);
+	//ImGui::InputFloat2("tu12Size", debugNum2);
+	//ImGui::InputFloat2("escPos", debugNum3);
+	//ImGui::InputFloat2("escSize", debugNum4);
+	//ImGui::InputFloat2("startPos", debugNum5);
+	//ImGui::InputFloat2("startSize", debugNum6);
+	//ImGui::End();
 }
 
 void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)
