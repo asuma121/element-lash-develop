@@ -46,4 +46,7 @@ private:
 	XMFLOAT3 up_ = { 0, 1, 0 };
 	XMFLOAT4 color = { 1,1,1,1 };
 	XMFLOAT3 dir = { 1,-1,-1 };
+	//画面幅
+	float window_width = 1280.0f;
+	float window_height = 720.0f;
 };

@@ -97,6 +97,9 @@
     <Filter Include="リソース ファイル\postEffect\shadowMap">
       <UniqueIdentifier>{38b7a643-ef18-4965-9cad-b1a8ac5d0245}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\object\obj">
+      <UniqueIdentifier>{8391d715-d4b7-42fa-bf01-44facce3e61a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\main.cpp">
@@ -273,6 +276,9 @@
     <ClCompile Include="src\engine\base\FPS.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\application\gameObject\Terrain.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\base\WinApp.h">
@@ -443,6 +449,9 @@
     <ClInclude Include="src\engine\base\FPS.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
+    <ClInclude Include="src\application\gameObject\Terrain.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="external\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj.filters" />
@@ -467,6 +476,9 @@
     </None>
     <None Include="Resources\Shaders\ShadowMap\ShadowMapHeader.hlsli">
       <Filter>リソース ファイル\postEffect\shadowMap</Filter>
+    </None>
+    <None Include="Resources\Shaders\Obj\ObjHeader.hlsli">
+      <Filter>リソース ファイル\object\obj</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -526,6 +538,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ShadowMap\ShadowMapVertexShader.hlsl">
       <Filter>リソース ファイル\postEffect\shadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Obj\ObjPixelShader.hlsl">
+      <Filter>リソース ファイル\object\obj</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Obj\ObjVertexShader.hlsl">
+      <Filter>リソース ファイル\object\obj</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -578,7 +578,7 @@ void Enemy::StatusManagerGame1()
 		if (statusTimer >= frameStand)
 		{
 			statusTimer = 0.0f;
-			status = Stand;
+			status = AttackOmen1;
 			return;
 		}
 	}

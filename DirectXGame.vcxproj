@@ -33,6 +33,7 @@
     <ClCompile Include="src\application\gameObject\Player.cpp" />
     <ClCompile Include="src\application\gameObject\PlayerBullet.cpp" />
     <ClCompile Include="src\application\gameObject\PlayerStateManager.cpp" />
+    <ClCompile Include="src\application\gameObject\Terrain.cpp" />
     <ClCompile Include="src\application\gameObject\TutorialEnemy.cpp" />
     <ClCompile Include="src\application\gameObject\UI.cpp" />
     <ClCompile Include="src\application\particle\ElecParticle.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="src\application\gameObject\Player.h" />
     <ClInclude Include="src\application\gameObject\PlayerBullet.h" />
     <ClInclude Include="src\application\gameObject\PlayerStateManager.h" />
+    <ClInclude Include="src\application\gameObject\Terrain.h" />
     <ClInclude Include="src\application\gameObject\TutorialEnemy.h" />
     <ClInclude Include="src\application\gameObject\UI.h" />
     <ClInclude Include="src\application\particle\ElecParticle.h" />
@@ -154,6 +156,7 @@
     <None Include="Resources\Shaders\EnemyBulletParticle\EnemyBulletParticleHeader.hlsli" />
     <None Include="Resources\Shaders\ExplosionParticle1\ExplosionParticle1Header.hlsli" />
     <None Include="Resources\Shaders\ExplosionParticle2\ExplosionParticle2Header.hlsli" />
+    <None Include="Resources\Shaders\Obj\ObjHeader.hlsli" />
     <None Include="Resources\Shaders\PlayerBulletParticle\PlayerBulletParticleHeader.hlsli" />
     <None Include="Resources\Shaders\ShadowMap\ShadowMapHeader.hlsli" />
     <None Include="Resources\Shaders\Sprite\SpriteHeader.hlsli" />
@@ -230,6 +233,14 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Obj\ObjPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Obj\ObjVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PlayerBulletParticle\PlayerBulletParticleGeometryShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>

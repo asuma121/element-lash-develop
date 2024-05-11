@@ -448,7 +448,7 @@ void PlayerState::Update()
 
 void PlayerState::UpdateCollider()
 {
-	colliderData.scale = scale;
+	colliderData.scale = XMFLOAT3(5.0f,5.0f,5.0f);
 	colliderData.rotation = rotation0;
 	colliderData.center = position;
 }

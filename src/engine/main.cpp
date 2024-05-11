@@ -312,16 +312,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ui = new UI();
 	ui->Initialize();
 
-	//天球
-	ObjModel* skySphereModel = nullptr;
-	skySphereModel = new ObjModel();
-	skySphereModel->Initialize(dxCommon->GetDevice(), "coliseum", "Resources/pictures/coliseum.png");
-	ObjObject3D* skySphereObject = nullptr;
-	skySphereObject = new ObjObject3D();
-	skySphereObject->Initialize(dxCommon->GetDevice(), skySphereModel, camera);
-	skySphereObject->setScale({ 30.0f, 15.0f, 30.0f });
-	skySphereObject->setRotation({ 0.0f,0.0f,0.0f });
-	skySphereObject->setPosition({ 0.0f,0.0f,0.0f });
+	//地形
+	Terrain::SetCamera(camera);
+	Terrain* terrain = nullptr;
+	terrain = new Terrain();
+	terrain->Initialize(dxCommon->GetDevice());
 
 	//ShadowMap
 	ShadowMap* shadowMap = nullptr;
@@ -336,15 +331,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//チュートリアルシーン
 	TutorialScene::SetDevice(dxCommon, input, dxInput);
-	TutorialScene::SetGameObject(player, enemy, tutorialEnemy, plane, camera, light, ui);
-
+	TutorialScene::SetGameObject(player, enemy, tutorialEnemy, plane,terrain, camera, light, ui);
+	
 	//ゲーム フェーズ
 	PhaseState::SetDevice(dxCommon, input, dxInput);
-	PhaseState::SetGameObject(player, enemy, miniEnemy, plane, camera, light, ui);
+	PhaseState::SetGameObject(player, enemy, miniEnemy, plane, terrain,camera, light, ui);
 
 	//クリアシーン
 	ClearScene::SetDevice(dxCommon, input, dxInput);
-	ClearScene::SetGameObject(player, enemy, plane, camera, light, ui);
+	ClearScene::SetGameObject(player, enemy, plane,terrain, camera, light, ui);
 
 	//シーン
 	Scene* scene = nullptr;
@@ -380,10 +375,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//シーンの更新
 		scene->Update();
 
-		//天球
-	/*	skySphereObject->HomingUpdate(player->GetPosition());
-		skySphereObject->Update();*/
-
 		//// 4. 描画コマンド
 
 		//shadowMap
@@ -396,8 +387,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//描画前処理
 		dxCommon->PreDraw();
 
-		//天球描画
-		//skySphereObject->Draw(dxCommon->GetCommandList(), skySphereModel->vbView, skySphereModel->ibView);
 		//シーンの描画
 		scene->Draw();
 

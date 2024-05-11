@@ -12,6 +12,7 @@ Player* TutorialScene::player = nullptr;
 Enemy* TutorialScene::enemy = nullptr;
 TutorialEnemy* TutorialScene::tutorialEnemy = nullptr;
 Plane* TutorialScene::plane = nullptr;
+Terrain* TutorialScene::terrain = nullptr;
 UI* TutorialScene::ui = nullptr;
 
 TutorialScene::TutorialScene()
@@ -131,6 +132,9 @@ void TutorialScene::UpdateObject()
 
 	//°
 	plane->Update();
+
+	//’nŒ`
+	terrain->Update();
 }
 
 void TutorialScene::UpdateSprite()
@@ -373,6 +377,7 @@ void TutorialScene::DrawFBX()
 	enemy->Draw(dxCommon->GetCommandList());
 	if (tutorialSpriteFlag == 10)tutorialEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
 }
 
 void TutorialScene::DrawSprite()
@@ -422,12 +427,14 @@ void TutorialScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dx
 	TutorialScene::dxInput = dxInput;
 }
 
-void TutorialScene::SetGameObject(Player* player, Enemy* enemy, TutorialEnemy* tutorialEnemy, Plane* plane, Camera* camera, Light* light, UI* ui)
+void TutorialScene::SetGameObject(Player* player, Enemy* enemy, TutorialEnemy* tutorialEnemy,
+	Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui)
 {
 	TutorialScene::player = player;
 	TutorialScene::enemy = enemy;
 	TutorialScene::tutorialEnemy = tutorialEnemy;
 	TutorialScene::plane = plane;
+	TutorialScene::terrain = terrain;
 	TutorialScene::camera = camera;
 	TutorialScene::light = light;
 	TutorialScene::ui = ui;

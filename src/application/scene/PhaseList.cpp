@@ -63,6 +63,9 @@ void Phase1::UpdateObject()
 
 	//床
 	plane->Update();
+
+	//地形
+	terrain->Update();
 }
 
 void Phase1::UpdateCollider()
@@ -112,6 +115,14 @@ void Phase1::UpdateCollider()
 		enemy->HitElec();
 	}
 
+	//時機のオブジェクトの当たり判定
+	for (int i = 0; i < terrain->GetColliderNum(); i++)
+	{
+		if (ColliderManager::CheckCollider(player->GetColliderData(), terrain->GetColliderData()[i]))
+		{
+		}
+	}
+
 	//敵の弾と平面の判定
 	//for (std::unique_ptr<FbxObject3D>& object1 : object)
 	//{
@@ -140,6 +151,10 @@ void Phase1::DrawFBX()
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
+
+	//コライダー描画
+	ColliderManager::Draw(dxCommon->GetCommandList());
 
 	//ImGui
 	//ImGui::Begin("Phase1");
@@ -233,6 +248,9 @@ void Phase2::UpdateObject()
 
 	//床
 	plane->Update();
+
+	//地形
+	terrain->Update();
 }
 
 void Phase2::UpdateCollider()
@@ -325,6 +343,7 @@ void Phase2::DrawFBX()
 	enemy->Draw(dxCommon->GetCommandList());
 	miniEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
 }
 
 void Phase2::DrawSprite()

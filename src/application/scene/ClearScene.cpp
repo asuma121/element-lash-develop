@@ -10,6 +10,7 @@ Light* ClearScene::light = nullptr;
 Player* ClearScene::player = nullptr;
 Enemy* ClearScene::enemy = nullptr;
 Plane* ClearScene::plane = nullptr;
+Terrain* ClearScene::terrain = nullptr;
 UI* ClearScene::ui = nullptr;
 
 void ClearScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput)
@@ -20,11 +21,12 @@ void ClearScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInp
 	ClearScene::dxInput = dxInput;
 }
 
-void ClearScene::SetGameObject(Player* player, Enemy* enemy, Plane* plane, Camera* camera, Light* light, UI* ui)
+void ClearScene::SetGameObject(Player* player, Enemy* enemy, Plane* plane, Terrain* terrain,Camera* camera, Light* light, UI* ui)
 {
 	ClearScene::player = player;
 	ClearScene::enemy = enemy;
 	ClearScene::plane = plane;
+	ClearScene::terrain = terrain;
 	ClearScene::camera = camera;
 	ClearScene::light = light;
 	ClearScene::ui = ui;
@@ -112,6 +114,9 @@ void ClearScene::UpdateObject()
 
 	//“G
 	enemy->UpdateGame1();
+
+	//’nŒ`
+	terrain->Update();
 }
 
 void ClearScene::UpdateSprite()
@@ -148,6 +153,7 @@ void ClearScene::DrawFBX()
 {
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
 }
 
 void ClearScene::DrawSprite()

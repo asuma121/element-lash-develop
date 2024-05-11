@@ -147,7 +147,7 @@ private:
 	XMMATRIX matView_ = XMMatrixIdentity();
 	XMFLOAT3 eye_ = { 0, 20, -100 };
 	XMFLOAT3 target_ = { 0, 0, 0 };
-	XMFLOAT3 up_ = { 0, 100, 0 };
+	XMFLOAT3 up_ = { 0, 1, 0 };
 	XMFLOAT3 debugEye_ = { 0, 100, -100 };
 	XMFLOAT3 debugTarget_ = { 0, 0, 0 };
 	XMFLOAT3 debugUp_ = { 0, 100, 0 };

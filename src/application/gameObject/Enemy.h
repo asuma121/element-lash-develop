@@ -296,7 +296,7 @@ private:
 public:
 
 	//敵の状態
-	Status status = Stand;
+	Status status = AttackOmen1;
 	Status preStatus = Stand;
 	//状態遷移用タイマー
 	float statusTimer = 0.0f;

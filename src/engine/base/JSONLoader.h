@@ -86,6 +86,9 @@ public:	//サブクラス
 public:
 	void LoadFile(const std::string& fileName);
 
+	//ステージの判定読み込み
+	static std::vector<JSONLoader::ColliderData>LoadTerrainCollider(const std::string& fileName);
+
 	std::vector<EnemyPatern> LoadEnemyPatern(const std::string& fileName);
 
 	/// <summary>

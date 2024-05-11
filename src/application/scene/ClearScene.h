@@ -13,6 +13,7 @@
 #include "Plane.h"
 #include "UI.h"
 #include "SceneManager.h"
+#include "Terrain.h"
 
 class ClearScene : public SceneState
 {
@@ -35,7 +36,7 @@ public:	//静的メンバ変数
 	/// <summary>
 	///ゲームシーンで使うオブジェクトセット
 	/// </summary>
-	static void SetGameObject(Player* player, Enemy* enemy, Plane* plane, Camera* camera, Light* light, UI* ui);
+	static void SetGameObject(Player* player, Enemy* enemy, Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui);
 
 public: //メンバ関数
 
@@ -126,6 +127,8 @@ private:	//静的メンバ変数
 	static Enemy* enemy;
 	//床
 	static Plane* plane;
+	//地形
+	static Terrain* terrain;
 	//UI
 	static UI* ui;
 

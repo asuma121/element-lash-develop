@@ -14,6 +14,7 @@
 #include "Plane.h"
 #include "UI.h"
 #include "SceneManager.h"
+#include "Terrain.h"
 
 class TutorialScene : public SceneState
 {
@@ -36,7 +37,7 @@ public:	//静的メンバ変数
 	/// <summary>
 	///チュートリアルシーンで使うオブジェクトセット
 	/// </summary>
-	static void SetGameObject(Player* player, Enemy* enemy,TutorialEnemy* tutorialEnemy,Plane* plane, Camera* camera, Light* light, UI* ui);
+	static void SetGameObject(Player* player, Enemy* enemy,TutorialEnemy* tutorialEnemy,Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui);
 
 public: //メンバ関数
 
@@ -132,6 +133,8 @@ private:	//静的メンバ変数
 	static TutorialEnemy* tutorialEnemy;
 	//床
 	static Plane* plane;
+	//地形
+	static Terrain* terrain;
 	//UI
 	static UI* ui;
 

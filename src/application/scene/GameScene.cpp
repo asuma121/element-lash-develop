@@ -14,6 +14,7 @@ Player* PhaseState::player = nullptr;
 Enemy* PhaseState::enemy = nullptr;
 MiniEnemy* PhaseState::miniEnemy = nullptr;
 Plane* PhaseState::plane = nullptr;
+Terrain* PhaseState::terrain = nullptr;
 UI* PhaseState::ui = nullptr;
 
 GameScene::GameScene()
@@ -86,12 +87,13 @@ void PhaseState::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInp
 }
 
 void PhaseState::SetGameObject(Player* player, Enemy* enemy,
-	MiniEnemy* miniEnemy, Plane* plane, Camera* camera, Light* light, UI* ui)
+	MiniEnemy* miniEnemy, Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui)
 {
 	PhaseState::player = player;
 	PhaseState::enemy = enemy;
 	PhaseState::miniEnemy = miniEnemy;
 	PhaseState::plane = plane;
+	PhaseState::terrain = terrain;
 	PhaseState::camera = camera;
 	PhaseState::light = light;
 	PhaseState::ui = ui;

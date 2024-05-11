@@ -14,6 +14,7 @@
 #include "Plane.h"
 #include "UI.h"
 #include "SceneManager.h"
+#include "Terrain.h"
 
 //クラスの前方宣言
 class PhaseState;
@@ -83,48 +84,6 @@ private:
 
 	//デバッグ用
 	int debugNum[1] = { 0 };
-
-//protected:	//静的メンバ変数
-//	//デバイスとinput
-//	static DirectXCommon* dxCommon;
-//	static Input* input;
-//	static DXInput* dxInput;
-//	//カメラ
-//	static Camera* camera;
-//	//ライト
-//	static Light* light;
-//	//プレイヤー
-//	static Player* player;
-//	//敵
-//	static Enemy* enemy;
-//	//床
-//	static Plane* plane;
-//	//UI
-//	static UI* ui;
-//
-//protected:	//メンバ変数
-//
-//	float lightDir[3] = { 0.0f,-1.0f , -1.0f };
-//	float lightPos[3] = { 0.0f,25.0f,25.0f };
-//	float lightTarget[3] = { 0.0f,0.0f,0.0f };
-//	float lightFactorAngle[2] = { 20.0f,30.0f, };
-//	float lightAtten[3] = { 0.0f,0.0f,0.0f };
-//
-//	//スプライト
-//	std::unique_ptr<Sprite>game1Sprite;
-//	//スプライト 座標 スケール
-//	XMFLOAT2 game1Pos = { 900.0f, 600.0f };
-//	XMFLOAT2 game1Scale = { 227.0f, 101.0f };
-//
-//	//タイマー
-//	float gameTimer = 0.0f;
-//
-//	//シーン遷移用フラグ
-//	bool moveTitleFlag = false;
-//	bool moveGame2Flag = false;
-//
-//	//デバッグ用
-//	int debugNum[1] = { 0 };
 };
 
 class PhaseState
@@ -141,7 +100,7 @@ public:	//静的メンバ変数
 	///ゲームシーンで使うオブジェクトセット
 	/// </summary>
 	static void SetGameObject(Player* player, Enemy* enemy,
-		MiniEnemy* miniEnemy ,Plane* plane, Camera* camera, Light* light, UI* ui);
+		MiniEnemy* miniEnemy ,Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui);
 
 public:	//仮想関数
 	void Initialize();
@@ -175,6 +134,8 @@ protected:	//静的メンバ変数
 	static MiniEnemy* miniEnemy;
 	//床
 	static Plane* plane;
+	//地形
+	static Terrain* terrain;
 	//UI
 	static UI* ui;
 

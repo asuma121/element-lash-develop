@@ -6,6 +6,7 @@
  */
 
 #include "Light.h"
+#include "imGui.h"
 
 void Light::Initialize()
 {
@@ -17,7 +18,7 @@ void Light::Initialize()
 	//);
 
 	matProjection_ = XMMatrixOrthographicLH(
-		80, 80, 1.0f, 200.0f);
+		80, 80, 1.0f, 3000.0f);
 
 	//行列計算
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
