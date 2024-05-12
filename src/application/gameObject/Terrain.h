@@ -37,8 +37,6 @@ public:	//メンバ関数
 	std::vector<JSONLoader::ColliderData> GetColliderData() { return colliderData; }
 	//コライダーの数取得
 	int GetColliderNum() { return colliderNum; }
-	//壁のコライダー取得
-	JSONLoader::ColliderData GetWallColliderData();
 
 private:	//静的メンバ変数
 	

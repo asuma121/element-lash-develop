@@ -53,14 +53,3 @@ void Terrain::Draw(ID3D12GraphicsCommandList* cmdList)
 	skySphereObject->Draw(cmdList, skySphereModel->vbView, skySphereModel->ibView);
 	coliseumObject->Draw(cmdList, coliseumModel->vbView, coliseumModel->ibView);
 }
-
-JSONLoader::ColliderData Terrain::GetWallColliderData()
-{
-	for (int i = 0; i < colliderData.size(); i++)
-	{
-		if (colliderData[i].objectName == "wall")
-		{
-			return colliderData[i];
-		}
-	}
-}

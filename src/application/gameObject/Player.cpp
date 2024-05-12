@@ -240,9 +240,9 @@ void Player::SetSRV(ID3D12DescriptorHeap* SRV)
 	playerState->SetSRV(SRV);
 }
 
-void Player::SetWallCollider(JSONLoader::ColliderData colliderData)
+void Player::SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData)
 {
-	playerState->SetWallCollider(colliderData);
+	playerState->SetObjectCollider(colliderData);
 }
 
 void Player::DrawSpriteGame(ID3D12GraphicsCommandList* cmdList)
@@ -459,8 +459,19 @@ void PlayerState::Update()
 
 void PlayerState::UpdateCollider()
 {
-	//壁との当たり判定処理
-	UpdateHitWall();
+	for (int i = 0; i < objectColliderData.size(); i++)
+	{
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 4) == "wall")
+		{
+			UpdateHitWall(objectColliderData[i]);
+		}
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 6) == "piller")
+		{
+			UpdateHitPiller(objectColliderData[i]);
+		}
+	}
 }
 
 void PlayerState::UpdateDown()
@@ -486,10 +497,10 @@ void PlayerState::UpdateDown()
 	}
 }
 
-void PlayerState::UpdateHitWall()
+void PlayerState::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
 {
 	//壁の外にいる時のみ
-	while (ColliderManager::CheckCollider(colliderData, wallColliderData) == false)
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == false)
 	{
 		//プレイヤーから原点のベクトル
 		XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - position;
@@ -497,6 +508,22 @@ void PlayerState::UpdateHitWall()
 		vec = normalize(vec);
 		//壁の中に戻るまで加算
 		position = position + (vec * knockBackSpeed);
+		//コライダーデータの座標更新
+		colliderData.center = position;
+	}
+}
+
+void PlayerState::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
+{
+	//柱にめり込んでいる間
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == true)
+	{
+		//柱からプレイヤーのベクトル
+		XMFLOAT3 vec = objectColliderData.center - colliderData.center;
+		//プレイヤーから原点のベクトルを正規化
+		vec = normalize(vec);
+		//壁の中に戻るまで加算
+		position = position - (vec * knockBackSpeed);
 		//コライダーデータの座標更新
 		colliderData.center = position;
 	}

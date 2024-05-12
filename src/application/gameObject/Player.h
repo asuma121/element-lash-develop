@@ -142,9 +142,9 @@ public:
 	void SetPosition(XMFLOAT3 pos) {};
 
 	/// <summary>
-	///壁の当たり判定セット
+	///オブジェクトの当たり判定セット
 	/// </summary>
-	void SetWallCollider(JSONLoader::ColliderData colliderData);
+	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData);
 
 	/// <summary>
 	///敵の座標取得
@@ -380,9 +380,11 @@ public:	//メンバ関数
 	//ダウン状態更新
 	void UpdateDown();
 	//壁との当たり判定処理
-	void UpdateHitWall();
-	//壁の当たり判定セット
-	void SetWallCollider(JSONLoader::ColliderData colliderData) { wallColliderData = colliderData; };
+	void UpdateHitWall(JSONLoader::ColliderData objectColliderData);
+	//柱との当たり判定処理
+	void UpdateHitPiller(JSONLoader::ColliderData objectColliderData);
+	//オブジェクトの当たり判定セット
+	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData) { objectColliderData = colliderData; };
 
 	//座標取得
 	XMFLOAT3 GetPosition() { return position; }
@@ -494,8 +496,8 @@ protected:	//メンバ変数
 	//角度ベクトル
 	XMFLOAT3 rotVelocity = { 0.0f,0.0f,0.0f };
 
-	//壁のコライダーデータ
-	JSONLoader::ColliderData wallColliderData;
+	//オブジェクトのコライダーデータ
+	std::vector<JSONLoader::ColliderData> objectColliderData;
 	//オブジェクト衝突時の押し戻し
 	float knockBackSpeed = 0.05f;
 };

@@ -74,7 +74,7 @@ void Phase1::UpdateCollider()
 	ColliderManager::PreUpdate();
 
 	//プレイヤー当たり判定更新
-	player->SetWallCollider(terrain->GetWallColliderData());
+	player->SetObjectCollider(terrain->GetColliderData());
 	player->UpdateCollider();
 
 	//敵の弾と時機の当たり判定

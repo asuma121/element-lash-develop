@@ -250,7 +250,7 @@ std::vector<JSONLoader::ColliderData> JSONLoader::LoadTerrainCollider(const std:
 			nlohmann::json& collider = object["collider"];
 
 			// コライダーの種類
-			colliderData1.type = collider["type"];
+			colliderData1.type = "Sphere";
 		}
 		//返り値のコライダーデータの末尾に追加
 		terrainCollider.emplace_back(colliderData1);
