@@ -157,11 +157,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Sprite::SetTextureManager(textureManager);
 	Sprite::CreateGraphicsPipeLine();
 
-	//スプライト
-	Sprite::SetDevice(dxCommon->GetDevice());
-	Sprite::SetTextureManager(textureManager);
-	Sprite::CreateGraphicsPipeLine();
-
 	//FBXローダー初期化
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 	//テクスチャマネージャーセット

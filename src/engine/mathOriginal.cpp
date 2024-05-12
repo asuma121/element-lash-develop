@@ -208,6 +208,26 @@ float shake(int num, int strength)
 	return num + shake;
 }
 
+float comparisonMax(float num1, float num2)
+{
+	if (num1 >= num2)
+	{
+		return num1;
+	}
+
+	return num2;
+}
+
+float comparisonMin(float num1, float num2)
+{
+	if (num1 <= num2)
+	{
+		return num1;
+	}
+
+	return num2;
+}
+
 float easeInSine(float x)
 {
 	return 1 - cos((x * PI) / 2);

@@ -73,55 +73,65 @@ void Phase1::UpdateCollider()
 	//事前処理
 	ColliderManager::PreUpdate();
 
+	//プレイヤー当たり判定更新
+	player->SetWallCollider(terrain->GetWallColliderData());
+	player->UpdateCollider();
+
 	//敵の弾と時機の当たり判定
-	if (player->GetInvincibleFlag() == false)
-	{
-		for (int i = 0; i < enemy->GetBulletNum(); i++)
-		{
-			if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
-			{
-				//自機にヒットフラグ送信
-				player->HitEnemy();
-			}
-		}
-	}
+	//if (player->GetInvincibleFlag() == false)
+	//{
+	//	for (int i = 0; i < enemy->GetBulletNum(); i++)
+	//	{
+	//		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
+	//		{
+	//			//自機にヒットフラグ送信
+	//			player->HitEnemy();
+	//		}
+	//	}
+	//}
 
-	//敵と時機の当たり判定
-	if (player->GetInvincibleFlag() == false)
-	{
-		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
-		{
-			//自機にヒットフラグ送信
-			player->HitEnemy();
-		}
-	}
+	////敵と時機の当たり判定
+	//if (player->GetInvincibleFlag() == false)
+	//{
+	//	if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
+	//	{
+	//		//自機にヒットフラグ送信
+	//		player->HitEnemy();
+	//	}
+	//}
 
-	//時機の弾(炎)と敵の当たり判定
-	for (int i = 0; i < player->GetBullet1Num(); i++)
-	{
-		if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
-		{
-			//敵にヒットフラグ送信
-			enemy->HitBullet1();
-			//自機にヒットフラグ送信
-			player->HitBullet1(i);
-		}
-	}
+	////時機の弾(炎)と敵の当たり判定
+	//for (int i = 0; i < player->GetBullet1Num(); i++)
+	//{
+	//	if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
+	//	{
+	//		//敵にヒットフラグ送信
+	//		enemy->HitBullet1();
+	//		//自機にヒットフラグ送信
+	//		player->HitBullet1(i);
+	//	}
+	//}
 
-	//雷攻撃が当たったら
-	if (player->GetHitElec())
-	{
-		//敵にヒットフラグ送信
-		enemy->HitElec();
-	}
+	////雷攻撃が当たったら
+	//if (player->GetHitElec())
+	//{
+	//	//敵にヒットフラグ送信
+	//	enemy->HitElec();
+	//}
 
 	//時機のオブジェクトの当たり判定
-	for (int i = 0; i < terrain->GetColliderNum(); i++)
+	/*for (int i = 0; i < terrain->GetColliderNum(); i++)
 	{
 		if (ColliderManager::CheckCollider(player->GetColliderData(), terrain->GetColliderData()[i]))
 		{
 		}
-	}
+	}*/
+	/*for (int i = 0; i < terrain->GetColliderNum(); i++)
+	{
+		if (ColliderManager::CheckCollider(player->GetColliderData(), terrain->GetColliderData()[i]))
+		{
+		}
+	}*/
 
 	//敵の弾と平面の判定
 	//for (std::unique_ptr<FbxObject3D>& object1 : object)
@@ -259,61 +269,61 @@ void Phase2::UpdateCollider()
 	ColliderManager::PreUpdate();
 
 	//敵の弾と時機の当たり判定
-	if (player->GetInvincibleFlag() == false)
-	{
-		for (int i = 0; i < enemy->GetBulletNum(); i++)
-		{
-			if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
-			{
-				//自機にヒットフラグ送信
-				player->HitEnemy();
-			}
-		}
-	}
+	//if (player->GetInvincibleFlag() == false)
+	//{
+	//	for (int i = 0; i < enemy->GetBulletNum(); i++)
+	//	{
+	//		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
+	//		{
+	//			//自機にヒットフラグ送信
+	//			player->HitEnemy();
+	//		}
+	//	}
+	//}
 
-	//敵と時機の当たり判定
-	if (player->GetInvincibleFlag() == false)
-	{
-		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
-		{
-			//自機にヒットフラグ送信
-			player->HitEnemy();
-		}
-	}
+	////敵と時機の当たり判定
+	//if (player->GetInvincibleFlag() == false)
+	//{
+	//	if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
+	//	{
+	//		//自機にヒットフラグ送信
+	//		player->HitEnemy();
+	//	}
+	//}
 
-	//時機の弾(炎)と敵の当たり判定
-	for (int i = 0; i < player->GetBullet1Num(); i++)
-	{
-		if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
-		{
-			//敵にヒットフラグ送信
-			enemy->HitBullet1();
-			//自機にヒットフラグ送信
-			player->HitBullet1(i);
-		}
-	}
+	////時機の弾(炎)と敵の当たり判定
+	//for (int i = 0; i < player->GetBullet1Num(); i++)
+	//{
+	//	if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
+	//	{
+	//		//敵にヒットフラグ送信
+	//		enemy->HitBullet1();
+	//		//自機にヒットフラグ送信
+	//		player->HitBullet1(i);
+	//	}
+	//}
 
-	//雷攻撃が当たったら
-	if (player->GetHitElec())
-	{
-		//敵にヒットフラグ送信
-		enemy->HitElec();
-	}
+	////雷攻撃が当たったら
+	//if (player->GetHitElec())
+	//{
+	//	//敵にヒットフラグ送信
+	//	enemy->HitElec();
+	//}
 
-	//時機と小さい敵の当たり判定
-	for (int i = 0; i < miniEnemy->GetEnemyNum(); i++)
-	{
-		for (int j = 0; j < player->GetBullet1Num(); j++)
-		{
-			if (ColliderManager::CheckCollider(miniEnemy->GetColliderData(i), player->GetBullet1ColliderData(j)))
-			{
-				//敵にヒットフラグ送信
-				miniEnemy->HitFire(i);
-				//自機にヒットフラグ送信
-				player->HitBullet1(j);
-			}
-		}
-	}
+	////時機と小さい敵の当たり判定
+	//for (int i = 0; i < miniEnemy->GetEnemyNum(); i++)
+	//{
+	//	for (int j = 0; j < player->GetBullet1Num(); j++)
+	//	{
+	//		if (ColliderManager::CheckCollider(miniEnemy->GetColliderData(i), player->GetBullet1ColliderData(j)))
+	//		{
+	//			//敵にヒットフラグ送信
+	//			miniEnemy->HitFire(i);
+	//			//自機にヒットフラグ送信
+	//			player->HitBullet1(j);
+	//		}
+	//	}
+	//}
 
 	//敵の弾と平面の判定
 	//for (std::unique_ptr<FbxObject3D>& object1 : object)

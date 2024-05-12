@@ -208,6 +208,11 @@ void Player::UpdateSprite()
 	attackFireSprite->Update();*/
 }
 
+void Player::UpdateCollider()
+{
+	playerState->UpdateCollider();
+}
+
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	//プレイヤーの描画
@@ -233,6 +238,11 @@ void Player::SetSRV(ID3D12DescriptorHeap* SRV)
 {
 	//パーティクル描画
 	playerState->SetSRV(SRV);
+}
+
+void Player::SetWallCollider(JSONLoader::ColliderData colliderData)
+{
+	playerState->SetWallCollider(colliderData);
 }
 
 void Player::DrawSpriteGame(ID3D12GraphicsCommandList* cmdList)
@@ -426,8 +436,9 @@ void PlayerState::Update()
 	////ダウン状態更新
 	//UpdateDown();
 
-	//コライダー更新
-	UpdateCollider();
+	//コライダーデータ更新
+	colliderData.rotation = rotation0;
+	colliderData.center = position;
 
 	//攻撃更新
 	UpdateAttack();
@@ -448,9 +459,8 @@ void PlayerState::Update()
 
 void PlayerState::UpdateCollider()
 {
-	colliderData.scale = XMFLOAT3(5.0f,5.0f,5.0f);
-	colliderData.rotation = rotation0;
-	colliderData.center = position;
+	//壁との当たり判定処理
+	UpdateHitWall();
 }
 
 void PlayerState::UpdateDown()
@@ -476,12 +486,28 @@ void PlayerState::UpdateDown()
 	}
 }
 
+void PlayerState::UpdateHitWall()
+{
+	//壁の外にいる時のみ
+	while (ColliderManager::CheckCollider(colliderData, wallColliderData) == false)
+	{
+		//プレイヤーから原点のベクトル
+		XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - position;
+		//プレイヤーから原点のベクトルを正規化
+		vec = normalize(vec);
+		//壁の中に戻るまで加算
+		position = position + (vec * knockBackSpeed);
+		//コライダーデータの座標更新
+		colliderData.center = position;
+	}
+}
+
 void PlayerState::StaticInitialize()
 {
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため
 	colliderData.objectName = "player";
-	colliderData.scale = { 1.0f,1.0f,1.0f };
+	colliderData.scale = { 5.0f,5.0f,5.0f };
 	colliderData.rotation = { 0.0f,0.0f,0.0f };
 	colliderData.center = { 0.0f,0.0f,0.0f };
 	//コライダーマネージャーにセット

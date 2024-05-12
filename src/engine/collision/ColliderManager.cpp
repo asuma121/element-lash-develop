@@ -8,6 +8,9 @@
 #include "ColliderManager.h"
 #include "math.h"
 #include "mathOriginal.h"
+#include <functional>
+#include <algorithm>
+#include <cassert>
 
 using namespace DirectX;
 #define PI 3.1415
@@ -207,12 +210,11 @@ bool ColliderManager::CheckSphereSphere(JSONLoader::ColliderData colliderSphere0
 	float distanceCenter1 = sqrt(pow(distanceCenter0.x, 2) + pow(distanceCenter0.y, 2) + pow(distanceCenter0.z, 2));
 
 	//二つのコライダーの半径の合計
-	float r = length(colliderSphere0.scale) + length(colliderSphere1.scale);
+	float r = length(colliderSphere0.scale) / 2 + length(colliderSphere1.scale) / 2;
 
 	//中心との距離が半径の合計より大きければ当たっていない
 	if (r < distanceCenter1) return false;
 
-	/*ChangeHitColor(colliderSphere0);*/
 	ChangeHitColor(colliderSphere1);
 	ChangeHitColor(colliderSphere0);
 	return true;
@@ -276,6 +278,14 @@ bool ColliderManager::CheckPlaneBox(JSONLoader::ColliderData colliderPlane, JSON
 	ChangeHitColor(colliderPlane);
 
 	return true;
+}
+
+bool ColliderManager::CheckSpherePoint(JSONLoader::ColliderData colliderSphere, XMFLOAT3 pointPos)
+{
+	//球体の半径
+	float sphereR = length(colliderSphere.scale);
+
+	return length(colliderSphere.center - pointPos) < sphereR;
 }
 
 ColliderManager::OBB ColliderManager::GetObbFromColliderData(JSONLoader::ColliderData colliderData)

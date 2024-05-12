@@ -18,6 +18,10 @@ float GetRand(float min, float max);
 //シェイク
 float shake(int num, int strength);
 
+//std::max,std::min代用 window.hをインクルードするとエラーになる問題
+float comparisonMax(float num1, float num2);
+float comparisonMin(float num1, float num2);
+
 #pragma endregion
 
 #pragma region イージング

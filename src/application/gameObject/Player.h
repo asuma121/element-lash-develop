@@ -92,6 +92,11 @@ public:
 	void UpdateSprite();
 
 	/// <summary>
+	///更新 コライダー
+	/// </summary>
+	void UpdateCollider();
+
+	/// <summary>
 	///描画
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
@@ -135,6 +140,11 @@ public:
 	///座標セット
 	/// </summary>
 	void SetPosition(XMFLOAT3 pos) {};
+
+	/// <summary>
+	///壁の当たり判定セット
+	/// </summary>
+	void SetWallCollider(JSONLoader::ColliderData colliderData);
 
 	/// <summary>
 	///敵の座標取得
@@ -369,6 +379,10 @@ public:	//メンバ関数
 	void UpdateCollider();
 	//ダウン状態更新
 	void UpdateDown();
+	//壁との当たり判定処理
+	void UpdateHitWall();
+	//壁の当たり判定セット
+	void SetWallCollider(JSONLoader::ColliderData colliderData) { wallColliderData = colliderData; };
 
 	//座標取得
 	XMFLOAT3 GetPosition() { return position; }
@@ -443,7 +457,6 @@ protected:	//メンバ変数
 	//コントローラー
 	DXInput* dxInput = nullptr;
 
-
 	//オブジェクトごとのタイマー
 	int objectTimer = 0;
 	//オブジェクトに時間の設定がある場合
@@ -480,4 +493,9 @@ protected:	//メンバ変数
 	XMFLOAT3 posVelocity = { 0.0f,0.0f,0.0f };
 	//角度ベクトル
 	XMFLOAT3 rotVelocity = { 0.0f,0.0f,0.0f };
+
+	//壁のコライダーデータ
+	JSONLoader::ColliderData wallColliderData;
+	//オブジェクト衝突時の押し戻し
+	float knockBackSpeed = 0.05f;
 };
