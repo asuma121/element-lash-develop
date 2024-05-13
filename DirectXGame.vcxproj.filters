@@ -279,6 +279,9 @@
     <ClCompile Include="src\application\gameObject\Terrain.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
+    <ClCompile Include="src\application\gameObject\EnemyStateManager.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\base\WinApp.h">
@@ -450,6 +453,9 @@
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
     <ClInclude Include="src\application\gameObject\Terrain.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\EnemyStateManager.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,7 +24,7 @@
         },
         {
             "type": "MESH",
-            "name": "coliseum.001",
+            "name": "coliseum",
             "transform": {
                 "translation": [
                     0.0,
@@ -45,7 +45,7 @@
         },
         {
             "type": "MESH",
-            "name": "piller_1",
+            "name": "piller_obj_1",
             "transform": {
                 "translation": [
                     250.0,
@@ -79,9 +79,9 @@
                     0.0
                 ],
                 "scale": [
-                    14.0,
-                    14.0,
-                    14.0
+                    16.0,
+                    16.0,
+                    16.0
                 ]
             },
             "collider": {
@@ -121,7 +121,7 @@
         },
         {
             "type": "MESH",
-            "name": "piller_2",
+            "name": "piller_obj_2",
             "transform": {
                 "translation": [
                     -250.0,
@@ -155,9 +155,9 @@
                     0.0
                 ],
                 "scale": [
-                    14.0,
-                    14.0,
-                    14.0
+                    16.0,
+                    16.0,
+                    16.0
                 ]
             },
             "collider": {
@@ -176,7 +176,7 @@
         },
         {
             "type": "MESH",
-            "name": "piller_3",
+            "name": "piller_obj_3",
             "transform": {
                 "translation": [
                     0.0,
@@ -202,7 +202,7 @@
                 "translation": [
                     0.0,
                     250.0,
-                    7.0
+                    0.0
                 ],
                 "rotation": [
                     0.0,
@@ -210,9 +210,9 @@
                     0.0
                 ],
                 "scale": [
-                    14.0,
-                    14.0,
-                    14.0
+                    16.0,
+                    16.0,
+                    16.0
                 ]
             },
             "collider": {
@@ -231,7 +231,7 @@
         },
         {
             "type": "MESH",
-            "name": "piller_4",
+            "name": "piller_obj_4",
             "transform": {
                 "translation": [
                     0.0,
@@ -265,9 +265,9 @@
                     0.0
                 ],
                 "scale": [
-                    14.0,
-                    14.0,
-                    14.0
+                    16.0,
+                    16.0,
+                    16.0
                 ]
             },
             "collider": {

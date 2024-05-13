@@ -259,6 +259,82 @@ std::vector<JSONLoader::ColliderData> JSONLoader::LoadTerrainCollider(const std:
 	return terrainCollider;
 }
 
+std::vector<JSONLoader::ObjectData> JSONLoader::LoadTerrainObject(const std::string& fileName)
+{
+	//返り値のオブジェクトデータ
+	std::vector<JSONLoader::ObjectData>terrainObject;
+
+	//ファイルを開く
+	std::ifstream file;
+	file.open(fileName);
+	assert(!file.fail());
+
+	//json文字列
+	nlohmann::json jsonFileList;
+	//json文字列に代入
+	file >> jsonFileList;
+
+	//正しいレベルデータファイルかチェック
+	assert(jsonFileList.is_object());
+	assert(jsonFileList.contains("name"));
+	assert(jsonFileList["name"].is_string());
+
+	//"name"を文字列として取得
+	std::string name = jsonFileList["name"].get<std::string>();
+	assert(name.compare("scene") == 0);
+
+	// "objects"の全オブジェクトを走査
+	for (nlohmann::json& object : jsonFileList["objects"]) {
+		assert(object.contains("type"));
+
+		// 種別を取得
+		std::string type = object["type"].get<std::string>();
+
+		//データを入れておく変数
+		JSONLoader::ObjectData objectData1;
+
+		//壁のコライダーデータ
+		if (type.compare("MESH") == 0) {
+
+			if (object.contains("name")) {
+				// オブジェクト名
+				std::string objectName = object["name"];
+				//コロシアムか柱以外の場合スルー
+				if (objectName.substr(0, 10) != "piller_obj")
+				{
+					continue;
+				}
+				//コライダーの名前に代入
+				objectData1.objectName = object["name"];
+				objectData1.fileName = object["name"];
+			}
+
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			// 平行移動
+			objectData1.position.x = (float)transform["translation"][0];
+			objectData1.position.y = (float)transform["translation"][2];
+			objectData1.position.z = (float)transform["translation"][1];
+			// 回転角
+			objectData1.rotation.x = (float)transform["rotation"][0];
+			objectData1.rotation.y = -(float)transform["rotation"][2];
+			objectData1.rotation.z = -(float)transform["rotation"][1];
+			//弧度法に変換
+			objectData1.rotation.x *= 1.0f / 360.0f * (2.0f * PI);
+			objectData1.rotation.y *= 1.0f / 360.0f * (2.0f * PI);
+			objectData1.rotation.z *= 1.0f / 360.0f * (2.0f * PI);
+			// スケーリング
+			objectData1.scale.x = (float)transform["scale"][0];
+			objectData1.scale.y = (float)transform["scale"][2];
+			objectData1.scale.z = (float)transform["scale"][1];
+		}
+		//返り値のコライダーデータの末尾に追加
+		terrainObject.emplace_back(objectData1);
+	}
+
+	return terrainObject;
+}
+
 std::vector<JSONLoader::EnemyPatern> JSONLoader::LoadEnemyPatern(const std::string& fileName)
 {
 	//読み込んだ敵の行動パターンを入れておくコンテナ

@@ -270,6 +270,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	player = new Player();
 	player->Initialize();
 
+	//敵ステート
+	EnemyState::StaticInitialize();
+
 	//敵初期化
 	Enemy::SetCamera(camera);
 	Enemy::SetInput(input);

@@ -22,6 +22,7 @@
     <ClCompile Include="src\application\gameObject\Camera.cpp" />
     <ClCompile Include="src\application\gameObject\Enemy.cpp" />
     <ClCompile Include="src\application\gameObject\EnemyBullet.cpp" />
+    <ClCompile Include="src\application\gameObject\EnemyStateManager.cpp" />
     <ClCompile Include="src\application\gameObject\light\DirectionalLight.cpp" />
     <ClCompile Include="src\application\gameObject\light\Light.cpp" />
     <ClCompile Include="src\application\gameObject\light\LightGroup.cpp" />
@@ -86,6 +87,7 @@
     <ClInclude Include="src\application\gameObject\Camera.h" />
     <ClInclude Include="src\application\gameObject\Enemy.h" />
     <ClInclude Include="src\application\gameObject\EnemyBullet.h" />
+    <ClInclude Include="src\application\gameObject\EnemyStateManager.h" />
     <ClInclude Include="src\application\gameObject\light\CircleShadow.h" />
     <ClInclude Include="src\application\gameObject\light\DirectionalLight.h" />
     <ClInclude Include="src\application\gameObject\light\Light.h" />
@@ -381,7 +383,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src\engine;$(SolutionDir)src\engine\base;$(SolutionDir)src\engine\object;$(SolutionDir)src\application\gameObject;$(SolutionDir)src\application\gameObject\light;$(SolutionDir)src\engine\collision;$(SolutionDir)src\application\particle;$(SolutionDir)src\application\scene;$(SolutionDir)src\engine\postEffect</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4099;26495;26451;4996;4828;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>

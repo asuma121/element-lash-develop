@@ -1,6 +1,5 @@
 #include "PlayerStateManager.h"
 #include "mathOriginal.h"
-#include "FbxLoader.h"
 
 void Wait::Initialize()
 {

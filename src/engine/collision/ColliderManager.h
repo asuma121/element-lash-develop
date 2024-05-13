@@ -103,11 +103,6 @@ public:	//メンバ関数
 	static bool CheckPlaneBox(JSONLoader::ColliderData colliderPlane, JSONLoader::ColliderData colliderBox);
 
 	/// <summary>
-	///判定 球体とボックス
-	/// </summary>
-	static bool CheckSphereBox(JSONLoader::ColliderData colliderSphere, JSONLoader::ColliderData colliderBox);
-
-	/// <summary>
 	///判定 球体と点
 	/// </summary>
 	static bool CheckSpherePoint(JSONLoader::ColliderData colliderSphere, XMFLOAT3 pointPos);

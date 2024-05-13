@@ -10,19 +10,66 @@
 #include "FbxLoader.h"
 #include "imgui.h"
 #include "ColliderManager.h"
+#include "EnemyStateManager.h"
 #define G 6.674	//万有引力定数
 #define GAcceleration 9.80665 * 1/10	//重力加速度
 
 Camera* Enemy::camera = nullptr;
 Input* Enemy::input = nullptr;
 DXInput* Enemy::dxInput = nullptr;
+//立っている状態のオブジェクト
+FbxObject3D* EnemyState::objectStand = nullptr;
+//立っている状態のモデル
+FbxModel* EnemyState::modelStand = nullptr;
+//歩いている状態のオブジェクト
+FbxObject3D* EnemyState::objectWalk = nullptr;
+//歩いている状態のモデル
+FbxModel* EnemyState::modelWalk = nullptr;
+//攻撃1状態のオブジェクト
+FbxObject3D* EnemyState::objectAttack1 = nullptr;
+//攻撃1状態のモデル
+FbxModel* EnemyState::modelAttack1 = nullptr;
+//攻撃1前兆のオブジェクト
+FbxObject3D* EnemyState::objectAttackOmen1 = nullptr;
+//攻撃1前兆のモデル
+FbxModel* EnemyState::modelAttackOmen1 = nullptr;
+//ダッシュのオブジェクト
+FbxObject3D* EnemyState::objectDash = nullptr;
+//ダッシュのモデル
+FbxModel* EnemyState::modelDash = nullptr;
+//敵呼び出しのオブジェクト
+FbxObject3D* EnemyState::objectCallMiniEnemy = nullptr;
+//平行移動
+XMFLOAT3 EnemyState::position = { 0.0f,0.0f,30.0f };
+//回転
+XMFLOAT3 EnemyState::rotation;
+//サイズ
+XMFLOAT3 EnemyState::scale = { 5.0f,5.0f,5.0f };
+//雷パーティクル 敵呼び出しで描画
+ElecParticle* EnemyState::elecParticle = nullptr;
+//爆発パーティクル 敵呼び出しで描画
+ExplosionParticle1* EnemyState::explosionParticle1 = nullptr;
+ExplosionParticle2* EnemyState::explosionParticle2 = nullptr;
+//弾
+EnemyBullet* EnemyState::bullet = nullptr;
+//コライダーデータ
+JSONLoader::ColliderData EnemyState::colliderData;
+
+Enemy::Enemy()
+{
+	enemyState = new Dash();
+}
 
 Enemy::~Enemy()
 {
+	delete enemyState;
 }
 
 void Enemy::Initialize()
 {
+	//ステートの初期化
+	enemyState->Initialize();
+
 	//HPバーのスプライト
 	hpBar1 = new Sprite();
 	hpBar1->Initialize();
@@ -39,7 +86,474 @@ void Enemy::Initialize()
 	hpBar5 = new Sprite();
 	hpBar5->Initialize();
 	hpBar5->SetTextureNum(58);
+}
 
+void Enemy::UpdateGame1()
+{
+	//ステート更新
+	enemyState->Update();
+
+	//ステータスマネージャー
+	StatusManagerGame1();
+
+	//スプライト更新
+	UpdateSpriteGame1();
+
+	//ダメージ更新
+	UpdateDamage();
+}
+
+void Enemy::UpdateGame2()
+{
+	////動く
+	//Move();
+
+	////ステータスマネージャー
+	//StatusManagerGame2();
+
+	////オブジェクト更新
+	//UpdateObject();
+
+	////スプライト更新
+	//UpdateSpriteGame2();
+
+	////ダメージ更新
+	//UpdateDamage();
+
+	////パーティクル更新
+	//UpdateParticle();
+
+	////コライダー更新
+	//UpdateCollider();
+}
+
+void Enemy::UpdateTutorial(int tutorialTimer)
+{
+	//position.y = 1000.0f;
+	//if (tutorialTimer == 0)return;
+
+	//position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+	////ステータスマネージャー
+	//StatusManagerTutorial(tutorialTimer);
+
+	////オブジェクト更新
+	//UpdateObject();
+
+	////スプライト更新
+	//UpdateSpriteGame1();
+
+	////1フレーム前の状態を代入
+	//preStatus = status;
+}
+
+void Enemy::UpdateSpriteGame1()
+{
+	//HPバーを現在のHPに
+	hpBar2Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
+	hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
+
+	//更新
+	hpBar1->Update(hpBar1Pos, hpBar1Scale);
+	hpBar2->Update(hpBar2Pos, hpBar2Scale);
+	hpBar3->Update(hpBar3Pos, hpBar3Scale);
+	hpBar4->Update(hpBar4Pos, hpBar4Scale);
+	hpBar5->Update(hpBar5Pos, hpBar5Scale);
+}
+
+void Enemy::UpdateSpriteGame2()
+{
+	//HPバーを現在のHPに
+	hpBar5Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
+	hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
+
+	//更新
+	hpBar1->Update(hpBar1Pos, hpBar1Scale);
+	hpBar3->Update(hpBar3Pos, hpBar3Scale);
+	hpBar4->Update(hpBar4Pos, hpBar4Scale);
+	hpBar5->Update(hpBar5Pos, hpBar5Scale);
+}
+
+void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	//ステート描画
+	enemyState->Draw(cmdList);
+
+	//ステート更新
+	enemyState->UpdateState(this);
+
+	//ImGui
+	/*ImGui::Begin("Enemy");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 150));
+	ImGui::InputFloat3("playerPos", bulletPos);
+	ImGui::End();*/
+}
+
+void Enemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
+{
+	enemyState->DrawLightView(cmdList);
+}
+
+void Enemy::DrawSpriteGame1(ID3D12GraphicsCommandList* cmdList)
+{
+	hpBar5->Draw(cmdList);
+	hpBar2->Draw(cmdList);
+	hpBar4->Draw(cmdList);
+	hpBar1->Draw(cmdList);
+	hpBar3->Draw(cmdList);
+}
+
+void Enemy::DrawSpriteGame2(ID3D12GraphicsCommandList* cmdList)
+{
+	hpBar5->Draw(cmdList);
+	hpBar1->Draw(cmdList);
+	hpBar3->Draw(cmdList);
+}
+
+void Enemy::DrawParticle(ID3D12GraphicsCommandList* cmdList)
+{
+	enemyState->DrawParticle(cmdList);
+}
+
+void Enemy::UpdateDamage()
+{
+	//炎攻撃をくらった際
+	if (HitFlag1 == true)
+	{
+		//HPを減らす
+		HP -= 1.0f;
+	}
+
+	//雷攻撃をくらった際
+	if (hitElec == true)
+	{
+		//HPを減らす
+		HP -= 7.0f;
+	}
+
+	//死亡
+	if (HP <= 0)
+	{
+		isDead = true;
+	}
+
+	//フラグをもとに戻す
+	HitFlag1 = false;
+	hitElec = false;
+}
+
+void Enemy::UpdateCollider()
+{
+	enemyState->UpdateCollider();
+}
+
+void Enemy::StatusManagerGame1()
+{
+//	//攻撃前兆の場合
+//	if (status == AttackOmen1)
+//	{
+//		//次の攻撃がダッシュの時
+//		if (dashFlag == true)
+//		{
+//			if (statusTimer >= frameAttackOmen1)
+//			{
+//				//敵→プレイヤーのベクトル取得
+//				dashVector = XMFLOAT3(playerPos.x - position.x,0.0f, playerPos.z - position.z);
+//				dashVector = normalize(dashVector);
+//				dashVector = dashVector * dashSpeed;
+//				statusTimer = 0.0f;
+//				status = Dash;
+//				return;
+//			}
+//		}
+//		//次の攻撃が攻撃1の時
+//		if (attack1Flag == true)
+//		{
+//			//弾をセット
+//			if (statusTimer == 0.0f)
+//			{
+//				XMFLOAT3 addPos(-20, 40, 50);
+//				addPos = position + rollRotation(addPos, rotation);
+//				for (int i = 0; i < bulletVol; i++)
+//				{
+//					bullet->SetBullet(addPos, bulletScale, bulletLastScale, 0.0f,
+//						frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
+//				}
+//			}
+//			if (statusTimer >= frameAttackOmen1)
+//			{
+//				statusTimer = 0.0f;
+//				status = Attack1;
+//				return;
+//			}
+//		}
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//	}
+//	//攻撃1の場合
+//	if (status == Attack1)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		if (statusTimer >= frameAttack1)
+//		{
+//			statusTimer = 0.0f;
+//			status = AttackOmen1;
+//			//ダッシュのフラグを立てる
+//			dashFlag = true;
+//			attack1Flag = false;
+//			return;
+//		}
+//	}
+//	//立っているの場合
+//	if (status == Stand)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		if (statusTimer >= frameStand)
+//		{
+//			statusTimer = 0.0f;
+//			status = AttackOmen1;
+//			return;
+//		}
+//	}
+//	//歩きの場合
+//	if (status == Walk)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		//プレイヤーとの距離が近い場合も終了
+//		if (statusTimer >= frameWalk || length(position - playerPos) <= 10.0f)
+//		{
+//			statusTimer = 0.0f;
+//			status = AttackOmen1;
+//			return;
+//		}
+//	}
+//	//ダッシュの場合
+//	if (status == Dash)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		//プレイヤーとの距離が近い場合も終了
+//		if (statusTimer >= frameDash || length(position - playerPos) <= 10.0f)
+//		{
+//			statusTimer = 0.0f;
+//			status = AttackOmen1;
+//			//攻撃1のフラグを立てる
+//			dashFlag = false;
+//			attack1Flag = true;
+//			return;
+//		}
+//	}
+//}
+//
+//void Enemy::StatusManagerGame2()
+//{
+//	//デバッグ用
+//	//if (status == AttackOmen1)//タイマー更新
+//	//{
+//	//	statusTimer += 1.0f;
+//	//	if (statusTimer >= frameAttackOmen1)
+//	//	{
+//	//		statusTimer = 0.0f;
+//	//		status = AttackOmen1;
+//	//		return;
+//	//	}
+//	//	return;
+//	//}
+//	
+//
+//
+//	//攻撃前兆の場合
+//	if (status == AttackOmen1)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		//次の行動が敵呼び出しの時
+//		if (phase2CallEnemyFlag == true)
+//		{
+//			if (statusTimer >= frameAttackOmen1)
+//			{
+//				statusTimer = 0.0f;
+//				status = CallMiniEnemy;
+//				phase2CallEnemyFlag = false;
+//				phase2Attack1Flag = true;
+//				return;
+//			}
+//		}
+//		//次の行動が攻撃1の時
+//		if (phase2Attack1Flag == true)
+//		{
+//			if (statusTimer >= frameAttackOmen1)
+//			{
+//				statusTimer = 0.0f;
+//				status = Attack1;
+//				phase2CallEnemyFlag = true;
+//				phase2Attack1Flag = false;
+//				return;
+//			}
+//		}
+//	}
+//
+//	//敵呼び出しの場合
+//	if (status == CallMiniEnemy)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		callEnemyFlag = false;
+//		//敵呼び出し
+//		if (statusTimer == frameCallMiniEnemy2)
+//		{
+//			//フラグを立てる
+//			callEnemyFlag = true;
+//			//ベクトル取得
+//			XMFLOAT3 velo = playerPos - position;
+//			callEnemyPos = velo / 2;
+//		}
+//		//ダッシュへ移動
+//		if (statusTimer >= frameCallMiniEnemy)
+//		{
+//			//敵→プレイヤーのベクトル取得
+//			dashVector = XMFLOAT3(playerPos.x - position.x, 0.0f, playerPos.z - position.z);
+//			dashVector = normalize(dashVector);
+//			dashVector = dashVector * dashSpeed;
+//			statusTimer = 0.0f;
+//			status = Dash;
+//			return;
+//		}
+//	}
+//
+//	//ダッシュ呼び出しの場合
+//	if (status == Dash)
+//	{
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		//攻撃前兆へ移動
+//		if (statusTimer >= frameDash)
+//		{
+//			statusTimer = 0.0f;
+//			status = AttackOmen1;
+//			return;
+//		}
+//	}
+//
+//	//攻撃1の場合
+//	if (status == Attack1)
+//	{
+//		//弾をセット
+//		if (statusTimer == 0.0f)
+//		{
+//			XMFLOAT3 addPos(-20, 40, 50);
+//			addPos = position + rollRotation(addPos, rotation);
+//			for (int i = 0; i < bulletVol; i++)
+//			{
+//				bullet->SetBullet(addPos, bulletScale, bulletLastScale, 0.0f,
+//					frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
+//			}
+//		}
+//		//タイマー更新
+//		statusTimer += 1.0f;
+//		//攻撃前兆へ移動
+//		if (statusTimer >= frameAttack1)
+//		{
+//			statusTimer = 0.0f;
+//			status = AttackOmen1;
+//			return;
+//		}
+//	}
+}
+
+void Enemy::StatusManagerTutorial(int tutorialTimer)
+{
+	////しばらく立ってる
+	//if (tutorialTimer < 180)
+	//{
+	//	status = Stand;
+	//	return;
+	//}
+	////攻撃前兆モーション
+	//if (tutorialTimer < 180 + frameAttackOmen1)
+	//{
+	//	status = AttackOmen1;
+	//	return;
+	//}
+	////しばらく立ってる
+	//else
+	//{
+	//	status = Stand;
+	//	return;
+	//}
+}
+
+void Enemy::SetSRV(ID3D12DescriptorHeap* SRV)
+{
+	enemyState->SetSRV(SRV);
+}
+
+void Enemy::SetPlayerPos(XMFLOAT3 playerPos)
+{
+	enemyState->SetPlayerPos(playerPos);
+}
+
+void Enemy::SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData)
+{
+	enemyState->SetObjectCollider(colliderData);
+}
+
+void Enemy::HitBullet1()
+{
+	//被弾フラグを立てる
+	HitFlag1 = true;
+}
+
+void Enemy::Reset()
+{
+	HP = maxHP;
+	isDead = false;
+	enemyState->Reset();
+}
+
+void Enemy::SetGameScene()
+{
+	HP = maxHP;
+	isDead = false;
+	statusTimer = 0;
+	enemyState->SetGameScene();
+}
+
+XMFLOAT3 Enemy::GetPosition()
+{
+	return enemyState->GetPosition();
+}
+
+XMFLOAT3 Enemy::GetRotation()
+{
+	return enemyState->GetRotation();
+}
+
+XMFLOAT3 Enemy::GetScale()
+{
+	return enemyState->GetScale();
+}
+
+JSONLoader::ColliderData Enemy::GetColliderData()
+{
+	return enemyState->GetColliderData();
+}
+
+void Enemy::ChangeState(EnemyState* newState)
+{
+	delete enemyState;
+	enemyState = newState;
+
+	//初期化
+	enemyState->Initialize();
+}
+
+void EnemyState::StaticInitialize()
+{
 	//立っているモデル
 	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
 	//立っているオブジェクト
@@ -101,10 +615,6 @@ void Enemy::Initialize()
 	//コライダーマネージャーにセット
 	ColliderManager::SetCollider(colliderData);
 
-	//敵の弾
-	bullet = new EnemyBullet;
-	bullet->Initialize();
-
 	//雷パーティクル
 	elecParticle = new ElecParticle();
 	elecParticle->CreateBuffers();
@@ -119,232 +629,13 @@ void Enemy::Initialize()
 	explosionParticle2 = new ExplosionParticle2();
 	explosionParticle2->CreateBuffers();
 	explosionParticle2->SetTextureNum(16);
+
+	//敵の弾
+	bullet = new EnemyBullet;
+	bullet->Initialize();
 }
 
-void Enemy::UpdateGame1()
-{
-	//動く
-	Move();
-
-	//ステータスマネージャー
-	StatusManagerGame1();
-
-	//オブジェクト更新
-	UpdateObject();
-
-	//スプライト更新
-	UpdateSpriteGame1();
-
-	//ダメージ更新
-	UpdateDamage();
-
-	//コライダー更新
-	UpdateCollider();
-
-	//1フレーム前の状態を代入
-	preStatus = status;
-}
-
-void Enemy::UpdateGame2()
-{
-	//動く
-	Move();
-
-	//ステータスマネージャー
-	StatusManagerGame2();
-
-	//オブジェクト更新
-	UpdateObject();
-
-	//スプライト更新
-	UpdateSpriteGame2();
-
-	//ダメージ更新
-	UpdateDamage();
-
-	//パーティクル更新
-	UpdateParticle();
-
-	//コライダー更新
-	UpdateCollider();
-
-	//1フレーム前の状態を代入
-	preStatus = status;
-}
-
-void Enemy::UpdateTutorial(int tutorialTimer)
-{
-	position.y = 1000.0f;
-	if (tutorialTimer == 0)return;
-
-	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-
-	//ステータスマネージャー
-	StatusManagerTutorial(tutorialTimer);
-
-	//オブジェクト更新
-	UpdateObject();
-
-	//スプライト更新
-	UpdateSpriteGame1();
-
-	//1フレーム前の状態を代入
-	preStatus = status;
-}
-
-void Enemy::UpdateObject()
-{
-	//オブジェクト更新
-	UpdateObject(Stand, objectStand);
-	UpdateObject(Walk, objectWalk);
-	UpdateObject(Attack1, objectAttack1);
-	UpdateObject(AttackOmen1, objectAttackOmen1);
-	UpdateObject(Dash, objectDash);
-	UpdateObject(CallMiniEnemy, objectCallMiniEnemy);
-
-	//弾更新
-	bullet->SetPlayerPos(playerPos);
-	bullet->Update();
-}
-
-void Enemy::UpdateObject(const Status& status, FbxObject3D* object)
-{
-	//引数のステータスと違う場合早期リターン
-	if (this->status != status)
-	{
-		object->StopAnimation();
-		return;
-	}
-
-	//引数のステータスと同じ場合のみ更新
-	object->SetPosition(position);
-	object->SetRotation(rotation);
-	object->SetScale(scale);
-	if (this->status != preStatus)
-	{
-			object->PlayAnimation();
-	}
-
-	object->Update();
-}
-
-void Enemy::UpdateSpriteGame1()
-{
-	//HPバーを現在のHPに
-	hpBar2Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
-	hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
-
-	//更新
-	hpBar1->Update(hpBar1Pos, hpBar1Scale);
-	hpBar2->Update(hpBar2Pos, hpBar2Scale);
-	hpBar3->Update(hpBar3Pos, hpBar3Scale);
-	hpBar4->Update(hpBar4Pos, hpBar4Scale);
-	hpBar5->Update(hpBar5Pos, hpBar5Scale);
-}
-
-void Enemy::UpdateSpriteGame2()
-{
-	//HPバーを現在のHPに
-	hpBar5Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
-	hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
-
-	//更新
-	hpBar1->Update(hpBar1Pos, hpBar1Scale);
-	hpBar3->Update(hpBar3Pos, hpBar3Scale);
-	hpBar4->Update(hpBar4Pos, hpBar4Scale);
-	hpBar5->Update(hpBar5Pos, hpBar5Scale);
-}
-
-void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	//ImGui
-	/*ImGui::Begin("Enemy");
-	ImGui::SetWindowPos(ImVec2(0, 150));
-	ImGui::SetWindowSize(ImVec2(500, 150));
-	ImGui::InputInt("debugNum", debugNum);
-	ImGui::End();*/
-
-	if (status == Stand)
-	{
-		objectStand->Draw(cmdList);
-	}
-	if (status == Walk)
-	{
-		objectWalk->Draw(cmdList);
-	}
-	if (status == Attack1)
-	{
-		objectAttack1->Draw(cmdList);
-	}
-	if (status == AttackOmen1)
-	{
-		objectAttackOmen1->Draw(cmdList);
-	}
-	if (status == Dash)
-	{
-		objectDash->Draw(cmdList);
-	}
-	if (status == CallMiniEnemy)
-	{
-		objectCallMiniEnemy->Draw(cmdList);
-	}
-
-	//弾
-	bullet->Draw();
-
-	//ImGui
-	/*ImGui::Begin("Enemy");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 150));
-	ImGui::InputFloat3("playerPos", bulletPos);
-	ImGui::End();*/
-}
-
-void Enemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	if (status == Stand)
-	{
-		objectStand->DrawLightView(cmdList);
-	}
-	if (status == Walk)
-	{
-		objectWalk->DrawLightView(cmdList);
-	}
-	if (status == Attack1)
-	{
-		objectAttack1->DrawLightView(cmdList);
-	}
-	if (status == AttackOmen1)
-	{
-		objectAttackOmen1->DrawLightView(cmdList);
-	}
-	if (status == Dash)
-	{
-		objectDash->DrawLightView(cmdList);
-	}
-	if (status == CallMiniEnemy)
-	{
-		objectCallMiniEnemy->DrawLightView(cmdList);
-	}
-}
-
-void Enemy::DrawSpriteGame1(ID3D12GraphicsCommandList* cmdList)
-{
-	hpBar5->Draw(cmdList);
-	hpBar2->Draw(cmdList);
-	hpBar4->Draw(cmdList);
-	hpBar1->Draw(cmdList);
-	hpBar3->Draw(cmdList);
-}
-
-void Enemy::DrawSpriteGame2(ID3D12GraphicsCommandList* cmdList)
-{
-	hpBar5->Draw(cmdList);
-	hpBar1->Draw(cmdList);
-	hpBar3->Draw(cmdList);
-}
-
-void Enemy::DrawParticle(ID3D12GraphicsCommandList* cmdList)
+void EnemyState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 {
 	//弾のパーティクル描画
 	bullet->DrawParticle(cmdList);
@@ -357,458 +648,68 @@ void Enemy::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 	explosionParticle2->Draw(cmdList);
 }
 
-void Enemy::Move()
+void EnemyState::Update()
 {
-	//歩きモーション時の動き
-	if (status == Walk)
-	{
-		MoveWalk();
-	}
-	//ダッシュモーション時の動き
-	if (status == Dash)
-	{
-		MoveDash();
-	}
-}
-
-void Enemy::MoveWalk()
-{
-	//プレイヤーと敵のベクトル取得
-	XMFLOAT3 velo = playerPos - position;
-	//敵がプレイヤーの向きを向くようにする
-	rotation.y = getVectorRotation(velo).y;
-
-	//プレイヤーに近づく
-	position = position + normalize(velo) * walkSpeed;
-}
-
-void Enemy::MoveDash()
-{
-	//敵がプレイヤーの向きを向くようにする
-	rotation.y = getVectorRotation(dashVector).y;
-
-	//プレイヤーに近づく
-	position = position + dashVector;
-}
-
-void Enemy::UpdateGravity()
-{
-	//接地していたらタイマーとベクトルリセット
-	if (groundFlag == true)
-	{
-		fallTimer = 0.0f;
-		fallVelocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	}
-
-	//接地していなければ
-	if (groundFlag == false)
-	{
-		//落下タイマーが最大値より小さければ
-		if (fallTimer < fallTime)
-		{
-			fallTimer += fallFrame;
-		}
-	}
-
-	//落下ベクトル計算
-	fallVelocity.y = -(GAcceleration * fallTimer);
-
-	//座標に落下ベクトルを加算
-	position.x += fallVelocity.x;
-	position.y += fallVelocity.y;
-	position.z += fallVelocity.z;
-}
-
-void Enemy::UpdateJump()
-{
-	//接地していたら
-	if (groundFlag == true)
-	{
-		//スペースキーでジャンプ
-		if (input->TriggerKey(DIK_SPACE))
-		{
-			groundFlag = false;
-			fallTimer = -jumpHeight;
-			fallVelocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		}
-	}
-}
-
-void Enemy::UpdateAttack()
-{
-	
-}
-
-void Enemy::UpdateAttack1()
-{
-}
-
-void Enemy::UpdateAttackOmen()
-{
-}
-
-void Enemy::UpdateDamage()
-{
-	//炎攻撃をくらった際
-	if (HitFlag1 == true)
-	{
-		//HPを減らす
-		HP -= 1.0f;
-	}
-
-	//雷攻撃をくらった際
-	if (hitElec == true)
-	{
-		//HPを減らす
-		HP -= 7.0f;
-	}
-
-	//死亡
-	if (HP <= 0)
-	{
-		isDead = true;
-	}
-
-	//フラグをもとに戻す
-	HitFlag1 = false;
-	hitElec = false;
-}
-
-void Enemy::UpdateCollider()
-{
-	colliderData.scale = XMFLOAT3(20.0f,10.0f,10.0f);
-	colliderData.rotation = rotation;
-	colliderData.center = position + XMFLOAT3(0.0f,5.0f,0.0f);
-}
-
-void Enemy::UpdateParticle()
-{
-	//敵呼び出しの場合
-	if (status == CallMiniEnemy)
-	{
-		//敵呼び出し
-		if (statusTimer == frameCallMiniEnemy2)
-		{
-			elecParticle->AddParticle(elecFrame, callEnemyPos + XMFLOAT3(150.0f,500.0f, 150.0f),
-				callEnemyPos, elecStartSlace1, elecEndSlace1, 60.0f, elecStrength);
-			explosionParticle1->Add(callEnemyPos);
-			explosionParticle2->Add(callEnemyPos);
-		}
-		//敵呼び出し
-		if (statusTimer <= frameCallMiniEnemy2)
-		{
-			if ((int)statusTimer % elecInterval == 0)
-			{
-				for (int i = 0; i < elecVol; i++)
-				{
-					elecParticle->AddParticle(3.0f, callEnemyPos + XMFLOAT3(40.0f, 500.0f, 40.0f),
-						callEnemyPos, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength);
-				}
-			}
-		}
-	}
-	explosionParticle1->Update();
-	explosionParticle2->Update();
-	elecParticle->Update();
-}
-
-void Enemy::StatusManagerGame1()
-{
-	//攻撃前兆の場合
-	if (status == AttackOmen1)
-	{
-		//次の攻撃がダッシュの時
-		if (dashFlag == true)
-		{
-			if (statusTimer >= frameAttackOmen1)
-			{
-				//敵→プレイヤーのベクトル取得
-				dashVector = XMFLOAT3(playerPos.x - position.x,0.0f, playerPos.z - position.z);
-				dashVector = normalize(dashVector);
-				dashVector = dashVector * dashSpeed;
-				statusTimer = 0.0f;
-				status = Dash;
-				return;
-			}
-		}
-		//次の攻撃が攻撃1の時
-		if (attack1Flag == true)
-		{
-			//弾をセット
-			if (statusTimer == 0.0f)
-			{
-				XMFLOAT3 addPos(-20, 40, 50);
-				addPos = position + rollRotation(addPos, rotation);
-				for (int i = 0; i < bulletVol; i++)
-				{
-					bullet->SetBullet(addPos, bulletScale, bulletLastScale, 0.0f,
-						frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
-				}
-			}
-			if (statusTimer >= frameAttackOmen1)
-			{
-				statusTimer = 0.0f;
-				status = Attack1;
-				return;
-			}
-		}
-		//タイマー更新
-		statusTimer += 1.0f;
-	}
-	//攻撃1の場合
-	if (status == Attack1)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		if (statusTimer >= frameAttack1)
-		{
-			statusTimer = 0.0f;
-			status = AttackOmen1;
-			//ダッシュのフラグを立てる
-			dashFlag = true;
-			attack1Flag = false;
-			return;
-		}
-	}
-	//立っているの場合
-	if (status == Stand)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		if (statusTimer >= frameStand)
-		{
-			statusTimer = 0.0f;
-			status = AttackOmen1;
-			return;
-		}
-	}
-	//歩きの場合
-	if (status == Walk)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		//プレイヤーとの距離が近い場合も終了
-		if (statusTimer >= frameWalk || length(position - playerPos) <= 10.0f)
-		{
-			statusTimer = 0.0f;
-			status = AttackOmen1;
-			return;
-		}
-	}
-	//ダッシュの場合
-	if (status == Dash)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		//プレイヤーとの距離が近い場合も終了
-		if (statusTimer >= frameDash || length(position - playerPos) <= 10.0f)
-		{
-			statusTimer = 0.0f;
-			status = AttackOmen1;
-			//攻撃1のフラグを立てる
-			dashFlag = false;
-			attack1Flag = true;
-			return;
-		}
-	}
-}
-
-void Enemy::StatusManagerGame2()
-{
-	//デバッグ用
-	//if (status == AttackOmen1)//タイマー更新
-	//{
-	//	statusTimer += 1.0f;
-	//	if (statusTimer >= frameAttackOmen1)
-	//	{
-	//		statusTimer = 0.0f;
-	//		status = AttackOmen1;
-	//		return;
-	//	}
-	//	return;
-	//}
-	
-
-
-	//攻撃前兆の場合
-	if (status == AttackOmen1)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		//次の行動が敵呼び出しの時
-		if (phase2CallEnemyFlag == true)
-		{
-			if (statusTimer >= frameAttackOmen1)
-			{
-				statusTimer = 0.0f;
-				status = CallMiniEnemy;
-				phase2CallEnemyFlag = false;
-				phase2Attack1Flag = true;
-				return;
-			}
-		}
-		//次の行動が攻撃1の時
-		if (phase2Attack1Flag == true)
-		{
-			if (statusTimer >= frameAttackOmen1)
-			{
-				statusTimer = 0.0f;
-				status = Attack1;
-				phase2CallEnemyFlag = true;
-				phase2Attack1Flag = false;
-				return;
-			}
-		}
-	}
-
-	//敵呼び出しの場合
-	if (status == CallMiniEnemy)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		callEnemyFlag = false;
-		//敵呼び出し
-		if (statusTimer == frameCallMiniEnemy2)
-		{
-			//フラグを立てる
-			callEnemyFlag = true;
-			//ベクトル取得
-			XMFLOAT3 velo = playerPos - position;
-			callEnemyPos = velo / 2;
-		}
-		//ダッシュへ移動
-		if (statusTimer >= frameCallMiniEnemy)
-		{
-			//敵→プレイヤーのベクトル取得
-			dashVector = XMFLOAT3(playerPos.x - position.x, 0.0f, playerPos.z - position.z);
-			dashVector = normalize(dashVector);
-			dashVector = dashVector * dashSpeed;
-			statusTimer = 0.0f;
-			status = Dash;
-			return;
-		}
-	}
-
-	//ダッシュ呼び出しの場合
-	if (status == Dash)
-	{
-		//タイマー更新
-		statusTimer += 1.0f;
-		//攻撃前兆へ移動
-		if (statusTimer >= frameDash)
-		{
-			statusTimer = 0.0f;
-			status = AttackOmen1;
-			return;
-		}
-	}
-
-	//攻撃1の場合
-	if (status == Attack1)
-	{
-		//弾をセット
-		if (statusTimer == 0.0f)
-		{
-			XMFLOAT3 addPos(-20, 40, 50);
-			addPos = position + rollRotation(addPos, rotation);
-			for (int i = 0; i < bulletVol; i++)
-			{
-				bullet->SetBullet(addPos, bulletScale, bulletLastScale, 0.0f,
-					frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
-			}
-		}
-		//タイマー更新
-		statusTimer += 1.0f;
-		//攻撃前兆へ移動
-		if (statusTimer >= frameAttack1)
-		{
-			statusTimer = 0.0f;
-			status = AttackOmen1;
-			return;
-		}
-	}
-}
-
-void Enemy::StatusManagerTutorial(int tutorialTimer)
-{
-	//しばらく立ってる
-	if (tutorialTimer < 180)
-	{
-		status = Stand;
-		return;
-	}
-	//攻撃前兆モーション
-	if (tutorialTimer < 180 + frameAttackOmen1)
-	{
-		status = AttackOmen1;
-		return;
-	}
-	//しばらく立ってる
-	else
-	{
-		status = Stand;
-		return;
-	}
-}
-
-void Enemy::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	if (status == Stand)
-	{
-		objectStand->SetSRV(SRV);
-	}
-	if (status == Walk)
-	{
-		objectWalk->SetSRV(SRV);
-	}
-	if (status == Attack1)
-	{
-		objectAttack1->SetSRV(SRV);
-	}
-	if (status == AttackOmen1)
-	{
-		objectAttackOmen1->SetSRV(SRV);
-	}
-	if (status == Dash)
-	{
-		objectDash->SetSRV(SRV);
-	}
-	if (status == CallMiniEnemy)
-	{
-		objectCallMiniEnemy->SetSRV(SRV);
-	}
-}
-
-void Enemy::HitPlane()
-{
-	//接地フラグを立てる
-	groundFlag = true;
-
-	//めり込まなくなるまで加算
-	position.y += 0.1f;
+	//タイマー更新
+	objectTimer++;
 
 	//オブジェクト更新
 	UpdateObject();
+
+	////ダウン状態更新
+	//UpdateDown();
+
+	//コライダーデータ更新
+	colliderData.scale = colliderScale;
+	colliderData.rotation = rotation;
+	colliderData.center = position;
+
+	//攻撃更新
+	UpdateAttack();
+
+	//弾更新
+	bullet->Update();
+
+	//パーティクル更新
+	explosionParticle1->Update();
+	explosionParticle2->Update();
+	elecParticle->Update();
+
+	//動き
+	Move();
+
+	//当たりフラグを元に戻す
+	/*hitFlag = false;*/
 }
 
-void Enemy::HitBullet1()
+void EnemyState::UpdateCollider()
 {
-	//被弾フラグを立てる
-	HitFlag1 = true;
+	for (int i = 0; i < objectColliderData.size(); i++)
+	{
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 4) == "wall")
+		{
+			UpdateHitWall(objectColliderData[i]);
+		}
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 6) == "piller")
+		{
+			UpdateHitPiller(objectColliderData[i]);
+		}
+	}
 }
 
-void Enemy::Reset()
+void EnemyState::Reset()
 {
-	HP = maxHP;
-	isDead = false;
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
-void Enemy::SetGameScene()
+void EnemyState::SetTutorial()
 {
-	HP = maxHP;
-	isDead = false;
-	status = AttackOmen1;
-	statusTimer = 0;
+	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
+
+void EnemyState::SetGameScene()
+{
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }

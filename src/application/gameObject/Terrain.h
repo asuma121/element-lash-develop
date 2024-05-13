@@ -68,11 +68,15 @@ private:	//メンバ変数
 
 	//柱モデル
 	ObjModel* pillerModel = nullptr;
-	//柱オブジェクト
-	ObjObject3D* pillerObject = nullptr;
+	
+	//天球以外のオブジェクト
+	std::vector<ObjObject3D*> objects;
 
 	//判定を持つオブジェクトすべてのコライダーデータ
 	std::vector<JSONLoader::ColliderData>colliderData;
 	//コライダーの数
 	int colliderNum = 0;
+
+	//jsonから受け取ったオブジェクトのデータ
+	std::vector<JSONLoader::ObjectData>objectData;
 };

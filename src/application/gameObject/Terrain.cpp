@@ -8,7 +8,7 @@ Terrain::~Terrain()
 	delete skySphereModel;
 	delete skySphereObject;
 	delete coliseumModel;
-	delete coliseumObject;
+	delete pillerModel;
 }
 
 void Terrain::Initialize(ID3D12Device* device)
@@ -22,7 +22,7 @@ void Terrain::Initialize(ID3D12Device* device)
 	skySphereObject->setRotation(skySpherePos);
 	skySphereObject->setPosition(skySphereRotation);
 
-	//コロシアム
+	//コロシアムのモデル
 	coliseumModel = new ObjModel();
 	coliseumModel->Initialize(device, "coliseum", "Resources/pictures/coliseum.png");
 	coliseumObject = new ObjObject3D();
@@ -30,6 +30,27 @@ void Terrain::Initialize(ID3D12Device* device)
 	coliseumObject->setScale(coliseumScale);
 	coliseumObject->setRotation(coliseumPos);
 	coliseumObject->setPosition(coliseumRotation);
+
+	//柱のモデル
+	pillerModel = new ObjModel();
+	pillerModel->Initialize(device, "piller", "Resources/pictures/piller.png");
+
+	//天球以外のオブジェクト読み込み
+	objectData = JSONLoader::LoadTerrainObject("Resources/json/stage.json");
+
+	for (int i = 0; i < objectData.size(); i++)
+	{
+		//オブジェクト生成
+		ObjObject3D* newObject = new ObjObject3D();
+		//モデル読み込み
+		newObject->Initialize(device, pillerModel, camera);
+		//座標、スケール、角度設定
+		newObject->setScale(objectData[i].scale);
+		newObject->setRotation(objectData[i].rotation);
+		newObject->setPosition(objectData[i].position);
+		//オブジェクトの末尾に追加
+		objects.emplace_back(newObject);
+	}
 
 	//コライダー
 	colliderData = JSONLoader::LoadTerrainCollider("Resources/json/stage.json");
@@ -45,6 +66,10 @@ void Terrain::Update()
 	//オブジェクト更新
 	skySphereObject->Update();
 	coliseumObject->Update();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update();
+	}
 }
 
 void Terrain::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -52,4 +77,8 @@ void Terrain::Draw(ID3D12GraphicsCommandList* cmdList)
 	//オブジェクト描画
 	skySphereObject->Draw(cmdList, skySphereModel->vbView, skySphereModel->ibView);
 	coliseumObject->Draw(cmdList, coliseumModel->vbView, coliseumModel->ibView);
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Draw(cmdList, pillerModel->vbView, pillerModel->ibView);
+	}
 }

@@ -106,6 +106,7 @@ void PhaseState::Initialize()
 	{
 		ui->SetGame();
 		player->SetGameScene();
+		enemy->SetGameScene();
 	}
 }
 

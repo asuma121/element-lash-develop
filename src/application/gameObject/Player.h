@@ -499,5 +499,5 @@ protected:	//メンバ変数
 	//オブジェクトのコライダーデータ
 	std::vector<JSONLoader::ColliderData> objectColliderData;
 	//オブジェクト衝突時の押し戻し
-	float knockBackSpeed = 0.05f;
+	float knockBackSpeed = 0.001f;
 };

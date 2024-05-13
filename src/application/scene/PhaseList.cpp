@@ -77,6 +77,10 @@ void Phase1::UpdateCollider()
 	player->SetObjectCollider(terrain->GetColliderData());
 	player->UpdateCollider();
 
+	//“G‚Ì‚ ‚½‚è”»’èXV
+	enemy->SetObjectCollider(terrain->GetColliderData());
+	enemy->UpdateCollider();
+
 	//“G‚Ì’e‚ÆŽž‹@‚Ì“–‚½‚è”»’è
 	//if (player->GetInvincibleFlag() == false)
 	//{
@@ -90,15 +94,15 @@ void Phase1::UpdateCollider()
 	//	}
 	//}
 
-	////“G‚ÆŽž‹@‚Ì“–‚½‚è”»’è
-	//if (player->GetInvincibleFlag() == false)
-	//{
-	//	if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
-	//	{
-	//		//Ž©‹@‚Éƒqƒbƒgƒtƒ‰ƒO‘—M
-	//		player->HitEnemy();
-	//	}
-	//}
+	//“G‚ÆŽž‹@‚Ì“–‚½‚è”»’è
+	if (player->GetInvincibleFlag() == false)
+	{
+		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
+		{
+			////Ž©‹@‚Éƒqƒbƒgƒtƒ‰ƒO‘—M
+			//player->HitEnemy();
+		}
+	}
 
 	////Žž‹@‚Ì’e(‰Š)‚Æ“G‚Ì“–‚½‚è”»’è
 	//for (int i = 0; i < player->GetBullet1Num(); i++)
