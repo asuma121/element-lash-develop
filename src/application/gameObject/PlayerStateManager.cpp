@@ -470,7 +470,7 @@ void Down::Initialize()
 void Down::UpdateState(Player* player)
 {
 	//ヒットフラグが戻ったら
-	if (invincibleFlag == false)
+	if (objectTimer >= frameDown)
 	{
 		player->ChangeState(new Wait());
 		return;

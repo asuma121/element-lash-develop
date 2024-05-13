@@ -82,60 +82,48 @@ void Phase1::UpdateCollider()
 	enemy->UpdateCollider();
 
 	//敵の弾と時機の当たり判定
-	//if (player->GetInvincibleFlag() == false)
-	//{
-	//	for (int i = 0; i < enemy->GetBulletNum(); i++)
-	//	{
-	//		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
-	//		{
-	//			//自機にヒットフラグ送信
-	//			player->HitEnemy();
-	//		}
-	//	}
-	//}
+	if (player->GetInvincibleFlag() == false)
+	{
+		for (int i = 0; i < enemy->GetBulletNum(); i++)
+		{
+			if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
+			{
+				//自機にヒットフラグ送信
+				player->HitEnemy();
+			}
+		}
+	}
 
 	//敵と時機の当たり判定
 	if (player->GetInvincibleFlag() == false)
 	{
 		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
 		{
-			////自機にヒットフラグ送信
-			//player->HitEnemy();
+			//自機にヒットフラグ送信
+			player->HitEnemy();
+			//敵にヒットフラグ送信
+			enemy->SetHitPlayer();
 		}
 	}
 
 	////時機の弾(炎)と敵の当たり判定
-	//for (int i = 0; i < player->GetBullet1Num(); i++)
-	//{
-	//	if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
-	//	{
-	//		//敵にヒットフラグ送信
-	//		enemy->HitBullet1();
-	//		//自機にヒットフラグ送信
-	//		player->HitBullet1(i);
-	//	}
-	//}
-
-	////雷攻撃が当たったら
-	//if (player->GetHitElec())
-	//{
-	//	//敵にヒットフラグ送信
-	//	enemy->HitElec();
-	//}
-
-	//時機のオブジェクトの当たり判定
-	/*for (int i = 0; i < terrain->GetColliderNum(); i++)
+	for (int i = 0; i < player->GetBullet1Num(); i++)
 	{
-		if (ColliderManager::CheckCollider(player->GetColliderData(), terrain->GetColliderData()[i]))
+		if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
 		{
+			//敵にヒットフラグ送信
+			enemy->HitBullet1();
+			//自機にヒットフラグ送信
+			player->HitBullet1(i);
 		}
-	}*/
-	/*for (int i = 0; i < terrain->GetColliderNum(); i++)
+	}
+
+	//雷攻撃が当たったら
+	if (player->GetHitElec())
 	{
-		if (ColliderManager::CheckCollider(player->GetColliderData(), terrain->GetColliderData()[i]))
-		{
-		}
-	}*/
+		//敵にヒットフラグ送信
+		enemy->HitElec();
+	}
 
 	//敵の弾と平面の判定
 	//for (std::unique_ptr<FbxObject3D>& object1 : object)
@@ -186,10 +174,10 @@ void Phase1::DrawSprite()
 	//UI描画
 	ui->DrawGame(dxCommon->GetCommandList());
 
-	//プレイヤーのスプライト描画
-	player->DrawSpriteGame(dxCommon->GetCommandList());
 	//敵
 	enemy->DrawSpriteGame1(dxCommon->GetCommandList());
+	//プレイヤーのスプライト描画
+	player->DrawSpriteGame(dxCommon->GetCommandList());
 }
 
 void Phase1::DrawParticle()

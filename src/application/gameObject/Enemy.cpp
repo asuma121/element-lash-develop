@@ -39,6 +39,14 @@ FbxObject3D* EnemyState::objectDash = nullptr;
 FbxModel* EnemyState::modelDash = nullptr;
 //敵呼び出しのオブジェクト
 FbxObject3D* EnemyState::objectCallMiniEnemy = nullptr;
+//転ぶオブジェクト
+FbxObject3D* EnemyState::objectFallDown = nullptr;
+//転ぶモデル
+FbxModel* EnemyState::modelFallDown = nullptr;
+//立ち上がるオブジェクト
+FbxObject3D* EnemyState::objectGetUp = nullptr;
+//立ち上がるモデル
+FbxModel* EnemyState::modelGetUp = nullptr;
 //平行移動
 XMFLOAT3 EnemyState::position = { 0.0f,0.0f,30.0f };
 //回転
@@ -54,10 +62,14 @@ ExplosionParticle2* EnemyState::explosionParticle2 = nullptr;
 EnemyBullet* EnemyState::bullet = nullptr;
 //コライダーデータ
 JSONLoader::ColliderData EnemyState::colliderData;
+//次の行動を決めるフラグ
+bool EnemyState::nextCallMiniEnemy;
+bool EnemyState::nextDash;
+bool EnemyState::nextAttack01;
 
 Enemy::Enemy()
 {
-	enemyState = new Dash();
+	enemyState = new AttackOmen1();
 }
 
 Enemy::~Enemy()
@@ -91,7 +103,11 @@ void Enemy::Initialize()
 void Enemy::UpdateGame1()
 {
 	//ステート更新
+	enemyState->SetHitPlayer(hitPlayer);
 	enemyState->Update();
+
+	//フラグを戻す
+	hitPlayer = false;
 
 	//ステータスマネージャー
 	StatusManagerGame1();
@@ -543,6 +559,21 @@ JSONLoader::ColliderData Enemy::GetColliderData()
 	return enemyState->GetColliderData();
 }
 
+JSONLoader::ColliderData Enemy::GetBulletColliderData(int num)
+{
+	return enemyState->GetBullet1ColliderData(num);
+}
+
+size_t Enemy::GetBulletNum()
+{
+	return enemyState->GetBullet1Num();
+}
+
+void Enemy::SetHitPlayer()
+{
+	hitPlayer = true;
+}
+
 void Enemy::ChangeState(EnemyState* newState)
 {
 	delete enemyState;
@@ -606,10 +637,28 @@ void EnemyState::StaticInitialize()
 	objectCallMiniEnemy->SetTextureNum(0);
 	objectCallMiniEnemy->StopAnimation();
 
+	//転ぶモデル
+	modelFallDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyFallDown");
+	//転ぶオブジェクト
+	objectFallDown = new FbxObject3D;
+	objectFallDown->Initialize();
+	objectFallDown->SetModel(modelFallDown);
+	objectFallDown->SetTextureNum(0);
+	objectFallDown->StopAnimation();
+
+	//立ち上がるモデル
+	modelGetUp = FbxLoader::GetInstance()->LoadModelFromFile("enemyGetUp");
+	//立ち上がるオブジェクト
+	objectGetUp = new FbxObject3D;
+	objectGetUp->Initialize();
+	objectGetUp->SetModel(modelGetUp);
+	objectGetUp->SetTextureNum(0);
+	objectGetUp->StopAnimation();
+
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため
 	colliderData.objectName = "enemy";
-	colliderData.scale = scale;
+	colliderData.scale = { 30.0f,30.0f,30.0f };
 	colliderData.rotation = rotation;
 	colliderData.center = position;
 	//コライダーマネージャーにセット
@@ -633,6 +682,11 @@ void EnemyState::StaticInitialize()
 	//敵の弾
 	bullet = new EnemyBullet;
 	bullet->Initialize();
+
+	//行動を決めるフラグ
+	nextCallMiniEnemy = false;
+	nextDash = false;
+	nextAttack01 = true;
 }
 
 void EnemyState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
@@ -653,9 +707,6 @@ void EnemyState::Update()
 	//タイマー更新
 	objectTimer++;
 
-	//オブジェクト更新
-	UpdateObject();
-
 	////ダウン状態更新
 	//UpdateDown();
 
@@ -668,6 +719,7 @@ void EnemyState::Update()
 	UpdateAttack();
 
 	//弾更新
+	bullet->SetPlayerPos(playerPos);
 	bullet->Update();
 
 	//パーティクル更新
@@ -677,6 +729,9 @@ void EnemyState::Update()
 
 	//動き
 	Move();
+
+	//オブジェクト更新
+	UpdateObject();
 
 	//当たりフラグを元に戻す
 	/*hitFlag = false;*/

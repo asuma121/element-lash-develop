@@ -114,21 +114,6 @@ public://メンバ関数
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
-	///挙動全般
-	/// </summary>
-	void Move();
-
-	/// <summary>
-	///歩くモーション自の挙動
-	/// </summary>
-	void MoveWalk();
-
-	/// <summary>
-	///ダッシュ自の挙動
-	/// </summary>
-	void MoveDash();
-
-	/// <summary>
 	///ダメージ系全般
 	/// </summary>
 	void UpdateDamage();
@@ -169,6 +154,11 @@ public://メンバ関数
 	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData);
 
 	/// <summary>
+	///プレイヤーにダッシュを当てたら
+	/// </summary>
+	void SetHitPlayer();
+
+	/// <summary>
 	///時機の弾被弾時
 	/// </summary>
 	void HitBullet1();
@@ -203,15 +193,15 @@ public://メンバ関数
 	/// </summary>
 	JSONLoader::ColliderData GetColliderData();
 
-	/*/// <summary>
+	/// <summary>
 	///弾のコライダー取得
 	/// </summary>
-	JSONLoader::ColliderData GetBulletColliderData(int num) { return bullet->GetColliderData(num); }
+	JSONLoader::ColliderData GetBulletColliderData(int num);
 
 	/// <summary>
 	///弾のコライダー取得
 	/// </summary>
-	size_t GetBulletNum() { return  bullet->GetBulletNum(); }*/
+	size_t GetBulletNum();
 
 	/// <summary>
 	///敵呼び出しフラグ取得
@@ -272,6 +262,9 @@ private:
 	bool callEnemyFlag = false;
 	//呼び出す敵の座標
 	XMFLOAT3 callEnemyPos = { 0.0f,0.0f,0.0f };
+
+	//プレイヤーにダッシュを当てたフラグ
+	bool hitPlayer = false;
 
 	////コライダーデータ
 	//JSONLoader::ColliderData colliderData;
@@ -479,6 +472,8 @@ public:	//メンバ関数
 	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData) { objectColliderData = colliderData; };
 	//プレイヤーの座標セット
 	void SetPlayerPos(XMFLOAT3 playerPos) { EnemyState::playerPos = playerPos; };
+	//プレイヤーに当たったら
+	void SetHitPlayer(bool hitPlayerFlag) { EnemyState::hitPlayerFlag = hitPlayerFlag; };
 
 	//座標取得
 	XMFLOAT3 GetPosition() { return position; }
@@ -486,18 +481,12 @@ public:	//メンバ関数
 	XMFLOAT3 GetRotation() { return rotation; }
 	//スケール取得
 	XMFLOAT3 GetScale() { return scale; }
-	////プレイヤーの弾命中時
-	//void HitBullet1(int num) { bullet->SetHitFlag(num); };
 	//コライダー取得
 	JSONLoader::ColliderData GetColliderData() { return colliderData; }
 	//弾のコライダー取得
 	JSONLoader::ColliderData GetBullet1ColliderData(int num) { return bullet->GetColliderData(num); }
 	//弾のコライダー取得
 	size_t GetBullet1Num() { return  bullet->GetBulletNum(); }
-	////プレイヤーが無敵状態か取得
-	//bool GetInvincibleFlag() { return invincibleFlag; }
-	////ヒットフラグ取得
-	//bool GetHitElec() { return hitElecFlag; }
 	//リセット
 	void Reset();
 	//チュートリアルシーンに移る際に呼び出す
@@ -535,6 +524,16 @@ protected:	//静的メンバ変数
 	//敵呼び出しのオブジェクト
 	static FbxObject3D* objectCallMiniEnemy;
 
+	//転ぶオブジェクト
+	static FbxObject3D* objectFallDown;
+	//転ぶモデル
+	static FbxModel* modelFallDown;
+
+	//立ち上がるオブジェクト
+	static FbxObject3D* objectGetUp;
+	//立ち上がるモデル
+	static FbxModel* modelGetUp;
+
 	//コライダーデータ
 	static JSONLoader::ColliderData colliderData;
 
@@ -556,6 +555,10 @@ protected:	//静的メンバ変数
 	//サイズ
 	static XMFLOAT3 scale;
 
+	//次の行動を決めるフラグ
+	static bool nextCallMiniEnemy ;
+	static bool nextDash ;
+	static bool nextAttack01;
 
 protected:	//メンバ変数
 
@@ -583,6 +586,12 @@ protected:	//メンバ変数
 	float frameCallMiniEnemy2 = 40.0f;
 	//敵呼び出し状態のアニメーションのフレーム
 	float frameCallMiniEnemy = 190.0f;
+	//転ぶ状態のアニメーションのフレーム
+	float frameFallDownEnemy = 250.0f;
+	//立ち上がる状態のアニメーションのフレーム
+	float frameGetUpEnemy = 163.0f;
+	//柱の判定を取らない時間
+	float frameNoPillerHit = 90.0f;
 
 	//一度に出す雷パーティクルの数
 	int elecVol = 5;
@@ -599,14 +608,26 @@ protected:	//メンバ変数
 	//雷の横揺れの強さ
 	float elecStrength = 1.1f;
 
+	//弾を出す位置
+	XMFLOAT3 bulletAddPos = { 20.0f, 40.0f, 50.0f };
+	//一度に発射する弾の数
+	int bulletVol = 10;
+	//弾の時間差
+	float bulletTimeLag = 15.0f;
+	//弾の大きさ
+	XMFLOAT3 bulletScale = { 5.0f,5.0f,5.0f };
+	//弾の角度
+	XMFLOAT3 bulletLastScale = { 3.0f,3.0f,3.0f };
+
 	//歩くスピード
 	float walkSpeed = 1.0f;
 	//ダッシュのスピード
 	float dashSpeed = 0.9f;
+	//ダッシュ攻撃に移らない範囲
+	float dashLength = 50.0f;
 
-	//被弾フラグ
-	bool HitFlag1 = false;
-	bool hitElec = false;
+	//プレイヤーにダッシュを当てたフラグ
+	bool hitPlayerFlag = false;
 
 	//コライダー
 	//コライダーの大きさ

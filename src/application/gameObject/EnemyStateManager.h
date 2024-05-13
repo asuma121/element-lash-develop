@@ -67,6 +67,8 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
+	//攻撃更新
+	void UpdateAttack()override;
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
@@ -105,6 +107,10 @@ public:	//メンバ変数
 	bool hitObjectFlag = false;
 	//オブジェクト衝突時の押し戻し
 	float knockBackSpeed = 0.001f;
+
+	//一度プレイヤーに衝突したらオブジェクトにぶつかるまで同じ方向へダッシュ
+	XMFLOAT3 dashVec = { 0.0f, 0.0f, 0.0f };
+	bool dashFlag = false;
 };
 
 class CallMiniEnemy : public EnemyState
@@ -124,4 +130,42 @@ class CallMiniEnemy : public EnemyState
 		void SetSRV(ID3D12DescriptorHeap* SRV);
 		//オブジェクト更新
 		void UpdateObject();
+};
+
+class FallDown : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void Initialize();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+	//描画
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+	//ライト目線描画
+	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
+	//SRVセット
+	void SetSRV(ID3D12DescriptorHeap* SRV);
+	//オブジェクト更新
+	void UpdateObject();
+};
+
+class GetUp : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void Initialize();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+	//描画
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+	//ライト目線描画
+	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
+	//SRVセット
+	void SetSRV(ID3D12DescriptorHeap* SRV);
+	//オブジェクト更新
+	void UpdateObject();
 };

@@ -110,6 +110,22 @@ void Attack01::Move()
 
 void Attack01::UpdateState(Enemy* enemy)
 {
+	//弾を打ち終えたら攻撃前兆へ
+	if (objectTimer >= frameAttack1)
+	{
+		//プレイヤーとの距離が近い場合もう一度弾
+		if (dashLength >= length(playerPos - position))
+		{
+			nextAttack01 = true;
+		}
+		//プレイヤーとの距離が遠い場合ダッシュ
+		else
+		{
+			nextDash = true;
+		}
+		enemy->ChangeState(new AttackOmen1());
+		return;
+	}
 }
 
 void Attack01::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -148,10 +164,59 @@ void AttackOmen1::Initialize()
 
 void AttackOmen1::Move()
 {
+	if (objectTimer == 1)
+	{
+		//プレイヤーと敵のベクトル取得
+		XMFLOAT3 velo = playerPos - position;
+
+		//敵がプレイヤーの向きを向くようにする
+		rotation.y = getVectorRotation(velo).y;
+	}
 }
 
 void AttackOmen1::UpdateState(Enemy* enemy)
 {
+	//アニメーションが終わったら
+	if (objectTimer >= frameAttackOmen1)
+	{
+		//次の行動が敵呼び出しの時
+		if (nextCallMiniEnemy)
+		{
+			nextCallMiniEnemy = false;
+			enemy->ChangeState(new CallMiniEnemy());
+			return;
+		}
+		//次の行動がダッシュの時
+		if (nextDash)
+		{
+			nextDash = false;
+			enemy->ChangeState(new Dash());
+			return;
+		}
+		//次の行動が敵呼び出しの時
+		if (nextAttack01)
+		{
+			nextAttack01 = false;
+			enemy->ChangeState(new Attack01());
+			return;
+		}
+	}
+}
+
+void AttackOmen1::UpdateAttack()
+{
+	//弾をセット
+	if (objectTimer == 1.0f && nextAttack01)
+	{
+		//弾を出す位置を回転
+		bulletAddPos = position + rollRotation(bulletAddPos, rotation);
+		//弾をセット
+		for (int i = 0; i < bulletVol; i++)
+		{
+			bullet->SetBullet(bulletAddPos, bulletScale, bulletLastScale, 0.0f,
+				frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
+		}
+	}
 }
 
 void AttackOmen1::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -190,6 +255,17 @@ void Dash::Initialize()
 
 void Dash::Move()
 {
+	//プレイヤーにすでにヒットしている場合
+	if (dashFlag == true)
+	{
+		//プレイヤーに近づく
+		position = position + dashVec * dashSpeed;
+
+		//敵がプレイヤーの向きを向くようにする
+		rotation.y = getVectorRotation(dashVec).y;
+
+		return;
+	}
 	//プレイヤーと敵のベクトル取得
 	XMFLOAT3 velo = playerPos - position;
 
@@ -198,8 +274,12 @@ void Dash::Move()
 	//敵がプレイヤーの向きを向くようにする
 	rotation.y = getVectorRotation(velo).y;
 
-	//プレイヤーに近づく
-	position = position + velo * dashSpeed;
+	//プレイヤーにまだヒットしてない場合
+	if (dashFlag == false)
+	{
+		//プレイヤーに近づく
+		position = position + velo * dashSpeed;
+	}
 }
 
 void Dash::UpdateState(Enemy* enemy)
@@ -207,7 +287,7 @@ void Dash::UpdateState(Enemy* enemy)
 	//オブジェクトに衝突したら倒れるモーションへ
 	if (hitObjectFlag == true)
 	{
-		enemy->ChangeState(new Stand());
+		enemy->ChangeState(new FallDown());
 		return;
 	}
 }
@@ -229,6 +309,15 @@ void Dash::SetSRV(ID3D12DescriptorHeap* SRV)
 
 void Dash::UpdateObject()
 {
+	if (hitPlayerFlag == true && dashFlag == false)
+	{
+		//プレイヤーと敵のベクトル取得
+		dashVec = playerPos - position;
+		dashVec = normalize(dashVec);
+
+		dashFlag = true;
+	}
+
 	objectDash->SetPosition(position);
 	objectDash->SetRotation(rotation);
 	objectDash->SetScale(scale);
@@ -258,6 +347,9 @@ void Dash::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
 
 void Dash::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
 {
+	//タイマー90フレーム以内は判定をとらない
+	if (objectTimer < frameNoPillerHit)return;
+
 	//柱に衝突してなかったら処理終了
 	if(ColliderManager::CheckCollider(colliderData, objectColliderData) == false)return;
 
@@ -319,3 +411,100 @@ void CallMiniEnemy::UpdateObject()
 	objectCallMiniEnemy->Update();
 }
 
+void FallDown::Initialize()
+{
+	//アニメーションの設定
+	objectFallDown->StopAnimation();
+	objectFallDown->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void FallDown::Move()
+{
+}
+
+void FallDown::UpdateState(Enemy* enemy)
+{
+	//時間が立ったら立ちあがるアニメーションへ
+	if (objectTimer >= frameFallDownEnemy)
+	{
+		enemy->ChangeState(new GetUp());
+		return;
+	}
+}
+
+void FallDown::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	objectFallDown->Draw(cmdList);
+}
+
+void FallDown::DrawLightView(ID3D12GraphicsCommandList* cmdList)
+{
+	objectFallDown->DrawLightView(cmdList);
+}
+
+void FallDown::SetSRV(ID3D12DescriptorHeap* SRV)
+{
+	objectFallDown->SetSRV(SRV);
+}
+
+void FallDown::UpdateObject()
+{
+	objectFallDown->SetPosition(position);
+	objectFallDown->SetRotation(rotation);
+	objectFallDown->SetScale(scale);
+	objectFallDown->Update();
+}
+
+void GetUp::Initialize()
+{
+	//アニメーションの設定
+	objectGetUp->StopAnimation();
+	objectGetUp->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void GetUp::Move()
+{
+}
+
+void GetUp::UpdateState(Enemy* enemy)
+{
+	//立ち上がったら攻撃モーションへ
+	if (objectTimer >= frameGetUpEnemy)
+	{
+		//次の攻撃を弾に設定
+		nextAttack01 = true;
+		enemy->ChangeState(new AttackOmen1());
+		return;
+	}
+}
+
+void GetUp::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	objectGetUp->Draw(cmdList);
+}
+
+void GetUp::DrawLightView(ID3D12GraphicsCommandList* cmdList)
+{
+	objectGetUp->DrawLightView(cmdList);
+}
+
+void GetUp::SetSRV(ID3D12DescriptorHeap* SRV)
+{
+	objectGetUp->SetSRV(SRV);
+}
+
+void GetUp::UpdateObject()
+{
+	objectGetUp->SetPosition(position);
+	objectGetUp->SetRotation(rotation);
+	objectGetUp->SetScale(scale);
+	objectGetUp->Update();
+}

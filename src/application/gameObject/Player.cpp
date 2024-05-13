@@ -47,6 +47,9 @@ PlayerBullet* PlayerState::bullet = nullptr;
 ElecParticle* PlayerState::elecParticle1 = nullptr;
 //雷パーティクルに使うパーティクル 敵の弾のもので代用
 EnemyBulletParticle* PlayerState::elecParticle2 = nullptr;
+//被ダメージ時の無敵時間
+bool PlayerState::invincibleFlag;
+float PlayerState::hitTimer;
 
 Player::Player()
 {
@@ -85,16 +88,10 @@ void Player::UpdateGame()
 	//フォルム更新
 	UpdateForm();
 
-	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
-	playerState->SetPlayerForm(form);
-	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->Update();
-
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
 	lockOn->SetPlayerPosition(playerState->GetPosition());
-	if (1)
+	if (form == Elec)
 	{
 		for (int i = 0; i < enemyPos.size(); i++)
 		{
@@ -102,6 +99,13 @@ void Player::UpdateGame()
 		}
 		lockOn->Update();
 	}
+
+	//プレイヤーステート更新
+	playerState->SetDXInput(dxInput);
+	playerState->SetPlayerForm(form);
+	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
+	playerState->Update();
+
 
 
 	//スプライト更新
@@ -160,12 +164,6 @@ void Player::UpdateTitle(float timer)
 	//フォルム更新
 	UpdateForm();
 
-	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
-	playerState->SetPlayerForm(form);
-	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->Update();
-
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
 	lockOn->SetPlayerPosition(playerState->GetPosition());
@@ -177,6 +175,13 @@ void Player::UpdateTitle(float timer)
 		}
 		lockOn->Update();
 	}
+
+	//プレイヤーステート更新
+	playerState->SetDXInput(dxInput);
+	playerState->SetPlayerForm(form);
+	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
+	playerState->Update();
+
 
 
 	//スプライト更新
@@ -433,8 +438,8 @@ void PlayerState::Update()
 	//オブジェクト更新
 	UpdateObject();
 
-	////ダウン状態更新
-	//UpdateDown();
+	//ダウン状態更新
+	UpdateDown();
 
 	//コライダーデータ更新
 	colliderData.rotation = rotation0;
@@ -602,6 +607,10 @@ void PlayerState::StaticInitialize()
 	rotation1 = { 0.0f,0.0f,0.0f };
 	//スケール
 	scale = { 1.0f,1.0f,1.0f };
+
+	//あたりフラグ
+	invincibleFlag = false;
+	hitTimer = 0;
 }
 
 void PlayerState::Move()

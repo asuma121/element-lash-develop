@@ -453,6 +453,9 @@ protected:	//静的メンバ変数
 	static ElecParticle* elecParticle1;
 	//雷パーティクルに使うパーティクル 敵の弾のもので代用
 	static EnemyBulletParticle* elecParticle2;
+	//被ダメージ時の無敵時間
+	static bool invincibleFlag;
+	static float hitTimer;
 
 protected:	//メンバ変数
 
@@ -485,9 +488,6 @@ protected:	//メンバ変数
 	//当たりフラグ
 	bool hitFlag = false;
 	bool hitElecFlag = false;
-	float hitTimer = 0.0f;
-	//被ダメージ時の無敵時間
-	bool invincibleFlag = false;
 
 	//被ダメージアニメーションのフレーム数
 	float frameDown = 138.0f;

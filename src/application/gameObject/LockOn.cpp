@@ -78,6 +78,10 @@ void LockOn::Update()
 		lockOnSprite1->SetPosition(sprite1Pos);
 		lockOnSprite1->SetScale(XMFLOAT3(2.5f, 2.5f, 2.5f));
 		lockOnSprite1->Update();
+
+		debugTargetPos[0] = sprite1Pos.x;
+		debugTargetPos[1] = sprite1Pos.y;
+		debugTargetPos[2] = sprite1Pos.z;
 	}
 	//ロックオンしていない時のターゲットを設定する
 	else
@@ -116,6 +120,8 @@ void LockOn::Draw(ID3D12GraphicsCommandList* cmdList)
 		lockOnSprite2->Draw(cmdList);
 	}
 
+	debugTargetFlag[0] = lockOnFlag;
+
 	//ロックオンフラグを戻す
 	lockOnFlag = false;
 
@@ -124,8 +130,7 @@ void LockOn::Draw(ID3D12GraphicsCommandList* cmdList)
 	ImGui::SetWindowPos(ImVec2(500, 300));
 	ImGui::SetWindowSize(ImVec2(500, 150));
 	//ImGui::InputFloat2("debugPos", debugPos);
-	ImGui::InputFloat("debugTimer", debugTimer);
-	ImGui::InputFloat("debugTimer2", debugTimer2);
-	ImGui::InputFloat("debugNum", debugNum);
+	ImGui::InputFloat3("targetPos", debugTargetPos);
+	ImGui::InputFloat("targetFlag", debugTargetFlag);
 	ImGui::End();
 }

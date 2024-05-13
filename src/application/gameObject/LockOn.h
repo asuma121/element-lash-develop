@@ -103,4 +103,6 @@ private:	//ƒƒ“ƒo•Ï”
 	float debugTimer2[1] = { 0 };
 	float debugTimer3[1] = { 0 };
 	float debugNum[1] = { 0 };
+	float debugTargetPos[3] = { 0,0,0 };
+	float debugTargetFlag[1] = { 0 };
 };
