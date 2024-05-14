@@ -85,12 +85,12 @@ public:	//メンバ関数
 	/// <summary>
 	///判定
 	/// </summary>
-	static bool CheckCollider(JSONLoader::ColliderData colliderData0, JSONLoader::ColliderData colliderData1);
+	static bool CheckCollider(JSONLoader::ColliderData colliderData0, JSONLoader::ColliderData colliderData1,bool wallFlag = false);
 
 	/// <summary>
 	///判定 球体と球体
 	/// </summary>
-	static bool CheckSphereSphere(JSONLoader::ColliderData colliderSphere0, JSONLoader::ColliderData colliderSphere1);
+	static bool CheckSphereSphere(JSONLoader::ColliderData colliderSphere0, JSONLoader::ColliderData colliderSphere1,bool wallFlag = false);
 
 	/// <summary>
 	///判定 平面と球体

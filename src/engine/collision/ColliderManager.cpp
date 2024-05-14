@@ -152,7 +152,7 @@ void ColliderManager::Draw(ID3D12GraphicsCommandList* cmdList)
 	}
 }
 
-bool ColliderManager::CheckCollider(JSONLoader::ColliderData colliderData0, JSONLoader::ColliderData colliderData1)
+bool ColliderManager::CheckCollider(JSONLoader::ColliderData colliderData0, JSONLoader::ColliderData colliderData1, bool wallFlag)
 {
 
 	for (std::unique_ptr<Collider>& colliders : collider)
@@ -177,7 +177,7 @@ bool ColliderManager::CheckCollider(JSONLoader::ColliderData colliderData0, JSON
 	//球と球の場合
 	if (colliderData0.type == "Sphere" && colliderData1.type == "Sphere")
 	{
-		return CheckSphereSphere(colliderData0, colliderData1);
+		return CheckSphereSphere(colliderData0, colliderData1, wallFlag);
 	}
 
 	//平面と球の場合
@@ -203,14 +203,24 @@ bool ColliderManager::CheckCollider(JSONLoader::ColliderData colliderData0, JSON
 	return false;
 }
 
-bool ColliderManager::CheckSphereSphere(JSONLoader::ColliderData colliderSphere0, JSONLoader::ColliderData colliderSphere1)
+bool ColliderManager::CheckSphereSphere(JSONLoader::ColliderData colliderSphere0, JSONLoader::ColliderData colliderSphere1, bool wallFlag)
 {
 	//中心同士の距離を求める
 	XMFLOAT3 distanceCenter0 = colliderSphere0.center - colliderSphere1.center;
 	float distanceCenter1 = sqrt(pow(distanceCenter0.x, 2) + pow(distanceCenter0.y, 2) + pow(distanceCenter0.z, 2));
 
 	//二つのコライダーの半径の合計
-	float r = length(colliderSphere0.scale) / 2 + length(colliderSphere1.scale) / 2;
+	float r;
+	if (wallFlag == false)
+	{
+		r = length(colliderSphere0.scale) / 2 + length(colliderSphere1.scale) / 2;
+	}
+	if (wallFlag == true)
+	{
+		float max = comparisonMax(length(colliderSphere0.scale) / 2, length(colliderSphere1.scale) / 2);
+		float min = comparisonMin(length(colliderSphere0.scale) / 2, length(colliderSphere1.scale) / 2);
+		r = max - min;
+	}
 
 	//中心との距離が半径の合計より大きければ当たっていない
 	if (r < distanceCenter1) return false;

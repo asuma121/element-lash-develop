@@ -321,6 +321,10 @@ void TutorialScene::UpdateCollider()
 	//事前処理
 	ColliderManager::PreUpdate();
 
+	//プレイヤー当たり判定更新
+	player->SetObjectCollider(terrain->GetColliderData());
+	player->UpdateCollider();
+
 	//時機の弾(炎)と敵の当たり判定
 	for (int i = 0; i < player->GetBullet1Num(); i++)
 	{

@@ -129,7 +129,7 @@ void Player::UpdateTutorial()
 	playerState->SetDXInput(dxInput);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->Update();
+	playerState->UpdateTutorial(tutorialFlag);
 
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
@@ -497,6 +497,44 @@ void PlayerState::UpdateTitle(float titleTimer)
 	hitFlag = false;
 }
 
+void PlayerState::UpdateTutorial(int tutorialFlag)
+{
+	//タイマー更新
+	objectTimer++;
+
+	//オブジェクト更新
+	UpdateObject();
+
+	//ダウン状態更新
+	UpdateDown();
+
+	//コライダーデータ更新
+	colliderData.rotation = rotation0;
+	colliderData.center = position;
+
+	//攻撃更新
+	UpdateAttack();
+
+	//弾更新
+	bullet->Update();
+
+	//パーティクル更新
+	elecParticle1->Update();
+	elecParticle2->Update();
+
+	if (tutorialFlag > 12)
+	{
+		position = XMFLOAT3(0.0f, 0.0f, 100.0f);
+		return;
+	}
+
+	//動き
+	Move();
+
+	//当たりフラグを元に戻す
+	hitFlag = false;
+}
+
 void PlayerState::UpdateCollider()
 {
 	for (int i = 0; i < objectColliderData.size(); i++)
@@ -710,7 +748,7 @@ void PlayerState::SetTutorial()
 
 void PlayerState::SetGameScene()
 {
-	position = XMFLOAT3(0.0f, 0.0f, -100.0f);
+	position = XMFLOAT3(0.0f, 0.0f, -200.0f);
 }
 
 void PlayerState::SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos)

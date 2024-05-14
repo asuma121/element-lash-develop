@@ -366,10 +366,10 @@ void Dash::UpdateObject()
 void Dash::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
 {
 	//壁の中にいたら処理終了
-	if (ColliderManager::CheckCollider(colliderData, objectColliderData) == true)return;
+	if (ColliderManager::CheckCollider(colliderData, objectColliderData,true) == true)return;
 
 	//壁の外にいる時のみ
-	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == false)
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData,true) == false)
 	{
 		//プレイヤーから原点のベクトル
 		XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - position;

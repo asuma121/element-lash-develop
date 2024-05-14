@@ -386,6 +386,8 @@ public:	//メンバ関数
 	void Update();
 	//タイトル専用の更新
 	void UpdateTitle(float titleTimer);
+	//チュートリアル専用の更新
+	void UpdateTutorial(int tutorialFlag);
 	//判定更新
 	void UpdateCollider();
 	//ダウン状態更新
@@ -517,4 +519,7 @@ protected:	//メンバ変数
 	//シーン遷移に使う角度
 	float addRot = 0.0f;
 	float originalRot = 0.0f;
+
+	//チュートリアルのフェーズ
+	int tutorialFlag = 0;
 };
