@@ -10,6 +10,8 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
+	//チュートリアルのステート更新
+	void UpdateStateTutorial(Enemy* enemy)override;
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
@@ -67,6 +69,8 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
+	//チュートリアルのステート更新
+	void UpdateStateTutorial(Enemy* enemy)override;
 	//攻撃更新
 	void UpdateAttack()override;
 	//描画

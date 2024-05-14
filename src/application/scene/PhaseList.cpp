@@ -155,6 +155,10 @@ void Phase1::DrawFBX()
 	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
 
+	//ステート更新
+	player->UpdateState();
+	enemy->UpdateStateGame();
+
 	//コライダー描画
 	ColliderManager::Draw(dxCommon->GetCommandList());
 

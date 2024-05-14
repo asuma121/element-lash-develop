@@ -24,6 +24,9 @@ void TitleScene::Initialize()
 	//シーン遷移時に初期化
 	if (sceneTimer == 0)
 	{
+		//プレイヤーをタイトル用にセット
+		player->SetTitle();
+
 		//黒いスプライト1
 		Sprite* newBlackSprite1 = new Sprite();
 		newBlackSprite1->Initialize();
@@ -58,6 +61,7 @@ void TitleScene::NextScene(Scene* pScene)
 {
 	if (moveTutorialFlag1)
 	{
+		Reset();
 		pScene->ChangeScene(new TutorialScene());
 	}
 }

@@ -26,6 +26,8 @@ public:
 	void Initialize();
 	//ステートの更新
 	void UpdateState(Player* player);
+	//タイトルのみの処理
+	void MoveTitle(float timer) override;
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画

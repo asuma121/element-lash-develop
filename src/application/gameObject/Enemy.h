@@ -89,6 +89,16 @@ public://メンバ関数
 	void UpdateSpriteGame2();
 
 	/// <summary>
+	///ステート更新
+	/// </summary>
+	void UpdateStateGame();
+
+	/// <summary>
+	///ステート更新 チュートリアル用
+	/// </summary>
+	void UpdateStateTutorial();
+
+	/// <summary>
 	///描画
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
@@ -122,11 +132,6 @@ public://メンバ関数
 	///コライダー
 	/// </summary>
 	void UpdateCollider();
-
-	/// <summary>
-	///ステータスマネージャー
-	/// </summary>
-	void StatusManagerGame1();
 
 	/// <summary>
 	///ステータスマネージャー
@@ -167,6 +172,11 @@ public://メンバ関数
 	///リセット
 	/// </summary>
 	void Reset();
+
+	/// <summary>
+	///チュートリアルシーンに移る
+	/// </summary>
+	void SetTutorial();
 
 	/// <summary>
 	///ゲームシーンに移る
@@ -265,87 +275,12 @@ private:
 
 	//プレイヤーにダッシュを当てたフラグ
 	bool hitPlayer = false;
-
-	////コライダーデータ
-	//JSONLoader::ColliderData colliderData;
-
-	////雷パーティクル 敵呼び出しで描画
-	//ElecParticle* elecParticle = nullptr;
-	////一度に出す雷パーティクルの数
-	//int elecVol = 5;
-	////雷パーティクルを出すフレームの間隔
-	//int elecInterval = 7;
-	////雷を出しているフレーム数
-	//int elecFrame = 40.0f;
-	////でかい雷のスケール
-	//float elecStartSlace1 = 10.0f;
-	//float elecEndSlace1 = 10.0f;
-	////細かい雷のスケール
-	//float elecStartSlace2 = 0.7f;
-	//float elecEndSlace2 = 0.1f;
-	////雷の横揺れの強さ
-	//float elecStrength = 1.1f;
-
-	////爆発パーティクル 敵呼び出しで描画
-	//ExplosionParticle1* explosionParticle1 = nullptr;
-	//ExplosionParticle2* explosionParticle2 = nullptr;
-
-	////立っている状態のオブジェクト
-	//FbxObject3D* objectStand = nullptr;
-	////立っている状態のモデル
-	//FbxModel* modelStand = nullptr;
-	////攻撃1状態のアニメーションのフレーム
-	//float frameStand = 250.0f;
-
-	////歩いている状態のオブジェクト
-	//FbxObject3D* objectWalk = nullptr;
-	////歩いている状態のモデル
-	//FbxModel* modelWalk = nullptr;
-	////攻撃1状態のアニメーションのフレーム
-	//float frameWalk = 82.0f * 3.0f;
-
-	////攻撃1状態のオブジェクト
-	//FbxObject3D* objectAttack1 = nullptr;
-	////攻撃1状態のモデル
-	//FbxModel* modelAttack1 = nullptr;
-	////攻撃1状態のアニメーションのフレーム
-	//float frameAttack1 = 190.0f;
-
-	////攻撃1前兆のオブジェクト
-	//FbxObject3D* objectAttackOmen1 = nullptr;
-	////攻撃1前兆のモデル
-	//FbxModel* modelAttackOmen1 = nullptr;
-	////攻撃1前兆状態のアニメーションのフレーム
-	//float frameAttackOmen1 = 143.0f;
-
-	////ダッシュのオブジェクト
-	//FbxObject3D* objectDash = nullptr;
-	////ダッシュのモデル
-	//FbxModel* modelDash = nullptr;
-	////ダッシュ状態のアニメーションのフレーム
-	//float frameDash = 53.0f * 4;
-
-	////敵呼び出しのオブジェクト
-	//FbxObject3D* objectCallMiniEnemy = nullptr;
-	////敵呼び出し状態のアニメーションのフレーム
-	//float frameCallMiniEnemy = 190.0f;
-	////敵を呼び出すフレーム
-	//float frameCallMiniEnemy2 = 40.0f;
-
 	//スプライト
 	Sprite* hpBar1 = nullptr;	//HPバーの枠
 	Sprite* hpBar2 = nullptr;	//HPバー
 	Sprite* hpBar3 = nullptr;	//現在のHPのとこにつけるやつ
 	Sprite* hpBar4 = nullptr;	//BOSS HPのテキスト
 	Sprite* hpBar5 = nullptr;	//HPバーオレンジ
-
-	////変形行列
-	////平行移動
-	//XMFLOAT3 position = { 0.0f,0.0f,30.0f };
-	////回転
-	//XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	////サイズ
-	//XMFLOAT3 scale = { 5.0f,5.0f,5.0f };
 
 	//被弾
 	bool HitFlag1 = false;
@@ -442,6 +377,8 @@ public:	//メンバ関数
 	virtual void Move() = 0;
 	//ステートの変更
 	virtual void UpdateState(Enemy* enemy) = 0;
+	//ステートの変更
+	virtual void UpdateStateTutorial(Enemy* enemy) {};
 	//描画
 	virtual void Draw(ID3D12GraphicsCommandList* cmdList) = 0;
 	//ライト目線描画
@@ -459,15 +396,13 @@ public:	//メンバ関数
 	//パーティクル描画
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
-	void Update(); 
+	void Update();
+	//チュートリアル用の更新
+	void UpdateTutorial(int timer);
+	//チュートリアルの動き
+	void MoveTutorail();
 	//判定更新
 	void UpdateCollider();
-	////ダウン状態更新
-	//void UpdateDown();
-	////壁との当たり判定処理
-	//void UpdateHitWall(JSONLoader::ColliderData objectColliderData);
-	////柱との当たり判定処理
-	//void UpdateHitPiller(JSONLoader::ColliderData objectColliderData);
 	//オブジェクトの当たり判定セット
 	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData) { objectColliderData = colliderData; };
 	//プレイヤーの座標セット
@@ -490,9 +425,9 @@ public:	//メンバ関数
 	//リセット
 	void Reset();
 	//チュートリアルシーンに移る際に呼び出す
-	void SetTutorial();
+	void SetTutorial(Enemy* enemy);
 	//ゲームシーンに移る際に呼び出す
-	void SetGameScene();
+	void SetGame(Enemy* enemy);
 
 protected:	//静的メンバ変数
 
@@ -635,4 +570,11 @@ protected:	//メンバ変数
 
 	//オブジェクトのコライダーデータ
 	std::vector<JSONLoader::ColliderData> objectColliderData;
+
+	//チュートリアルの座標
+	XMFLOAT3 tutorialPos = { 0.0f,0.0f,0.0f };
+	//チュートリアル用のタイマー
+	int tutorialTimer = 0;
+	//チュートリアル 立ちアニメーションのフレーム
+	int tutorialStandFrame = 180;
 };

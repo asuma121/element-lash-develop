@@ -28,6 +28,12 @@ void TutorialScene::Initialize()
 	//シーン繊維したタイミングで初期化
 	if (gameTimer == 0)
 	{
+		//プレイヤーをチュートリアル用にセット
+		player->SetTutorial();
+
+		//敵をチュートリアル用にセット
+		enemy->SetTutorial();
+
 		//黒いスプライト1
 		Sprite* newBlackSprite1 = new Sprite();
 		newBlackSprite1->Initialize();
@@ -373,11 +379,16 @@ void TutorialScene::Draw()
 
 void TutorialScene::DrawFBX()
 {
+	//オブジェクト描画
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
 	if (tutorialSpriteFlag == 10)tutorialEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
+
+	//ステート更新
+	player->UpdateState();
+	enemy->UpdateStateTutorial();
 }
 
 void TutorialScene::DrawSprite()

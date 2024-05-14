@@ -127,6 +127,11 @@ public:
 	void UpdateForm();
 
 	/// <summary>
+	///更新 ステート
+	/// </summary>
+	void UpdateState();
+
+	/// <summary>
 	///更新 フォルム
 	/// </summary>
 	void UpdateFormTutorial();
@@ -165,6 +170,11 @@ public:
 	///リセット
 	/// </summary>
 	void Reset();
+
+	/// <summary>
+	///タイトルシーンに移る際に呼び出す
+	/// </summary>
+	void SetTitle();
 
 	/// <summary>
 	///チュートリアルシーンに移る際に呼び出す
@@ -322,9 +332,6 @@ private:
 
 	//走ってるアニメーションに無理やりするフラグ
 	bool runAnimationFlag = false;
-	//シーン遷移に使う角度
-	float addRot = 0.0f;
-	float originalRot = 0.0f;
 
 	//敵の座標
 	std::vector<XMFLOAT3>enemyPos;
@@ -359,6 +366,8 @@ public:	//メンバ関数
 	virtual void UpdateAttack() {};
 	//移動処理
 	virtual void Move();
+	//タイトル専用の移動処理
+	virtual void MoveTitle(float timer) {};
 	//ステートの変更
 	virtual void UpdateState(Player* player) = 0;
 	//描画
@@ -375,6 +384,8 @@ public:	//メンバ関数
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
 	void Update();
+	//タイトル専用の更新
+	void UpdateTitle(float titleTimer);
 	//判定更新
 	void UpdateCollider();
 	//ダウン状態更新
@@ -408,6 +419,8 @@ public:	//メンバ関数
 	bool GetHitElec() { return hitElecFlag; }
 	//リセット
 	void Reset();
+	//タイトルシーンに移る際に呼び出す
+	void SetTitle(Player* player);
 	//チュートリアルシーンに移る際に呼び出す
 	void SetTutorial();
 	//ゲームシーンに移る際に呼び出す
@@ -500,4 +513,8 @@ protected:	//メンバ変数
 	std::vector<JSONLoader::ColliderData> objectColliderData;
 	//オブジェクト衝突時の押し戻し
 	float knockBackSpeed = 0.001f;
+
+	//シーン遷移に使う角度
+	float addRot = 0.0f;
+	float originalRot = 0.0f;
 };

@@ -21,6 +21,35 @@ void Stand::UpdateState(Enemy* enemy)
 {
 }
 
+void Stand::UpdateStateTutorial(Enemy* enemy)
+{
+	//攻撃前兆のアニメーションも終わったら
+	if (tutorialTimer > tutorialStandFrame + frameAttackOmen1)
+	{
+		return;
+	}
+
+	//しばらく立ってる
+	if (tutorialTimer > tutorialStandFrame)
+	{
+		enemy->ChangeState(new AttackOmen1());
+		return;
+	}
+
+	////攻撃前兆モーション
+	//if (tutorialTimer < 180 + frameAttackOmen1)
+	//{
+	//	status = AttackOmen1;
+	//	return;
+	//}
+	////しばらく立ってる
+	//else
+	//{
+	//	status = Stand;
+	//	return;
+	//}
+}
+
 void Stand::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	objectStand->Draw(cmdList);
@@ -200,6 +229,16 @@ void AttackOmen1::UpdateState(Enemy* enemy)
 			enemy->ChangeState(new Attack01());
 			return;
 		}
+	}
+}
+
+void AttackOmen1::UpdateStateTutorial(Enemy* enemy)
+{
+	//アニメーションが終わったら
+	if (objectTimer >= frameAttackOmen1)
+	{
+		enemy->ChangeState(new Stand());
+		return;
 	}
 }
 

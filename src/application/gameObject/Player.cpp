@@ -125,9 +125,6 @@ void Player::UpdateTutorial()
 	//フォルム更新
 	UpdateFormTutorial();
 
-	//フォルム更新
-	UpdateForm();
-
 	//プレイヤーステート更新
 	playerState->SetDXInput(dxInput);
 	playerState->SetPlayerForm(form);
@@ -162,7 +159,7 @@ void Player::UpdateTutorial()
 void Player::UpdateTitle(float timer)
 {
 	//フォルム更新
-	UpdateForm();
+	/*UpdateForm();*/
 
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
@@ -180,9 +177,7 @@ void Player::UpdateTitle(float timer)
 	playerState->SetDXInput(dxInput);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->Update();
-
-
+	playerState->UpdateTitle(timer);
 
 	//スプライト更新
 	UpdateSprite();
@@ -222,9 +217,6 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	//プレイヤーの描画
 	playerState->Draw(cmdList);
-
-	//ステート更新
-	playerState->UpdateState(this);
 }
 
 void Player::DrawLightView(ID3D12GraphicsCommandList* cmdList)
@@ -310,6 +302,12 @@ void Player::UpdateForm()
 	}
 }
 
+void Player::UpdateState()
+{
+	//ステート更新
+	playerState->UpdateState(this);
+}
+
 void Player::UpdateFormTutorial()
 {
 	//Lボタンでフォルムチェンジフラグを立てる
@@ -356,6 +354,11 @@ void Player::Reset()
 {
 	HP = MaxHP;
 	playerState->Reset();
+}
+
+void Player::SetTitle()
+{
+	playerState->SetTitle(this);
 }
 
 void Player::SetTutorial()
@@ -457,6 +460,38 @@ void PlayerState::Update()
 
 	//動き
 	Move();
+
+	//当たりフラグを元に戻す
+	hitFlag = false;
+}
+
+void PlayerState::UpdateTitle(float titleTimer)
+{
+	//タイマー更新
+	objectTimer++;
+
+	//オブジェクト更新
+	UpdateObject();
+
+	//ダウン状態更新
+	UpdateDown();
+
+	//コライダーデータ更新
+	colliderData.rotation = rotation0;
+	colliderData.center = position;
+
+	//攻撃更新
+	UpdateAttack();
+
+	//弾更新
+	bullet->Update();
+
+	//パーティクル更新
+	elecParticle1->Update();
+	elecParticle2->Update();
+
+	//動き
+	MoveTitle(titleTimer);
 
 	//当たりフラグを元に戻す
 	hitFlag = false;
@@ -657,6 +692,15 @@ void PlayerState::Move()
 void PlayerState::Reset()
 {
 	position = XMFLOAT3(0.0f, 0.0f, -20.0f);
+}
+
+void PlayerState::SetTitle(Player* player)
+{
+	//座標更新
+	position = XMFLOAT3(0.0f, 0.0f,0.0f);
+
+	//ダッシュ状態に変更
+	player->ChangeState(new Run());
 }
 
 void PlayerState::SetTutorial()
