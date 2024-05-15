@@ -68,20 +68,20 @@ void Player::Initialize()
 
 	//HP用スプライト
 	//緑のHP
-	for (int i = 0; i < MaxHP; i++)
-	{
-		hpSprite1[i] = new Sprite();
-		hpSprite1[i]->Initialize();
-		hpSprite1[i]->SetTextureNum(28);
-	}
-	//赤いHP
-	hpSprite2 = new Sprite();
-	hpSprite2->Initialize();
-	hpSprite2->SetTextureNum(29);
-	//HPの枠
-	hpSprite3 = new Sprite();
-	hpSprite3->Initialize();
-	hpSprite3->SetTextureNum(30);
+	//for (int i = 0; i < MaxHP; i++)
+	//{
+	//	hpSprite1[i] = new Sprite();
+	//	hpSprite1[i]->Initialize();
+	//	hpSprite1[i]->SetTextureNum(28);
+	//}
+	////赤いHP
+	//hpSprite2 = new Sprite();
+	//hpSprite2->Initialize();
+	//hpSprite2->SetTextureNum(29);
+	////HPの枠
+	//hpSprite3 = new Sprite();
+	//hpSprite3->Initialize();
+	//hpSprite3->SetTextureNum(30);
 }
 void Player::UpdateGame()
 {
@@ -115,6 +115,18 @@ void Player::UpdateGame()
 	preForm = form;
 
 	if (HP <= 0)HP = MaxHP;
+
+	//敵クリア
+	enemyPos.clear();
+}
+
+void Player::UpdateMovePhase()
+{
+	//プレイヤーステート更新
+	playerState->SetDXInput(dxInput);
+	playerState->SetPlayerForm(form);
+	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
+	playerState->UpdateMovePhase();
 
 	//敵クリア
 	enemyPos.clear();
@@ -193,19 +205,6 @@ void Player::UpdateTitle(float timer)
 
 void Player::UpdateSprite()
 {
-	//緑のHP
-	for (int i = 0; i < HP; i++)
-	{
-		XMFLOAT2 addPos(hpFrameScale1 + (hpFrameScale2 * i) + (hpSprite1Scale.x * i), hpFrameScale3);
-		hpSprite1[i]->Update(hpSpritePos + addPos, hpSprite1Scale);
-	}
-	//赤いHP
-	hpSprite2->Update(hpSpritePos + XMFLOAT2(hpFrameScale1, hpFrameScale3), hpSprite2Scale);
-	//HPの枠
-	hpSprite3->Update(hpSpritePos, hpSprite3Scale);
-	//攻撃UIのスプライト
-	/*attackElecSprite->Update();
-	attackFireSprite->Update();*/
 }
 
 void Player::UpdateCollider()
@@ -251,17 +250,17 @@ void Player::DrawSpriteGame(ID3D12GraphicsCommandList* cmdList)
 	}
 
 	//緑のHP
-	for (int i = 0; i < HP; i++)
-	{
-		hpSprite1[i]->Draw(cmdList);
-	}
-	//赤いHP
-	if (HP == 1)
-	{
-		hpSprite2->Draw(cmdList);
-	}
-	//HPの枠
-	hpSprite3->Draw(cmdList);
+	//for (int i = 0; i < HP; i++)
+	//{
+	//	hpSprite1[i]->Draw(cmdList);
+	//}
+	////赤いHP
+	//if (HP == 1)
+	//{
+	//	hpSprite2->Draw(cmdList);
+	//}
+	////HPの枠
+	//hpSprite3->Draw(cmdList);
 }
 
 void Player::DrawSpriteTutorial(ID3D12GraphicsCommandList* cmdList)
@@ -370,6 +369,11 @@ void Player::SetGameScene()
 {
 	playerState->SetGameScene();
 	tutorialFlag = 1;
+}
+
+void Player::SetMovePhase()
+{
+	playerState->SetMovePhase(this);
 }
 
 XMFLOAT3 Player::GetPosition()
@@ -533,6 +537,15 @@ void PlayerState::UpdateTutorial(int tutorialFlag)
 
 	//当たりフラグを元に戻す
 	hitFlag = false;
+}
+
+void PlayerState::UpdateMovePhase()
+{
+	//タイマー更新
+	objectTimer++;
+
+	//オブジェクト更新
+	UpdateObject();
 }
 
 void PlayerState::UpdateCollider()
@@ -748,7 +761,13 @@ void PlayerState::SetTutorial()
 
 void PlayerState::SetGameScene()
 {
-	position = XMFLOAT3(0.0f, 0.0f, -200.0f);
+	position = gameScenePos;
+}
+
+void PlayerState::SetMovePhase(Player* player)
+{
+	position = movePhasePos;
+	player->ChangeState(new Wait());
 }
 
 void PlayerState::SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos)

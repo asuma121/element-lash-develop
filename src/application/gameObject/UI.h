@@ -40,7 +40,12 @@ public:
 	/// <summary>
 	///更新 ゲームシーン
 	/// </summary>
-	void UpdateGame();
+	void UpdateGame1();
+
+	/// <summary>
+	///更新 ゲームシーン
+	/// </summary>
+	void UpdateGame2();
 
 	/// <summary>
 	///更新 チュートリアルシーン
@@ -53,9 +58,19 @@ public:
 	void UpdateTitle();
 
 	/// <summary>
+	///更新 フェーズ間の移動
+	/// </summary>
+	void UpdateMovePhase();
+
+	/// <summary>
 	///描画 ゲームシーン
 	/// </summary>
-	void DrawGame(ID3D12GraphicsCommandList* cmdList);
+	void DrawGame1(ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
+	///描画 ゲームシーン
+	/// </summary>
+	void DrawGame2(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
 	///描画 チュートリアルシーン
@@ -68,9 +83,19 @@ public:
 	void DrawTitle(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
+	///描画 フェーズ間の移動
+	/// </summary>
+	void DrawMovePhase(ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
 	///ゲームシーン用にUIセット
 	/// </summary>
 	void SetGame();
+
+	/// <summary>
+	///ゲームシーン用にUIセット
+	/// </summary>
+	void SetMovePhase();
 
 	/// <summary>
 	///タイトルシーンのシーン遷移用タイマーセット
@@ -83,11 +108,21 @@ public:
 	void SetTutorialFlag(int tutorialFlag) { this->tutorialFlag = tutorialFlag; }
 
 	/// <summary>
+	///敵、プレイヤーのHPセット
+	/// </summary>
+	void SetHP(int playerHP,int playerMaxHP,int enemyHP,int enemyMaxHP);
+
+	/// <summary>
 	///チュートリアルシーンのタイマーセット
 	/// </summary>
 	void SetTutorialTimer(int LStickTimer, int LStickTime, int RStickTimer, int RStickTime,
 			int attackTimer, int attackTime, int attackTimer2, int attackTime2, 
-		int iikannjiTimer,int iikannjiTime, int tutorial12Timer, int tutorial12Time);
+		int iikannjiTimer,int iikannjiTime, int tutorial12Timer, int tutorial12Time, int tutorial13Timer, int tutorial13MaxTime);
+
+	/// <summary>
+	///ゲームシーンのタイマーセット
+	/// </summary>
+	void SetPhaseTimer(int phaseTimer) { this->phaseTimer = phaseTimer; }
 
 	/// <summary>
 	///プレイヤーの状態セット
@@ -104,6 +139,33 @@ private:
 	//メンバ変数
 private:
 
+	//外部から受け取る変数
+	//ゲームシーンで使っているタイマー
+	int phaseTimer = 0;
+	//プレイヤーの現在の属性
+	Form playerForm;
+	//プレイヤーが属性チェンジできるか
+	bool formChangeFlag;
+	//敵のHP
+	float enemyHP = 0;
+	float enemyMaxHP = 0;
+	//プレイヤーのHP
+	float playerHP = 0;
+	float playerMaxHP = 0;
+
+	//黒幕等に使用する黒いスプライト
+	std::unique_ptr<Sprite>blackSprite1;
+	std::unique_ptr<Sprite>blackSprite2;
+	std::unique_ptr<Sprite>blackSprite3;
+	XMFLOAT2 black1Pos = XMFLOAT2(0.0f, -620.0f);
+	XMFLOAT2 black1Scale = { 1280.0f, 720.0f };
+	XMFLOAT2 black2Pos = XMFLOAT2(0.0f, 620.0f);
+	XMFLOAT2 black2Scale = { 1280.0f, 720.0f };
+	XMFLOAT2 black3Pos = { 0.0f, 0.0f };
+	XMFLOAT2 black3Scale = { 1280.0f, 720.0f };
+	float blackSpriteTimer = 0.0f;
+	float blackSpriteMaxTime = 120.0f;
+	int phaseMoveTime = 746;
 	//キーボード ボタンのUI
 	//共通の座標、スケール
 	XMFLOAT2 keySpriteScale1 = { 32.0f,32.0f };	//ADSW,AROWキーのスケール
@@ -329,6 +391,9 @@ private:
 	//チュートリアルシーン 敵が登場するまでのタイマー
 	int tutorial12Timer = 0;
 	int tutorial12Time = 0;
+	//チュートリアルシーン 黒幕のタイマー
+	int tutorial13Timer = 0;
+	int tutorial13MaxTime = 0;
 
 	//ゲームシーン
 	//ゲームシーン 属性変化UI共通の座標 スケール
@@ -350,10 +415,54 @@ private:
 	//ゲームシーン 攻撃UI 炎
 	std::unique_ptr<Sprite>attackFireSprite;
 
-	//プレイヤーの現在の属性
-	Form playerForm;
-	//プレイヤーが属性チェンジできるか
-	bool formChangeFlag;
+	//敵のHP
+	//HPバーの枠
+	std::unique_ptr<Sprite>enemyHpBar1;
+	//HPバー
+	std::unique_ptr<Sprite>enemyHpBar2;
+	//現在のHPのとこにつけるやつ
+	std::unique_ptr<Sprite>enemyHpBar3;
+	//BOSS HPのテキスト
+	std::unique_ptr<Sprite>enemyHpBar4;
+	//HPバーオレンジ
+	std::unique_ptr<Sprite>enemyHpBar5;
+	//HPバー1
+	XMFLOAT2 enemyHpBar1Pos = { 320.0f,-15.0f };
+	XMFLOAT2 enemyHpBar1Scale = { 640.0f,96.0f };
+	//HPバー2
+	XMFLOAT2 enemyHpBar2Pos = { 349.0f,26.0f };
+	XMFLOAT2 enemyHpBar2OriginalScale = { 605.0f,15.0f };
+	XMFLOAT2 enemyHpBar2Scale = enemyHpBar2OriginalScale;
+	//HPバー3
+	XMFLOAT2 enemyHpBar3OriginalPos = { 938.0f,25.0f };
+	XMFLOAT2 enemyHpBar3Pos = enemyHpBar3OriginalPos;
+	XMFLOAT2 enemyHpBar3Scale = { 16.0f,16.0f };
+	//Hpバー4
+	XMFLOAT2 enemyHpBar4Pos = { 230.0f,25.0f };
+	XMFLOAT2 enemyHpBar4Scale = { 96.0f,16.0f };
+	//HPバー5
+	XMFLOAT2 enemyHpBar5Pos = { 349.0f,26.0f };
+	XMFLOAT2 enemyHpBar5OriginalScale = { 605.0f,15.0f };
+	XMFLOAT2 enemyHpBar5Scale = enemyHpBar2OriginalScale;
+
+	//プレイヤーのHP
+	//緑のHP
+	std::vector<Sprite*>hpSprite1;
+	//赤いHP
+	std::unique_ptr<Sprite>hpSprite2;	
+	//HPの枠
+	std::unique_ptr<Sprite>hpSprite3;	
+	//緑のHPの数
+	int hpSprite1Num = 5;
+	//HP用スプライトの大きさ、座標
+	XMFLOAT2 hpSpritePos = { 490.0f,660.0f };
+	XMFLOAT2 hpSprite1Scale = { 32.0f * 1.5f,16.0f * 1.5f };
+	XMFLOAT2 hpSprite2Scale = { 32.0f * 1.5f,16.0f * 1.5f };
+	XMFLOAT2 hpSprite3Scale = { 196.0f * 1.5,28.0f * 1.5 };
+	//HP枠の大きさ
+	float hpFrameScale1 = 10.0f * 1.5f;	//外枠 左右
+	float hpFrameScale2 = 4.0f * 1.5f;	//内側の枠
+	float hpFrameScale3 = 6.0f * 1.5f;	//外枠 上下
 
 	//デバッグ
 	float debugNum1[2] = { 0.0f,0.0f };

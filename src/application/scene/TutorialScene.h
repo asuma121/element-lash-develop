@@ -145,23 +145,11 @@ private:	//メンバ変数
 	float lightTarget[3] = { 0.0f,0.0f,0.0f };
 	float lightFactorAngle[2] = { 20.0f,30.0f, };
 	float lightAtten[3] = { 0.0f,0.0f,0.0f };
-
-	//黒いスプライト
-	std::unique_ptr<Sprite>blackSprite1;
-	std::unique_ptr<Sprite>blackSprite2;
-	std::unique_ptr<Sprite>blackSprite3;
-	//黒いスプライト 座標 スケール
-	XMFLOAT2 black1Pos = XMFLOAT2(0.0f, -620.0f);
-	XMFLOAT2 black1Scale = { 1280.0f, 720.0f };
-	XMFLOAT2 black2Pos = XMFLOAT2(0.0f, 620.0f);
-	XMFLOAT2 black2Scale = { 1280.0f, 720.0f };
-	XMFLOAT2 black3Pos = { 0.0f, 0.0f };
-	XMFLOAT2 black3Scale = { 1280.0f, 720.0f };
 	
 	//スプライト用タイマー
 	float blackSpriteTimer = 0.0f;
 	float blackSpriteMaxTime = 120.0f;
-	int tutorialSpriteFlag = 12;	//その番号のスプライト描画
+	int tutorialSpriteFlag = 1;	//その番号のスプライト描画
 	int tutorialLStickTimer = 0.0f;
 	int tutorialLStickMaxTime = 240.0f;
 	int tutorialRStickTimer = 0.0f;

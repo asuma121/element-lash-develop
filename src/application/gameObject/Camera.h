@@ -53,7 +53,7 @@ public:
 	/// <summary>
 	///タイトルの更新
 	/// </summary>
-	void TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot,float timer);
+	void TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer);
 
 	/// <summary>
 	///デバッグの更新
@@ -66,6 +66,11 @@ public:
 	void UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot);
 
 	/// <summary>
+	///プレイヤー追尾の更新
+	/// </summary>
+	void UpdateMovePhase();
+
+	/// <summary>
 	///チュートリアルの更新
 	/// </summary>
 	void UpdateTutorial(int tutorialTimer);
@@ -73,7 +78,7 @@ public:
 	/// <summary>
 	///クリア画面の更新
 	/// </summary>
-	void UpdateClear(XMFLOAT3 enemyPos,float timer);
+	void UpdateClear(XMFLOAT3 enemyPos, float timer);
 
 	/// <summary>
 	///ビルボード行列の更新
@@ -135,6 +140,11 @@ public:
 	/// </summary>
 	void SetDebugFlag(bool flag) { debugFlag = flag; }
 
+	/// <summary>
+	///ゲームシーンタイマーのセット
+	/// </summary>
+	void SetPhaseTimer(int timer) { phaseTimer = timer; }
+
 private:
 	//入力
 	//キーボード
@@ -161,7 +171,7 @@ private:
 	//加算用
 	float DebugChangeRot = (float)PI;
 	float DebugChangeRot2 = PI * (13.0f / 40.0f);
-	float maxDebugChangeRot2 = PI * (20.0f / 40.0f);
+	float maxDebugChangeRot2 = PI * (19.0f / 40.0f);
 	float minDebugChangeRot2 = PI * (8.0f / 40.0f);
 	float DebugChangeDistance = 0.0f;
 
@@ -179,6 +189,15 @@ private:
 	XMFLOAT3 originalPlayerPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 originalPlayerRot = { 0.0f,0.0f,0.0f };
 
+	//ゲームシーンタイマー
+	int phaseTimer = 0;
+
+	//フェーズ移動の注視点、座標
+	XMFLOAT3 movePhaseTarget = { -8.0f, 26.0f, 0.0f };
+	XMFLOAT3 movePhaseEye = { 37.0f, 20.0f, -100.0f };
+
 	//デバッグ用
 	bool debugFlag = false;
+	float debugEye[3] = { 0.0f,0.0f,0.0f };
+	float debugTarget[3] = { 0.0f,0.0f,0.0f };
 };

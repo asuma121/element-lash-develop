@@ -19,7 +19,7 @@ UI* PhaseState::ui = nullptr;
 
 GameScene::GameScene()
 {
-	phaseState = new Phase1();
+	phaseState = new MovePhase();
 }
 
 GameScene::~GameScene()
@@ -104,9 +104,7 @@ void PhaseState::Initialize()
 	//シーン遷移時初期化
 	if (phaseTimer == 0)
 	{
-		ui->SetGame();
-		player->SetGameScene();
-		enemy->SetGameScene();
+		PhaseInitialize();
 	}
 }
 

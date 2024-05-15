@@ -50,7 +50,7 @@ FbxModel* EnemyState::modelGetUp = nullptr;
 //平行移動
 XMFLOAT3 EnemyState::position = { 0.0f,0.0f,30.0f };
 //回転
-XMFLOAT3 EnemyState::rotation;
+XMFLOAT3 EnemyState::rotation = {0.0f,0.0f,0.0f};
 //サイズ
 XMFLOAT3 EnemyState::scale = { 5.0f,5.0f,5.0f };
 //雷パーティクル 敵呼び出しで描画
@@ -81,23 +81,6 @@ void Enemy::Initialize()
 {
 	//ステートの初期化
 	enemyState->Initialize();
-
-	//HPバーのスプライト
-	hpBar1 = new Sprite();
-	hpBar1->Initialize();
-	hpBar1->SetTextureNum(23);
-	hpBar2 = new Sprite();
-	hpBar2->Initialize();
-	hpBar2->SetTextureNum(24);
-	hpBar3 = new Sprite();
-	hpBar3->Initialize();
-	hpBar3->SetTextureNum(25);
-	hpBar4 = new Sprite();
-	hpBar4->Initialize();
-	hpBar4->SetTextureNum(26);
-	hpBar5 = new Sprite();
-	hpBar5->Initialize();
-	hpBar5->SetTextureNum(58);
 }
 
 void Enemy::UpdateGame1()
@@ -109,35 +92,34 @@ void Enemy::UpdateGame1()
 	//フラグを戻す
 	hitPlayer = false;
 
-	//スプライト更新
-	UpdateSpriteGame1();
-
 	//ダメージ更新
 	UpdateDamage();
 }
 
 void Enemy::UpdateGame2()
 {
-	////動く
-	//Move();
+	//ステート更新
+	enemyState->SetHitPlayer(hitPlayer);
+	enemyState->Update();
 
-	////ステータスマネージャー
-	//StatusManagerGame2();
+	//フラグを戻す
+	hitPlayer = false;
 
-	////オブジェクト更新
-	//UpdateObject();
+	//ダメージ更新
+	UpdateDamage();
+}
 
-	////スプライト更新
-	//UpdateSpriteGame2();
+void Enemy::UpdateMovePhase()
+{
+	//ステート更新
+	enemyState->SetHitPlayer(hitPlayer);
+	enemyState->UpdateMovePhase();
 
-	////ダメージ更新
-	//UpdateDamage();
+	//フラグを戻す
+	hitPlayer = false;
 
-	////パーティクル更新
-	//UpdateParticle();
-
-	////コライダー更新
-	//UpdateCollider();
+	//ダメージ更新
+	UpdateDamage();
 }
 
 void Enemy::UpdateTutorial(int tutorialTimer)
@@ -149,38 +131,8 @@ void Enemy::UpdateTutorial(int tutorialTimer)
 	//フラグを戻す
 	hitPlayer = false;
 
-	//スプライト更新
-	UpdateSpriteGame1();
-
 	//ダメージ更新
 	UpdateDamage();
-}
-
-void Enemy::UpdateSpriteGame1()
-{
-	//HPバーを現在のHPに
-	hpBar2Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
-	hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
-
-	//更新
-	hpBar1->Update(hpBar1Pos, hpBar1Scale);
-	hpBar2->Update(hpBar2Pos, hpBar2Scale);
-	hpBar3->Update(hpBar3Pos, hpBar3Scale);
-	hpBar4->Update(hpBar4Pos, hpBar4Scale);
-	hpBar5->Update(hpBar5Pos, hpBar5Scale);
-}
-
-void Enemy::UpdateSpriteGame2()
-{
-	//HPバーを現在のHPに
-	hpBar5Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
-	hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
-
-	//更新
-	hpBar1->Update(hpBar1Pos, hpBar1Scale);
-	hpBar3->Update(hpBar3Pos, hpBar3Scale);
-	hpBar4->Update(hpBar4Pos, hpBar4Scale);
-	hpBar5->Update(hpBar5Pos, hpBar5Scale);
 }
 
 void Enemy::UpdateStateGame()
@@ -195,6 +147,12 @@ void Enemy::UpdateStateTutorial()
 	enemyState->UpdateStateTutorial(this);
 }
 
+void Enemy::UpdateStateMovePhase()
+{
+	//ステート更新
+	enemyState->UpdateStateMovePhase(this);
+}
+
 void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	//ステート描画
@@ -204,22 +162,6 @@ void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
 void Enemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 {
 	enemyState->DrawLightView(cmdList);
-}
-
-void Enemy::DrawSpriteGame1(ID3D12GraphicsCommandList* cmdList)
-{
-	hpBar5->Draw(cmdList);
-	hpBar2->Draw(cmdList);
-	hpBar4->Draw(cmdList);
-	hpBar1->Draw(cmdList);
-	hpBar3->Draw(cmdList);
-}
-
-void Enemy::DrawSpriteGame2(ID3D12GraphicsCommandList* cmdList)
-{
-	hpBar5->Draw(cmdList);
-	hpBar1->Draw(cmdList);
-	hpBar3->Draw(cmdList);
 }
 
 void Enemy::DrawParticle(ID3D12GraphicsCommandList* cmdList)
@@ -407,6 +349,11 @@ void Enemy::SetPlayerPos(XMFLOAT3 playerPos)
 	enemyState->SetPlayerPos(playerPos);
 }
 
+void Enemy::SetPhaseTimer(int phaseTimer)
+{
+	enemyState->SetPhaseTimer(phaseTimer);
+}
+
 void Enemy::SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData)
 {
 	enemyState->SetObjectCollider(colliderData);
@@ -438,6 +385,11 @@ void Enemy::SetGameScene()
 	enemyState->SetGame(this);
 }
 
+void Enemy::SetMovePhase()
+{
+	enemyState->SetMovePhase(this);
+}
+
 XMFLOAT3 Enemy::GetPosition()
 {
 	return enemyState->GetPosition();
@@ -461,6 +413,16 @@ JSONLoader::ColliderData Enemy::GetColliderData()
 JSONLoader::ColliderData Enemy::GetBulletColliderData(int num)
 {
 	return enemyState->GetBullet1ColliderData(num);
+}
+
+bool Enemy::GetCallEnemyFlag()
+{
+	return enemyState->GetCallEnemyFlag();
+}
+
+XMFLOAT3 Enemy::GetCallEnemyPos()
+{
+	return enemyState->GetCallEnemyPos();
 }
 
 size_t Enemy::GetBulletNum()
@@ -633,6 +595,38 @@ void EnemyState::Update()
 	UpdateObject();
 }
 
+void EnemyState::UpdateMovePhase()
+{
+	//タイマー更新
+	objectTimer++;
+
+	////ダウン状態更新
+	//UpdateDown();
+
+	//コライダーデータ更新
+	colliderData.scale = colliderScale;
+	colliderData.rotation = rotation;
+	colliderData.center = position;
+
+	//攻撃更新
+	UpdateAttackMovePhase();
+
+	//弾更新
+	bullet->SetPlayerPos(playerPos);
+	bullet->Update();
+
+	//パーティクル更新
+	explosionParticle1->Update();
+	explosionParticle2->Update();
+	elecParticle->Update();
+
+	//動き
+	Move();
+
+	//オブジェクト更新
+	UpdateObject();
+}
+
 void EnemyState::UpdateTutorial(int timer)
 {
 	//タイマー更新
@@ -711,4 +705,12 @@ void EnemyState::SetGame(Enemy* enemy)
 	//攻撃前兆にセット
 	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
+
+void EnemyState::SetMovePhase(Enemy* enemy)
+{
+	//転ぶアニメーションにセット
+	enemy->ChangeState(new FallDown());
+	rotation = XMFLOAT3(0.0f, PI, 0.0f);
+	position = XMFLOAT3(0.0f, 0.0f, 100.0f);
 }

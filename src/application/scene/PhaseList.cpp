@@ -3,6 +3,13 @@
 #include "ColliderManager.h"
 #include "imgui.h"
 
+void Phase1::PhaseInitialize()
+{
+	ui->SetGame();
+	player->SetGameScene();
+	enemy->SetGameScene();
+}
+
 void Phase1::DrawFBXLightView()
 {
 	//SRVをセット
@@ -25,12 +32,10 @@ void Phase1::NextPhase(GameScene* gameScene)
 	{
 		//タイマーリセット
 		phaseTimer = 0;
-		//プレイヤーリセット
-		player->SetGameScene();
 		//敵リセット
-		enemy->SetGameScene();
+		enemy->Reset();
 		//次のフェーズへ
-		gameScene->ChangePhase(new Phase2());
+		gameScene->ChangePhase(new MovePhase());
 	}
 }
 
@@ -51,11 +56,14 @@ void Phase1::UpdateObject()
 
 	//敵
 	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetPhaseTimer(phaseTimer);
 	enemy->UpdateGame1();
 
 	//UI
 	ui->SetPlayerForm(player->GetPlayerForm(), player->GetFormChangeFlag());
-	ui->UpdateGame();
+	ui->SetPhaseTimer(phaseTimer);
+	ui->SetHP(player->GetHP(), player->GetMaxHP(), enemy->GetHP(), enemy->GetMaxHP());
+	ui->UpdateGame1();
 
 	//プレイヤー
 	player->SetEnemyPos(enemy->GetPosition());
@@ -176,10 +184,8 @@ void Phase1::DrawFBX()
 void Phase1::DrawSprite()
 {
 	//UI描画
-	ui->DrawGame(dxCommon->GetCommandList());
+	ui->DrawGame1(dxCommon->GetCommandList());
 
-	//敵
-	enemy->DrawSpriteGame1(dxCommon->GetCommandList());
 	//プレイヤーのスプライト描画
 	player->DrawSpriteGame(dxCommon->GetCommandList());
 }
@@ -190,6 +196,14 @@ void Phase1::DrawParticle()
 	player->DrawParticle(dxCommon->GetCommandList());
 	//敵のパーティクル描画
 	enemy->DrawParticle(dxCommon->GetCommandList());
+}
+
+void Phase2::PhaseInitialize()
+{
+	ui->SetGame();
+	player->SetGameScene();
+	enemy->SetGameScene();
+	miniEnemy->SetGameScene();
 }
 
 void Phase2::DrawFBXLightView()
@@ -214,6 +228,8 @@ void Phase2::NextPhase(GameScene* gameScene)
 	{
 		//タイマーリセット
 		phaseTimer = 0;
+		//敵リセット
+		enemy->Reset();
 		//クリアシーンへ
 		gameScene->SetMoveClearFlag(true);
 	}
@@ -229,24 +245,29 @@ void Phase2::UpdateObject()
 	light->SetEye(XMFLOAT3(lightPos) + player->GetPosition());
 	light->SetTarget(XMFLOAT3(lightTarget) + player->GetPosition());
 	light->SetDir(XMFLOAT3(lightDir));
+	/*light->SetEye(XMFLOAT3(debugLightPos));
+	light->SetTarget(XMFLOAT3(debugLightTarget));
+	light->SetDir(XMFLOAT3(debugLightDir));*/
 	light->Update();
 
 	//敵
 	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetPhaseTimer(phaseTimer);
 	enemy->UpdateGame2();
 
 	//小さい敵
-	//デバッグ用
-	if (input->TriggerKey(DIK_SPACE))
-	{
-		miniEnemy->AddEnemy(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	}
 	if (enemy->GetCallEnemyFlag())
 	{
 		miniEnemy->AddEnemy(enemy->GetCallEnemyPos());
 	}
 	miniEnemy->SetPlayerPos(player->GetPosition());
-	miniEnemy->Update();
+	miniEnemy->UpdateGame();
+
+	//UI
+	ui->SetPlayerForm(player->GetPlayerForm(), player->GetFormChangeFlag());
+	ui->SetPhaseTimer(phaseTimer);
+	ui->SetHP(player->GetHP(),player->GetMaxHP(), enemy->GetHP(), enemy->GetMaxHP());
+	ui->UpdateGame2();
 
 	//プレイヤー
 	player->SetEnemyPos(enemy->GetPosition());
@@ -264,80 +285,72 @@ void Phase2::UpdateCollider()
 	//事前処理
 	ColliderManager::PreUpdate();
 
-	//敵の弾と時機の当たり判定
-	//if (player->GetInvincibleFlag() == false)
-	//{
-	//	for (int i = 0; i < enemy->GetBulletNum(); i++)
-	//	{
-	//		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
-	//		{
-	//			//自機にヒットフラグ送信
-	//			player->HitEnemy();
-	//		}
-	//	}
-	//}
+	//プレイヤー当たり判定更新
+	player->SetObjectCollider(terrain->GetColliderData());
+	player->UpdateCollider();
 
-	////敵と時機の当たり判定
-	//if (player->GetInvincibleFlag() == false)
-	//{
-	//	if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
-	//	{
-	//		//自機にヒットフラグ送信
-	//		player->HitEnemy();
-	//	}
-	//}
+	//敵のあたり判定更新
+	enemy->SetObjectCollider(terrain->GetColliderData());
+	enemy->UpdateCollider();
+
+	//敵の弾と時機の当たり判定
+	if (player->GetInvincibleFlag() == false)
+	{
+		for (int i = 0; i < enemy->GetBulletNum(); i++)
+		{
+			if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetBulletColliderData(i)))
+			{
+				//自機にヒットフラグ送信
+				player->HitEnemy();
+			}
+		}
+	}
+
+	//敵と時機の当たり判定
+	if (player->GetInvincibleFlag() == false)
+	{
+		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
+		{
+			//自機にヒットフラグ送信
+			player->HitEnemy();
+			//敵にヒットフラグ送信
+			enemy->SetHitPlayer();
+		}
+	}
 
 	////時機の弾(炎)と敵の当たり判定
-	//for (int i = 0; i < player->GetBullet1Num(); i++)
-	//{
-	//	if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
-	//	{
-	//		//敵にヒットフラグ送信
-	//		enemy->HitBullet1();
-	//		//自機にヒットフラグ送信
-	//		player->HitBullet1(i);
-	//	}
-	//}
+	for (int i = 0; i < player->GetBullet1Num(); i++)
+	{
+		if (ColliderManager::CheckCollider(enemy->GetColliderData(), player->GetBullet1ColliderData(i)))
+		{
+			//敵にヒットフラグ送信
+			enemy->HitBullet1();
+			//自機にヒットフラグ送信
+			player->HitBullet1(i);
+		}
+	}
 
-	////雷攻撃が当たったら
-	//if (player->GetHitElec())
-	//{
-	//	//敵にヒットフラグ送信
-	//	enemy->HitElec();
-	//}
+	//雷攻撃が当たったら
+	if (player->GetHitElec())
+	{
+		//敵にヒットフラグ送信
+		enemy->HitElec();
+	}
 
-	////時機と小さい敵の当たり判定
-	//for (int i = 0; i < miniEnemy->GetEnemyNum(); i++)
-	//{
-	//	for (int j = 0; j < player->GetBullet1Num(); j++)
-	//	{
-	//		if (ColliderManager::CheckCollider(miniEnemy->GetColliderData(i), player->GetBullet1ColliderData(j)))
-	//		{
-	//			//敵にヒットフラグ送信
-	//			miniEnemy->HitFire(i);
-	//			//自機にヒットフラグ送信
-	//			player->HitBullet1(j);
-	//		}
-	//	}
-	//}
-
-	//敵の弾と平面の判定
-	//for (std::unique_ptr<FbxObject3D>& object1 : object)
-	//{
-	//	if (object1->GetFileName() == "plane")
-	//	{
-	//		for (int i = 0; i < enemy->GetBulletNum(); i++)
-	//		{
-	//			if (ColliderManager::CheckCollider(object1->GetColliderData(), enemy->GetBulletColliderData(i)))
-	//			{
-	//				//当たったらパーティクル発生
-	//				sparkParticle2->Add(XMFLOAT3(enemy->GetBulletColliderData(i).center));
-	//				explosionParticle1->Add(XMFLOAT3(enemy->GetBulletColliderData(i).center));
-	//				explosionParticle2->Add(XMFLOAT3(enemy->GetBulletColliderData(i).center));
-	//			}
-	//		}
-	//	}
-	//}
+	//時機と小さい敵の当たり判定
+	for (int i = 0; i < miniEnemy->GetEnemyNum(); i++)
+	{
+		for (int j = 0; j < player->GetBullet1Num(); j++)
+		{
+			if (ColliderManager::CheckCollider(miniEnemy->GetColliderData(i), player->GetBullet1ColliderData(j)))
+			{
+				//敵にヒットフラグ送信
+				miniEnemy->HitFire(i);
+				//自機にヒットフラグ送信
+				player->HitBullet1(j);
+			}
+		}
+	}
 
 	//後処理
 	ColliderManager::PostUpdate();
@@ -350,22 +363,139 @@ void Phase2::DrawFBX()
 	miniEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
+
+	//ステート更新
+	player->UpdateState();
+	enemy->UpdateStateGame();
 }
 
 void Phase2::DrawSprite()
 {
+	//UI描画
+	ui->DrawGame2(dxCommon->GetCommandList());
+
 	//プレイヤーのスプライト描画
 	player->DrawSpriteGame(dxCommon->GetCommandList());
-	//敵
-	enemy->DrawSpriteGame2(dxCommon->GetCommandList());
-	//小さい敵
-	miniEnemy->DrawSprite(dxCommon->GetCommandList());
 }
 
 void Phase2::DrawParticle()
 {
 	//プレイヤーのパーティクル描画
 	player->DrawParticle(dxCommon->GetCommandList());
+	//敵のパーティクル描画
+	enemy->DrawParticle(dxCommon->GetCommandList());
+}
+
+void MovePhase::PhaseInitialize()
+{
+	ui->SetMovePhase();
+	player->SetMovePhase();
+	enemy->SetMovePhase();
+}
+
+void MovePhase::DrawFBXLightView()
+{
+	//ライト目線描画
+	player->DrawLightView(dxCommon->GetCommandList());
+	enemy->DrawLightView(dxCommon->GetCommandList());
+	miniEnemy->DrawLightView(dxCommon->GetCommandList());
+}
+
+void MovePhase::SetSRV(ID3D12DescriptorHeap* SRV)
+{
+	//SRVをセット
+	player->SetSRV(SRV);
+	enemy->SetSRV(SRV);
+	miniEnemy->SetSRV(SRV);
+	plane->SetSRV(SRV);
+}
+
+void MovePhase::NextPhase(GameScene* gameScene)
+{
+	//フェーズチェンジフラグがたったら
+	if (phaseChangeFlag == true)
+	{
+		//タイマーリセット
+		phaseTimer = 0;
+		//敵リセット
+		enemy->Reset();
+
+		//次のフェーズへ
+		gameScene->ChangePhase(new Phase2());
+	}
+}
+
+void MovePhase::UpdateObject()
+{
+	//カメラ更新
+	camera->UpdateMovePhase();
+	camera->Update();
+
+	//ライト更新
+	light->SetEye(XMFLOAT3(lightPos) + player->GetPosition());
+	light->SetTarget(XMFLOAT3(lightTarget) + player->GetPosition());
+	light->SetDir(XMFLOAT3(lightDir));
+	light->Update();
+
+	//敵
+	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetPhaseTimer(phaseTimer);
+	enemy->UpdateMovePhase();
+
+	//小さい敵
+	if (enemy->GetCallEnemyFlag())
+	{
+		miniEnemy->AddEnemy(enemy->GetCallEnemyPos());
+	}
+	miniEnemy->SetPlayerPos(player->GetPosition());
+	miniEnemy->UpdateMovePhase();
+
+	//UI
+	ui->SetPlayerForm(player->GetPlayerForm(), player->GetFormChangeFlag());
+	ui->SetPhaseTimer(phaseTimer);
+	ui->UpdateMovePhase();
+
+	//プレイヤー
+	player->SetEnemyPos(enemy->GetPosition());
+	player->UpdateMovePhase();
+
+	//床
+	plane->Update();
+
+	//地形
+	terrain->Update();
+
+	if (phaseTimer > movePhaseTime)
+	{
+		phaseChangeFlag = true;
+	}
+}
+
+void MovePhase::UpdateCollider()
+{
+}
+
+void MovePhase::DrawFBX()
+{
+	//FBX描画
+	player->Draw(dxCommon->GetCommandList());
+	enemy->Draw(dxCommon->GetCommandList());
+	miniEnemy->Draw(dxCommon->GetCommandList());
+	plane->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
+
+	//ステート更新
+	enemy->UpdateStateMovePhase();
+}
+
+void MovePhase::DrawSprite()
+{
+	//UI描画
+	ui->DrawMovePhase(dxCommon->GetCommandList());
+}
+
+void MovePhase::DrawParticle()
+{
 	//敵のパーティクル描画
 	enemy->DrawParticle(dxCommon->GetCommandList());
 }

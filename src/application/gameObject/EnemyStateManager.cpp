@@ -35,19 +35,6 @@ void Stand::UpdateStateTutorial(Enemy* enemy)
 		enemy->ChangeState(new AttackOmen1());
 		return;
 	}
-
-	////攻撃前兆モーション
-	//if (tutorialTimer < 180 + frameAttackOmen1)
-	//{
-	//	status = AttackOmen1;
-	//	return;
-	//}
-	////しばらく立ってる
-	//else
-	//{
-	//	status = Stand;
-	//	return;
-	//}
 }
 
 void Stand::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -242,6 +229,16 @@ void AttackOmen1::UpdateStateTutorial(Enemy* enemy)
 	}
 }
 
+void AttackOmen1::UpdateStateMovePhase(Enemy* enemy)
+{
+	// アニメーションが終わったら
+	if (objectTimer >= frameAttackOmen1)
+	{
+		enemy->ChangeState(new Stand());
+		return;
+	}
+}
+
 void AttackOmen1::UpdateAttack()
 {
 	//弾をセット
@@ -427,6 +424,56 @@ void CallMiniEnemy::UpdateState(Enemy* enemy)
 {
 }
 
+void CallMiniEnemy::UpdateStateMovePhase(Enemy* enemy)
+{
+	//アニメーションが終わったら
+	if (objectTimer >= frameCallMiniEnemy)
+	{
+		enemy->ChangeState(new AttackOmen1());
+		return;
+	}
+}
+
+void CallMiniEnemy::UpdateAttackMovePhase()
+{
+	//敵呼び出しフラグをもとに戻す
+	callEnemyFlag = false;
+	//敵呼び出し 2回呼び出す
+	if (objectTimer == 40 || objectTimer == 40 + 1)
+	{
+		//フラグを立てる
+		callEnemyFlag = true;
+		//敵を呼び出す場所
+		if (objectTimer == frameCallMiniEnemy2)callEnemyPos = callEnemyPos1;
+		if (objectTimer == frameCallMiniEnemy2 + 1)callEnemyPos = callEnemyPos2;
+	}
+
+	//敵呼び出し 雷パーティクル
+	if (objectTimer == frameCallMiniEnemy2)
+	{
+		elecParticle->AddParticle(elecFrame, callEnemyPos1 + addElecPos1,
+			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60.0f, elecStrength);
+		elecParticle->AddParticle(elecFrame, callEnemyPos2 + addElecPos1,
+			callEnemyPos2, elecStartSlace1, elecEndSlace1, 60.0f, elecStrength);
+		explosionParticle1->Add(callEnemyPos1);
+		explosionParticle2->Add(callEnemyPos2);
+	}
+	//敵呼び出し
+	if (objectTimer <= frameCallMiniEnemy2)
+	{
+		if ((int)objectTimer % elecInterval == 0)
+		{
+			for (int i = 0; i < elecVol; i++)
+			{
+				elecParticle->AddParticle(3.0f, callEnemyPos1 + addElecPos2,
+					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength);
+				elecParticle->AddParticle(3.0f, callEnemyPos2 + addElecPos2,
+					callEnemyPos2, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength);
+			}
+		}
+	}
+}
+
 void CallMiniEnemy::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	objectCallMiniEnemy->Draw(cmdList);
@@ -466,6 +513,16 @@ void FallDown::Move()
 }
 
 void FallDown::UpdateState(Enemy* enemy)
+{
+	//時間が立ったら立ちあがるアニメーションへ
+	if (objectTimer >= frameFallDownEnemy)
+	{
+		enemy->ChangeState(new GetUp());
+		return;
+	}
+}
+
+void FallDown::UpdateStateMovePhase(Enemy* enemy)
 {
 	//時間が立ったら立ちあがるアニメーションへ
 	if (objectTimer >= frameFallDownEnemy)
@@ -521,6 +578,18 @@ void GetUp::UpdateState(Enemy* enemy)
 		//次の攻撃を弾に設定
 		nextAttack01 = true;
 		enemy->ChangeState(new AttackOmen1());
+		return;
+	}
+}
+
+void GetUp::UpdateStateMovePhase(Enemy* enemy)
+{
+	//立ち上がったら敵呼び出しへ
+	if (objectTimer >= frameGetUpEnemy)
+	{
+		//次の攻撃を弾に設定
+		nextAttack01 = true;
+		enemy->ChangeState(new CallMiniEnemy());
 		return;
 	}
 }

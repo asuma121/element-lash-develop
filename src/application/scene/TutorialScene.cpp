@@ -33,28 +33,6 @@ void TutorialScene::Initialize()
 
 		//敵をチュートリアル用にセット
 		enemy->SetTutorial();
-
-		//黒いスプライト1
-		Sprite* newBlackSprite1 = new Sprite();
-		newBlackSprite1->Initialize();
-		blackSprite1.reset(newBlackSprite1);
-		blackSprite1->SetTextureNum(14);
-		blackSprite1->SetPosition(black1Pos);
-		blackSprite1->SetScale(black1Scale);
-		//黒いスプライト2
-		Sprite* newBlackSprite2 = new Sprite();
-		newBlackSprite2->Initialize();
-		blackSprite2.reset(newBlackSprite2);
-		blackSprite2->SetTextureNum(14);
-		blackSprite2->SetPosition(black2Pos);
-		blackSprite2->SetScale(black2Scale);
-		//黒いスプライト2
-		Sprite* newBlackSprite3 = new Sprite();
-		newBlackSprite3->Initialize();
-		blackSprite3.reset(newBlackSprite3);
-		blackSprite3->SetTextureNum(14);
-		blackSprite3->SetPosition(black3Pos);
-		blackSprite3->SetScale(black3Scale);
 	}
 }
 
@@ -127,7 +105,8 @@ void TutorialScene::UpdateObject()
 	ui->SetPlayerForm(player->GetPlayerForm(),player->GetFormChangeFlag());
 	ui->SetTutorialTimer(tutorialLStickTimer, tutorialLStickMaxTime, tutorialRStickTimer, tutorialRStickMaxTime,
 		tutorialAttackTimer, tutorialAttackMaxTime, tutorialAttack2Timer
-		, tutorialAttack2MaxTime,tutorialIikannjiTimer, tutorialIikannjiMaxTime,tutorial12Timer, tutorial12MaxTime);
+		, tutorialAttack2MaxTime,tutorialIikannjiTimer, tutorialIikannjiMaxTime,tutorial12Timer, tutorial12MaxTime,
+		tutorial13Timer, tutorial13MaxTime);
 	ui->UpdateTutorial();
 
 	//プレイヤー
@@ -155,7 +134,6 @@ void TutorialScene::UpdateSprite()
 	if (tutorialSpriteFlag == 1)
 	{
 		blackSpriteTimer++;
-		blackSprite3->SetAlpha((blackSpriteMaxTime - blackSpriteTimer) / blackSpriteMaxTime);
 		//時間経過でスティック操作チュートリアルへ
 		if (blackSpriteTimer >= blackSpriteMaxTime)
 		{
@@ -296,7 +274,6 @@ void TutorialScene::UpdateSprite()
 		{
 			blackSpriteTimer++;
 		}
-		blackSprite3->SetAlpha(blackSpriteTimer / blackSpriteMaxTime);
 		//時間経過でチュートリアル終了
 		if (tutorial13Timer >= tutorial13MaxTime + blackSpriteMaxTime)
 		{
@@ -310,10 +287,6 @@ void TutorialScene::UpdateSprite()
 			moveGameFlag = true;
 		}
 	}
-	//スプライト更新
-	blackSprite1->Update();
-	blackSprite2->Update();
-	blackSprite3->Update();
 }
 
 void TutorialScene::UpdateCollider()
@@ -378,7 +351,7 @@ void TutorialScene::Draw()
 	//スプライト描画
 	DrawSprite();
 
-	ColliderManager::Draw(dxCommon->GetCommandList());
+	/*ColliderManager::Draw(dxCommon->GetCommandList());*/
 }
 
 void TutorialScene::DrawFBX()
@@ -397,16 +370,6 @@ void TutorialScene::DrawFBX()
 
 void TutorialScene::DrawSprite()
 {
-	//黒幕
-	if (tutorialSpriteFlag == 13)
-	{
-		blackSprite1->Draw(dxCommon->GetCommandList());
-		blackSprite2->Draw(dxCommon->GetCommandList());
-	}
-	if (tutorialSpriteFlag == 1 || tutorialSpriteFlag == 13)
-	{
-		blackSprite3->Draw(dxCommon->GetCommandList());
-	}
 	//UI描画
 	ui->DrawTutorial(dxCommon->GetCommandList());
 	player->DrawSpriteTutorial(dxCommon->GetCommandList());

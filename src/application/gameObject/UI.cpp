@@ -7,6 +7,25 @@ DXInput* UI::dxInput = nullptr;
 
 void UI::Initialize()
 {
+	//黒いスプライト1
+	Sprite* newBlackSprite1 = new Sprite();
+	newBlackSprite1->Initialize();
+	blackSprite1.reset(newBlackSprite1);
+	blackSprite1->SetTextureNum(14);
+	blackSprite1->Update(black1Pos,black1Scale);
+	//黒いスプライト2
+	Sprite* newBlackSprite2 = new Sprite();
+	newBlackSprite2->Initialize();
+	blackSprite2.reset(newBlackSprite2);
+	blackSprite2->SetTextureNum(14);
+	blackSprite2->Update(black2Pos, black2Scale);
+	//黒いスプライト2
+	Sprite* newBlackSprite3 = new Sprite();
+	newBlackSprite3->Initialize();
+	blackSprite3.reset(newBlackSprite3);
+	blackSprite3->SetTextureNum(14);
+	blackSprite3->Update(black3Pos, black3Scale);
+
 	//タイトルのスプライト
 	Sprite* newTitle1Sprite = new Sprite();
 	newTitle1Sprite->Initialize();
@@ -439,14 +458,120 @@ void UI::Initialize()
 	startButtonSprite.reset(newStartButtonSprite);
 	startButtonSprite->SetTextureNum(85);
 	startButtonSprite->Update(startButtonSpritePos, startButtonSpriteScale);
+	//敵のHPバーの枠
+	Sprite* newHpBar1Sprite = new Sprite();
+	newHpBar1Sprite->Initialize();
+	enemyHpBar1.reset(newHpBar1Sprite);
+	enemyHpBar1->SetTextureNum(23);
+	enemyHpBar1->Update(enemyHpBar1Pos, enemyHpBar1Scale);
+	//敵のHPバー
+	Sprite* newHpBar2Sprite = new Sprite();
+	newHpBar2Sprite->Initialize();
+	enemyHpBar2.reset(newHpBar2Sprite);
+	enemyHpBar2->SetTextureNum(24);
+	enemyHpBar2->Update(enemyHpBar2Pos, enemyHpBar2Scale);
+	//敵の現在のHPのとこにつけるやつ
+	Sprite* newHpBar3Sprite = new Sprite();
+	newHpBar3Sprite->Initialize();
+	enemyHpBar3.reset(newHpBar3Sprite);
+	enemyHpBar3->SetTextureNum(25);
+	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
+	//敵のBOSS HPのテキスト
+	Sprite* newHpBar4Sprite = new Sprite();
+	newHpBar4Sprite->Initialize();
+	enemyHpBar4.reset(newHpBar4Sprite);
+	enemyHpBar4->SetTextureNum(26);
+	enemyHpBar4->Update(enemyHpBar4Pos, enemyHpBar4Scale);
+	//敵のHPバーオレンジ
+	Sprite* newHpBar5Sprite = new Sprite();
+	newHpBar5Sprite->Initialize();
+	enemyHpBar5.reset(newHpBar5Sprite);
+	enemyHpBar5->SetTextureNum(58);
+	enemyHpBar5->Update(enemyHpBar5Pos, enemyHpBar5Scale);
+	//プレイヤーの緑のHP
+	for (int i = 0; i < hpSprite1Num; i++)
+	{
+		Sprite* newHpSprite1 = new Sprite();
+		newHpSprite1->Initialize();
+		newHpSprite1->SetTextureNum(28);
+		hpSprite1.emplace_back(newHpSprite1);
+	}
+	//プレイヤーの赤いHP
+	Sprite* newHpSprite2 = new Sprite();
+	newHpSprite2->Initialize();
+	hpSprite2.reset(newHpSprite2);
+	hpSprite2->SetTextureNum(29);
+	hpSprite2->Update(hpSpritePos + XMFLOAT2(hpFrameScale1, hpFrameScale3), hpSprite2Scale);
+	//プレイヤーのHPバーオレンジ
+	Sprite* newHpSprite3 = new Sprite();
+	newHpSprite3->Initialize();
+	hpSprite3.reset(newHpSprite3);
+	hpSprite3->SetTextureNum(30);
+	hpSprite3->Update(hpSpritePos, hpSprite3Scale);
 }
 
-void UI::UpdateGame()
+void UI::UpdateGame1()
 {
+	//敵のHP
+	//HPバーを現在のHPに
+	enemyHpBar2Scale.x = enemyHpBar2OriginalScale.x * (enemyHP / enemyMaxHP);
+	enemyHpBar3Pos.x = enemyHpBar3OriginalPos.x - (enemyHpBar2OriginalScale.x * ((enemyMaxHP - enemyHP) / enemyMaxHP));
+
+	//プレイヤーのHP
+	//緑のHP
+	for (int i = 0; i < playerHP; i++)
+	{
+		XMFLOAT2 addPos(hpFrameScale1 + (hpFrameScale2 * i) +
+			(hpSprite1Scale.x * i), hpFrameScale3);
+		//更新
+		hpSprite1[i]->Update(hpSpritePos + addPos, hpSprite1Scale);
+	}
+
+	//更新
+	enemyHpBar1->Update(enemyHpBar1Pos, enemyHpBar1Scale);
+	enemyHpBar2->Update(enemyHpBar2Pos, enemyHpBar2Scale);
+	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
+}
+
+void UI::UpdateGame2()
+{
+	//敵のHP
+	//HPバーを現在のHPに
+	enemyHpBar5Scale.x = enemyHpBar2OriginalScale.x * (enemyHP / enemyMaxHP);
+	enemyHpBar3Pos.x = enemyHpBar3OriginalPos.x - (enemyHpBar2OriginalScale.x * ((enemyMaxHP - enemyHP) / enemyMaxHP));
+
+	//プレイヤーのHP
+	//緑のHP
+	for (int i = 0; i < playerHP; i++)
+	{
+		XMFLOAT2 addPos(hpFrameScale1 + (hpFrameScale2 * i) + 
+			(hpSprite1Scale.x * i), hpFrameScale3);
+		//更新
+		hpSprite1[i]->Update(hpSpritePos + addPos, hpSprite1Scale);
+	}
+
+	//更新
+	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
+	enemyHpBar5->Update(enemyHpBar5Pos, enemyHpBar5Scale);
 }
 
 void UI::UpdateTutorial()
 {
+	//黒幕
+	if (tutorialFlag == 1)
+	{
+		//タイマー加算
+		blackSpriteTimer++;
+		//黒幕をだんだん明るくする
+		blackSprite3->SetAlpha((blackSpriteMaxTime - blackSpriteTimer) / blackSpriteMaxTime);
+		//スプライト更新
+		blackSprite3->Update();
+		//時間経過でスティック操作チュートリアルへ
+		if (blackSpriteTimer >= blackSpriteMaxTime)
+		{
+			blackSpriteTimer = 0;
+		}
+	}
 	//スティック操作チュートリアル
 	if (tutorialFlag == 2)
 	{
@@ -526,6 +651,17 @@ void UI::UpdateTutorial()
 		}
 		//スプライト更新
 		tutorial1Sprite->Update();
+	}
+	//黒幕と上下の黒いバー
+	if (tutorialFlag == 13)
+	{
+		//黒幕
+		if (tutorial13Timer >= tutorial13MaxTime)
+		{
+			blackSpriteTimer++;
+		}
+		blackSprite3->SetAlpha(blackSpriteTimer / blackSpriteMaxTime);
+		blackSprite3->Update();
 	}
 
 	//スキップの処理
@@ -618,7 +754,18 @@ void UI::UpdateTitle()
 	AButtonPushSprite->Update();
 }
 
-void UI::DrawGame(ID3D12GraphicsCommandList* cmdList)
+void UI::UpdateMovePhase()
+{
+	//黒幕
+	if (phaseTimer > phaseMoveTime)
+	{
+		blackSpriteTimer++;
+		blackSprite3->SetAlpha(blackSpriteTimer / blackSpriteMaxTime);
+		blackSprite3->Update();
+	}
+}
+
+void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
 {
 	//属性チェンジUI 炎
 	if (playerForm == Fire)
@@ -669,6 +816,7 @@ void UI::DrawGame(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
+	//攻撃のUI
 	if (playerForm == Fire)
 	{
 		attackFireSprite->Draw(cmdList);
@@ -705,12 +853,153 @@ void UI::DrawGame(ID3D12GraphicsCommandList* cmdList)
 			spaceKeySprite1->Draw(cmdList);
 		}
 	}
+
+	//敵のHP
+	enemyHpBar5->Draw(cmdList);
+	enemyHpBar2->Draw(cmdList);
+	/*hpBar4->Draw(cmdList);*/
+	enemyHpBar1->Draw(cmdList);
+	enemyHpBar3->Draw(cmdList);
+
+	//プレイヤーのHP
+	//緑のHP
+	for (int i = 0; i < playerHP; i++)
+	{
+		hpSprite1[i]->Draw(cmdList);
+	}
+	//赤いHP
+	if (playerHP == 1)
+	{
+		hpSprite2->Draw(cmdList);
+	}
+	//HPの枠
+	hpSprite3->Draw(cmdList);
+}
+
+void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
+{
+	//属性チェンジUI 炎
+	if (playerForm == Fire)
+	{
+		changeElementSprite1->Draw(cmdList);
+	}
+	//属性チェンジUI 電気
+	if (playerForm == Elec)
+	{
+		changeElementSprite2->Draw(cmdList);
+	}
+	//属性チェンジ中
+	if (formChangeFlag == true)
+	{
+		changeElementSprite4->Draw(cmdList);
+	}
+	//属性変えれる状態
+	else
+	{
+		changeElementSprite3->Draw(cmdList);
+	}
+	//コントローラー接続時 LBボタン
+	if (dxInput->GetConnectFlag() == true)
+	{
+		//ボタン押している時
+		if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+		{
+			LBButtonPushSprite1->Draw(cmdList);
+		}
+		//押していない時
+		else
+		{
+			LBButtonSprite1->Draw(cmdList);
+		}
+	}
+	//コントローラー未接続時 シフトキー
+	if (dxInput->GetConnectFlag() == false)
+	{
+		//押している時
+		if (input->PushKey(DIK_LSHIFT) == 1 || input->PushKey(DIK_RSHIFT) == 1)
+		{
+			shiftKeyPushSprite1->Draw(cmdList);
+		}
+		//押していない時
+		else
+		{
+			shiftKeySprite1->Draw(cmdList);
+		}
+	}
+
+	//攻撃のUI
+	if (playerForm == Fire)
+	{
+		attackFireSprite->Draw(cmdList);
+	}
+	if (playerForm == Elec)
+	{
+		attackElecSprite->Draw(cmdList);
+	}
+	//コントローラー接続時 RBボタン
+	if (dxInput->GetConnectFlag() == true)
+	{
+		//ボタン押している時
+		if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+		{
+			RBButtonPushSprite1->Draw(cmdList);
+		}
+		//押していない時
+		else
+		{
+			RBButtonSprite1->Draw(cmdList);
+		}
+	}
+	//コントローラー未接続時 スペースキー
+	if (dxInput->GetConnectFlag() == false)
+	{
+		//スペースキー押している時
+		if (input->PushKey(DIK_SPACE) == 1)
+		{
+			spaceKeyPushSprite1->Draw(cmdList);
+		}
+		//押していない時
+		else
+		{
+			spaceKeySprite1->Draw(cmdList);
+		}
+	}
+
+	//敵のHP
+	enemyHpBar5->Draw(cmdList);
+	enemyHpBar1->Draw(cmdList);
+	enemyHpBar3->Draw(cmdList);
+
+	//プレイヤーのHP
+	//緑のHP
+	for (int i = 0; i < playerHP; i++)
+	{
+		hpSprite1[i]->Draw(cmdList);
+	}
+	//赤いHP
+	if (playerHP == 1)
+	{
+		hpSprite2->Draw(cmdList);
+	}
+	//HPの枠
+	hpSprite3->Draw(cmdList);
 }
 
 void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 {
 	//ボス登場時以外枠とスキップ描画
 	if (tutorialFlag < 13)tutorial1Sprite->Draw(cmdList);
+
+	//黒幕
+	if (tutorialFlag == 13)
+	{
+		blackSprite1->Draw(cmdList);
+		blackSprite2->Draw(cmdList);
+	}
+	if (tutorialFlag == 1 || tutorialFlag == 13)
+	{
+		blackSprite3->Draw(cmdList);
+	}
 
 	//ボス登場時以外スキップ描画
 	if (tutorialFlag < 12)
@@ -1212,6 +1501,14 @@ void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)
 	}
 }
 
+void UI::DrawMovePhase(ID3D12GraphicsCommandList* cmdList)
+{
+	//黒幕
+	blackSprite1->Draw(cmdList);
+	blackSprite2->Draw(cmdList);
+	blackSprite3->Draw(cmdList);
+}
+
 void UI::SetGame()
 {
 	RBButtonSprite1->Update(RBButtonSpritePos3, BButtonSpriteScale);
@@ -1224,15 +1521,30 @@ void UI::SetGame()
 	shiftKeyPushSprite1->Update(shiftKeySpritePos3, keySpriteScale2);
 }
 
+void UI::SetMovePhase()
+{
+	blackSpriteTimer = 0;
+	blackSprite3->SetAlpha(0.0f);
+	blackSprite3->Update();
+}
+
 void UI::SetTitleTimer(int moveTutorialTimer, int moveTutorialTime)
 {
 	this->titleTimer = moveTutorialTimer;
 	this->titleTime = moveTutorialTime;
 }
 
+void UI::SetHP(int playerHP, int playerMaxHP, int enemyHP, int enemyMaxHP)
+{
+	this->playerHP = playerHP;
+	this->playerMaxHP = playerMaxHP;
+	this->enemyHP = enemyHP;
+	this->enemyMaxHP = enemyMaxHP;
+}
+
 void UI::SetTutorialTimer(int LStickTimer, int LStickTime, int RStickTimer, int RStickTime,
 	int attackTimer, int attackTime, int attackTimer2, int attackTime2,
-	int iikannjiTimer, int iikannjiTime, int tutorial12Timer, int tutorial12Time)
+	int iikannjiTimer, int iikannjiTime, int tutorial12Timer, int tutorial12Time,int tutorial13Timer,int tutorial13MaxTime)
 {
 	this->LStickTimer = LStickTimer;
 	this->LStickTime = LStickTime;
@@ -1246,6 +1558,8 @@ void UI::SetTutorialTimer(int LStickTimer, int LStickTime, int RStickTimer, int 
 	this->iikannjiTime = iikannjiTime;
 	this->tutorial12Timer = tutorial12Timer;
 	this->tutorial12Time = tutorial12Time;
+	this->tutorial13Timer = tutorial13Timer;
+	this->tutorial13MaxTime = tutorial13MaxTime;
 }
 
 void UI::SetPlayerForm(int form, bool formChangeFlag)

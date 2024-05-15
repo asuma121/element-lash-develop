@@ -104,6 +104,8 @@ public:	//静的メンバ変数
 
 public:	//仮想関数
 	void Initialize();
+	//フェーズごとの初期化
+	virtual void PhaseInitialize() = 0;
 	virtual void Update();
 	virtual void Draw();
 	virtual void DrawFBXLightView() = 0;

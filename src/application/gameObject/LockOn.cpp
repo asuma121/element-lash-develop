@@ -126,11 +126,11 @@ void LockOn::Draw(ID3D12GraphicsCommandList* cmdList)
 	lockOnFlag = false;
 
 	//ImGui
-	ImGui::Begin("LockOn");
-	ImGui::SetWindowPos(ImVec2(500, 300));
-	ImGui::SetWindowSize(ImVec2(500, 150));
-	//ImGui::InputFloat2("debugPos", debugPos);
-	ImGui::InputFloat3("targetPos", debugTargetPos);
-	ImGui::InputFloat("targetFlag", debugTargetFlag);
-	ImGui::End();
+	//ImGui::Begin("LockOn");
+	//ImGui::SetWindowPos(ImVec2(500, 300));
+	//ImGui::SetWindowSize(ImVec2(500, 150));
+	////ImGui::InputFloat2("debugPos", debugPos);
+	//ImGui::InputFloat3("targetPos", debugTargetPos);
+	//ImGui::InputFloat("targetFlag", debugTargetFlag);
+	//ImGui::End();
 }

@@ -74,19 +74,14 @@ public://メンバ関数
 	void UpdateGame2();
 
 	/// <summary>
+	///更新
+	/// </summary>
+	void UpdateMovePhase();
+
+	/// <summary>
 	///チュートリアルの時の更新
 	/// </summary>
 	void UpdateTutorial(int tutorialTimer);
-
-	/// <summary>
-	///スプライト更新
-	/// </summary>
-	void UpdateSpriteGame1();
-
-	/// <summary>
-	///スプライト更新
-	/// </summary>
-	void UpdateSpriteGame2();
 
 	/// <summary>
 	///ステート更新
@@ -99,6 +94,11 @@ public://メンバ関数
 	void UpdateStateTutorial();
 
 	/// <summary>
+	///ステート更新 ゲーム用
+	/// </summary>
+	void UpdateStateMovePhase();
+
+	/// <summary>
 	///描画
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
@@ -107,16 +107,6 @@ public://メンバ関数
 	///ライト視点描画
 	/// </summary>
 	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-
-	/// <summary>
-	///スプライト描画
-	/// </summary>
-	void DrawSpriteGame1(ID3D12GraphicsCommandList* cmdList);
-
-	/// <summary>
-	///スプライト描画
-	/// </summary>
-	void DrawSpriteGame2(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
 	///パーティクル描画
@@ -154,6 +144,11 @@ public://メンバ関数
 	void SetPlayerPos(XMFLOAT3 playerPos);
 
 	/// <summary>
+	///タイマーセット
+	/// </summary>
+	void SetPhaseTimer(int phaseTimer);
+
+	/// <summary>
 	///オブジェクトの当たり判定セット
 	/// </summary>
 	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData);
@@ -182,6 +177,11 @@ public://メンバ関数
 	///ゲームシーンに移る
 	/// </summary>
 	void SetGameScene();
+
+	/// <summary>
+	///ゲームシーンに移る
+	/// </summary>
+	void SetMovePhase();
 
 	/// <summary>
 	///座標取得
@@ -216,12 +216,22 @@ public://メンバ関数
 	/// <summary>
 	///敵呼び出しフラグ取得
 	/// </summary>
-	bool GetCallEnemyFlag() { return callEnemyFlag; }
+	bool GetCallEnemyFlag();
+
+	// <summary>
+	///HP取得
+	/// </summary>
+	int GetHP() { return HP; };
+
+	// <summary>
+	///最大HP取得
+	/// </summary>
+	int GetMaxHP() { return maxHP; };
 
 	/// <summary>
 	///敵呼び出し座標取得
 	/// </summary>
-	XMFLOAT3 GetCallEnemyPos() { return callEnemyPos; }
+	XMFLOAT3 GetCallEnemyPos(); 
 
 	/// <summary>
 	///死亡フラグ取得
@@ -265,22 +275,8 @@ private:
 	bool phase2DashFlag = false;
 	bool phase2Attack1Flag = false;
 
-	////敵の弾
-	//EnemyBullet* bullet = nullptr;
-
-	//敵呼び出しフラグ
-	bool callEnemyFlag = false;
-	//呼び出す敵の座標
-	XMFLOAT3 callEnemyPos = { 0.0f,0.0f,0.0f };
-
 	//プレイヤーにダッシュを当てたフラグ
 	bool hitPlayer = false;
-	//スプライト
-	Sprite* hpBar1 = nullptr;	//HPバーの枠
-	Sprite* hpBar2 = nullptr;	//HPバー
-	Sprite* hpBar3 = nullptr;	//現在のHPのとこにつけるやつ
-	Sprite* hpBar4 = nullptr;	//BOSS HPのテキスト
-	Sprite* hpBar5 = nullptr;	//HPバーオレンジ
 
 	//被弾
 	bool HitFlag1 = false;
@@ -325,26 +321,6 @@ private:
 	XMFLOAT3 dashVector = { 0.0f,0.0f,0.0f };
 	float dashSpeed = 1.4f;
 
-	//スプライト用
-	//HPバー1
-	XMFLOAT2 hpBar1Pos = { 320.0f,-15.0f };
-	XMFLOAT2 hpBar1Scale = { 640.0f,96.0f };
-	//HPバー2
-	XMFLOAT2 hpBar2Pos = { 349.0f,26.0f };
-	XMFLOAT2 hpBar2OriginalScale = { 605.0f,15.0f };
-	XMFLOAT2 hpBar2Scale = hpBar2OriginalScale;
-	//HPバー3
-	XMFLOAT2 hpBar3OriginalPos = { 938.0f,25.0f };
-	XMFLOAT2 hpBar3Pos = hpBar3OriginalPos;
-	XMFLOAT2 hpBar3Scale = { 16.0f,16.0f };
-	//Hpバー4
-	XMFLOAT2 hpBar4Pos = { 230.0f,25.0f };
-	XMFLOAT2 hpBar4Scale = { 96.0f,16.0f };
-	//HPバー5
-	XMFLOAT2 hpBar5Pos = { 349.0f,26.0f };
-	XMFLOAT2 hpBar5OriginalScale = { 605.0f,15.0f };
-	XMFLOAT2 hpBar5Scale = hpBar2OriginalScale;
-
 	//imgui用
 	int debugNum[1] = { 0};
 	float pos2[2] = { 605.0f,15.0f };
@@ -373,12 +349,16 @@ public:	//メンバ関数
 	virtual void Initialize() = 0;
 	//攻撃処理
 	virtual void UpdateAttack() {};
+	//攻撃処理
+	virtual void UpdateAttackMovePhase() {};
 	//移動処理
 	virtual void Move() = 0;
 	//ステートの変更
 	virtual void UpdateState(Enemy* enemy) = 0;
 	//ステートの変更
 	virtual void UpdateStateTutorial(Enemy* enemy) {};
+	//ステートの変更
+	virtual void UpdateStateMovePhase(Enemy* enemy) {};
 	//描画
 	virtual void Draw(ID3D12GraphicsCommandList* cmdList) = 0;
 	//ライト目線描画
@@ -397,6 +377,8 @@ public:	//メンバ関数
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
 	void Update();
+	//フェーズ移動用の更新
+	void UpdateMovePhase();
 	//チュートリアル用の更新
 	void UpdateTutorial(int timer);
 	//チュートリアルの動き
@@ -409,6 +391,8 @@ public:	//メンバ関数
 	void SetPlayerPos(XMFLOAT3 playerPos) { EnemyState::playerPos = playerPos; };
 	//プレイヤーに当たったら
 	void SetHitPlayer(bool hitPlayerFlag) { EnemyState::hitPlayerFlag = hitPlayerFlag; };
+	//タイマーセット
+	void SetPhaseTimer(int phaseTimer) { EnemyState::phaseTimer = phaseTimer; }
 
 	//座標取得
 	XMFLOAT3 GetPosition() { return position; }
@@ -428,6 +412,10 @@ public:	//メンバ関数
 	void SetTutorial(Enemy* enemy);
 	//ゲームシーンに移る際に呼び出す
 	void SetGame(Enemy* enemy);
+	//ゲームシーンに移る際に呼び出す
+	void SetMovePhase(Enemy* enemy);
+	bool GetCallEnemyFlag() { return callEnemyFlag; };
+	XMFLOAT3 GetCallEnemyPos() { return callEnemyPos; };
 
 protected:	//静的メンバ変数
 
@@ -504,6 +492,9 @@ protected:	//メンバ変数
 	//オブジェクトごとに時間の設定があるか
 	bool objectTimeFlag = false;
 
+	//フェーズごとのタイマー
+	int phaseTimer = 0;
+
 	//プレイヤーの座標
 	XMFLOAT3 playerPos = { 0.0f,0.0f,0.0f };
 
@@ -557,12 +548,19 @@ protected:	//メンバ変数
 	//歩くスピード
 	float walkSpeed = 1.0f;
 	//ダッシュのスピード
-	float dashSpeed = 0.9f;
+	float dashSpeed = 1.2f;
 	//ダッシュ攻撃に移らない範囲
 	float dashLength = 50.0f;
 
 	//プレイヤーにダッシュを当てたフラグ
 	bool hitPlayerFlag = false;
+
+	//敵呼び出しフラグ
+	bool callEnemyFlag = false;
+	//呼び出す敵の座標
+	XMFLOAT3 callEnemyPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 callEnemyPos1 = { 60.0f,0.0f,40.0f };	//フェーズ移動用
+	XMFLOAT3 callEnemyPos2 = { -60.0f,0.0f,40.0f };	//フェーズ移動用
 
 	//コライダー
 	//コライダーの大きさ
@@ -577,4 +575,7 @@ protected:	//メンバ変数
 	int tutorialTimer = 0;
 	//チュートリアル 立ちアニメーションのフレーム
 	int tutorialStandFrame = 180;
+
+	XMFLOAT3 addElecPos1 = XMFLOAT3(150.0f, 500.0f, 150.0f);
+	XMFLOAT3 addElecPos2 = XMFLOAT3(40.0f, 500.0f, 40.0f);
 };

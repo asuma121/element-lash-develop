@@ -71,6 +71,8 @@ public:
 	void UpdateState(Enemy* enemy);
 	//チュートリアルのステート更新
 	void UpdateStateTutorial(Enemy* enemy)override;
+	//ゲームのステート更新
+	void UpdateStateMovePhase(Enemy* enemy)override;
 	//攻撃更新
 	void UpdateAttack()override;
 	//描画
@@ -126,6 +128,10 @@ class CallMiniEnemy : public EnemyState
 		void Move();
 		//ステートの更新
 		void UpdateState(Enemy* enemy);
+		//ゲームのステート更新
+		void UpdateStateMovePhase(Enemy* enemy)override;
+		//フェーズ移動の処理
+		void UpdateAttackMovePhase()override;
 		//描画
 		void Draw(ID3D12GraphicsCommandList* cmdList);
 		//ライト目線描画
@@ -145,6 +151,8 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
+	//ゲームのステート更新
+	void UpdateStateMovePhase(Enemy* enemy)override;
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
@@ -164,6 +172,8 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
+	//ゲームのステート更新
+	void UpdateStateMovePhase(Enemy* enemy)override;
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画

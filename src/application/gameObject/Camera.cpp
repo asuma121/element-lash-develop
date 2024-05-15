@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Math.h"
 #include "mathOriginal.h"
+#include "imgui.h"
 #define PI 3.14159265359
 
 Input* Camera::input = nullptr;
@@ -145,19 +146,53 @@ void Camera::DebugUpdate()
 	//視点座標を変更
 	if (input->PushKey(DIK_LEFT))
 	{
-		DebugChangeRot -= (float)rot;
+		eye_.x -= 0.5f;
 	}
 	if (input->PushKey(DIK_RIGHT))
 	{
-		DebugChangeRot += (float)rot;
+		eye_.x += 0.5f;
 	}
 	if (input->PushKey(DIK_UP))
 	{
-		DebugChangeRot2 -= (float)rot;
+		eye_.y -= 0.5f;
 	}
 	if (input->PushKey(DIK_DOWN))
 	{
-		DebugChangeRot2 += (float)rot;
+		eye_.y += 0.5f;
+	}
+	if (input->PushKey(DIK_O))
+	{
+		eye_.z -= 0.5f;
+	}
+	if (input->PushKey(DIK_P))
+	{
+		eye_.z += 0.5f;
+	}
+
+	//注視点座標を変更
+	if (input->PushKey(DIK_Q))
+	{
+		target_.x -= 0.5f;
+	}
+	if (input->PushKey(DIK_W))
+	{
+		target_.x += 0.5f;
+	}
+	if (input->PushKey(DIK_A))
+	{
+		target_.y -= 0.5f;
+	}
+	if (input->PushKey(DIK_S))
+	{
+		target_.y += 0.5f;
+	}
+	if (input->PushKey(DIK_Z))
+	{
+		target_.z -= 0.5f;
+	}
+	if (input->PushKey(DIK_X))
+	{
+		target_.z += 0.5f;
 	}
 
 	//ターゲットまでの距離を変更
@@ -170,10 +205,20 @@ void Camera::DebugUpdate()
 		DebugTargetDistance += 0.2f;
 	}
 
-	//視点座標に代入
-	eye_.x = sin(DebugChangeRot) * DebugTargetDistance + target_.x;
-	eye_.y = sin(DebugChangeRot2) * DebugTargetDistance + target_.y;
-	eye_.z = cos(DebugChangeRot) * DebugTargetDistance + target_.z;
+	debugEye[0] = eye_.x;
+	debugEye[1] = eye_.y;
+	debugEye[2] = eye_.z;
+	debugTarget[0] = target_.x;
+	debugTarget[1] = target_.y;
+	debugTarget[2] = target_.z;
+
+	//ImGui
+	ImGui::Begin("camera");
+	ImGui::SetWindowPos(ImVec2(500, 0));
+	ImGui::SetWindowSize(ImVec2(500, 150));
+	ImGui::InputFloat3("debugEye", debugEye);
+	ImGui::InputFloat3("debugTarget", debugTarget);
+	ImGui::End();
 }
 
 void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
@@ -231,6 +276,27 @@ void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
 	//eye_.x = playerPos.x + (cos(DebugChangeRot) * playerTargetDistance);
 	//eye_.y = playerPos.y + (cos(DebugChangeRot2) * playerTargetDistance);
 	//eye_.z = playerPos.z + (sin(DebugChangeRot) * playerTargetDistance);
+}
+
+void Camera::UpdateMovePhase()
+{
+	eye_ = movePhaseEye;
+	target_ = movePhaseTarget;
+
+	debugEye[0] = eye_.x;
+	debugEye[1] = eye_.y;
+	debugEye[2] = eye_.z;
+	debugTarget[0] = target_.x;
+	debugTarget[1] = target_.y;
+	debugTarget[2] = target_.z;
+
+	////ImGui
+	//ImGui::Begin("camera");
+	//ImGui::SetWindowPos(ImVec2(500, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 150));
+	//ImGui::InputFloat3("debugEye", debugEye);
+	//ImGui::InputFloat3("debugTarget", debugTarget);
+	//ImGui::End();
 }
 
 void Camera::UpdateTutorial(int tutorialTimer)

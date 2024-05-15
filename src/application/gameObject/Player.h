@@ -75,6 +75,11 @@ public:
 	///更新 ゲームシーン
 	/// </summary>
 	void UpdateGame();
+	
+	/// <summary>
+	///更新 フェーズ移動
+	/// </summary>
+	void UpdateMovePhase();
 
 	/// <summary>
 	///更新 チュートリアルシーン
@@ -187,6 +192,11 @@ public:
 	void SetGameScene();
 
 	/// <summary>
+	///フェーズ移動に移る際に呼び出す
+	/// </summary>
+	void SetMovePhase();
+
+	/// <summary>
 	///チュートリアルのフェーズセット
 	/// </summary>
 	void SetTutorialFlag(int tutorialFlag) { this->tutorialFlag = tutorialFlag; }
@@ -251,6 +261,16 @@ public:
 	/// </summary>
 	int GetPlayerForm() { return form; }
 
+	// <summary>
+	///HP取得
+	/// </summary>
+	int GetHP() { return HP; };
+
+	// <summary>
+	///最大HP取得
+	/// </summary>
+	int GetMaxHP() { return MaxHP; };
+
 	/// <summary>
 	///プレイヤーの状態変更
 	/// </summary>
@@ -276,19 +296,19 @@ private:
 	//チュートリアルのフェーズ
 	int tutorialFlag = 0;
 
-	//HP用スプライト
-	Sprite* hpSprite1[5];	//緑のHP
-	Sprite* hpSprite2 = nullptr;	//赤いHP
-	Sprite* hpSprite3 = nullptr;	//HPの枠
-	//HP用スプライトの大きさ、座標
-	XMFLOAT2 hpSpritePos = { 490.0f,660.0f };
-	XMFLOAT2 hpSprite1Scale = { 32.0f * 1.5f,16.0f * 1.5f };
-	XMFLOAT2 hpSprite2Scale = { 32.0f * 1.5f,16.0f * 1.5f };
-	XMFLOAT2 hpSprite3Scale = { 196.0f * 1.5,28.0f * 1.5 };
-	//HP枠の大きさ
-	float hpFrameScale1 = 10.0f * 1.5f;	//外枠 左右
-	float hpFrameScale2 = 4.0f * 1.5f;	//内側の枠
-	float hpFrameScale3 = 6.0f * 1.5f;	//外枠 上下
+	////HP用スプライト
+	//Sprite* hpSprite1[5];	//緑のHP
+	//Sprite* hpSprite2 = nullptr;	//赤いHP
+	//Sprite* hpSprite3 = nullptr;	//HPの枠
+	////HP用スプライトの大きさ、座標
+	//XMFLOAT2 hpSpritePos = { 490.0f,660.0f };
+	//XMFLOAT2 hpSprite1Scale = { 32.0f * 1.5f,16.0f * 1.5f };
+	//XMFLOAT2 hpSprite2Scale = { 32.0f * 1.5f,16.0f * 1.5f };
+	//XMFLOAT2 hpSprite3Scale = { 196.0f * 1.5,28.0f * 1.5 };
+	////HP枠の大きさ
+	//float hpFrameScale1 = 10.0f * 1.5f;	//外枠 左右
+	//float hpFrameScale2 = 4.0f * 1.5f;	//内側の枠
+	//float hpFrameScale3 = 6.0f * 1.5f;	//外枠 上下
 
 	//属性変化のUIスプライト
 	Sprite* changeElementSprite1 = nullptr;	//電気
@@ -388,6 +408,8 @@ public:	//メンバ関数
 	void UpdateTitle(float titleTimer);
 	//チュートリアル専用の更新
 	void UpdateTutorial(int tutorialFlag);
+	//フェーズ移動専用の更新
+	void UpdateMovePhase();
 	//判定更新
 	void UpdateCollider();
 	//ダウン状態更新
@@ -427,6 +449,8 @@ public:	//メンバ関数
 	void SetTutorial();
 	//ゲームシーンに移る際に呼び出す
 	void SetGameScene();
+	//フェーズ移動に移る際に呼び出す
+	void SetMovePhase(Player* player);
 
 	//プレイヤー本体からセットする系
 	void SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos);
@@ -522,4 +546,9 @@ protected:	//メンバ変数
 
 	//チュートリアルのフェーズ
 	int tutorialFlag = 0;
+
+	//フェーズ移動の時の座標
+	XMFLOAT3 movePhasePos = { 0.0f, 0.0f, -50.0f };
+	//ゲームシーンに移る時の座標
+	XMFLOAT3 gameScenePos = { 0.0f, 0.0f, -200.0f };
 };
