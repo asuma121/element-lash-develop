@@ -33,6 +33,8 @@ public:	//メンバ関数
 	void Update();
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+	//描画
+	void DrawTitle(ID3D12GraphicsCommandList* cmdList);
 	//コライダー取得
 	std::vector<JSONLoader::ColliderData> GetColliderData() { return colliderData; }
 	//コライダーの数取得

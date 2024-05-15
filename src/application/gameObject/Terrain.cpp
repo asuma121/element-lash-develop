@@ -82,3 +82,8 @@ void Terrain::Draw(ID3D12GraphicsCommandList* cmdList)
 		objects[i]->Draw(cmdList, pillerModel->vbView, pillerModel->ibView);
 	}
 }
+
+void Terrain::DrawTitle(ID3D12GraphicsCommandList* cmdList)
+{
+	skySphereObject->Draw(cmdList, skySphereModel->vbView, skySphereModel->ibView);
+}

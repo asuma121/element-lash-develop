@@ -325,7 +325,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//タイトルシーン
 	TitleScene::SetDevice(dxCommon, input, dxInput);
-	TitleScene::SetGameObject(player, camera, light, ui);
+	TitleScene::SetGameObject(player, terrain, camera, light, ui);
 
 	//チュートリアルシーン
 	TutorialScene::SetDevice(dxCommon, input, dxInput);

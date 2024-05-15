@@ -10,6 +10,7 @@ Camera* TitleScene::camera = nullptr;
 Light* TitleScene::light = nullptr;
 Player* TitleScene::player = nullptr;
 UI* TitleScene::ui = nullptr;
+Terrain* TitleScene::terrain = nullptr;
 
 TitleScene::TitleScene()
 {
@@ -84,6 +85,9 @@ void TitleScene::UpdateObject()
 	light->SetDir(XMFLOAT3(lightDir));
 	light->Update();
 
+	//オブジェクト
+	terrain->Update();
+
 	//UIの更新
 	ui->SetTitleTimer(moveTutorialTimer, titleMoveTime);
 	ui->UpdateTitle();
@@ -157,6 +161,7 @@ void TitleScene::Draw()
 void TitleScene::DrawFBX()
 {
 	player->Draw(dxCommon->GetCommandList());
+	terrain->DrawTitle(dxCommon->GetCommandList());
 }
 
 void TitleScene::DrawSprite()
@@ -191,9 +196,10 @@ void TitleScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInp
 	TitleScene::dxInput = dxInput;
 }
 
-void TitleScene::SetGameObject(Player* player, Camera* camera, Light* light, UI* ui)
+void TitleScene::SetGameObject(Player* player, Terrain* terrain, Camera* camera, Light* light, UI* ui)
 {
 	TitleScene::player = player;
+	TitleScene::terrain = terrain;
 	TitleScene::camera = camera;
 	TitleScene::light = light;
 	TitleScene::ui = ui;

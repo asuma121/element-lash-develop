@@ -383,7 +383,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src\engine;$(SolutionDir)src\engine\base;$(SolutionDir)src\engine\object;$(SolutionDir)src\application\gameObject;$(SolutionDir)src\application\gameObject\light;$(SolutionDir)src\engine\collision;$(SolutionDir)src\application\particle;$(SolutionDir)src\application\scene;$(SolutionDir)src\engine\postEffect</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4099;26495;26451;4996;4828;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>

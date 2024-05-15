@@ -31,9 +31,9 @@ void MiniEnemy::Initialize()
 	//hpBarSprite->SetModel(hpBarSpriteModel);
 
 	//ƒ‚ƒfƒ‹
-	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDash");
+	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("miniEnemyDash");
 	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("miniEnemyDown");
-	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("EnemyStand");
+	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("miniEnemyStand");
 }
 
 void MiniEnemy::UpdateGame()

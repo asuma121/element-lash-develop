@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Sprite.h"
 #include "Player.h"
+#include "Terrain.h"
 #include "UI.h"
 #include "SceneManager.h"
 
@@ -34,7 +35,7 @@ public:	//静的メンバ変数
 	/// <summary>
 	///ゲームシーンで使うオブジェクトセット
 	/// </summary>
-	static void SetGameObject(Player* player, Camera* camera, Light* light, UI* ui);
+	static void SetGameObject(Player* player, Terrain* terrain, Camera* camera, Light* light, UI* ui);
 
 public: //メンバ関数
 
@@ -122,6 +123,8 @@ private:	//静的メンバ変数
 	static Light* light;
 	//プレイヤー
 	static Player* player;
+	//オブジェクト
+	static Terrain* terrain;
 	//UI
 	static UI* ui;
 
