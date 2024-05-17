@@ -42,6 +42,14 @@ ClearScene::~ClearScene()
 
 void ClearScene::Initialize()
 {
+	//シーン遷移時に初期化
+	if (clearFromGameTimer == 0)
+	{
+		//プレイヤーをタイトル用にセット
+		enemy->SetClear();
+		player->SetClear();
+	}
+
 	//黒いスプライト1
 	Sprite* newBlackSprite1 = new Sprite();
 	newBlackSprite1->Initialize();
@@ -99,6 +107,11 @@ void ClearScene::NextScene(Scene* pScene)
 
 void ClearScene::UpdateObject()
 {
+	if (clearFromGameTimer >= clearFromGameTime && dxInput->TriggerKey(DXInput::PAD_X))
+	{
+		moveTitleFlag = true;
+	}
+
 	//カメラ更新
 	camera->UpdateClear(enemy->GetPosition(), clearFromGameTimer);
 	camera->Update();
@@ -113,7 +126,10 @@ void ClearScene::UpdateObject()
 	player->UpdateGame();
 
 	//敵
-	enemy->UpdateGame1();
+	enemy->UpdateClear(clearFromGameTimer);
+
+	//地面
+	plane->Update();
 
 	//地形
 	terrain->Update();
@@ -153,6 +169,7 @@ void ClearScene::DrawFBX()
 {
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
+	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
 }
 
@@ -161,6 +178,9 @@ void ClearScene::DrawSprite()
 	blackSprite1->Draw(dxCommon->GetCommandList());
 	blackSprite2->Draw(dxCommon->GetCommandList());
 	if (clearFromGameTimer >= clearFromGameTime)clear1Sprite->Draw(dxCommon->GetCommandList());
+
+	//ステート更新
+	enemy->UpdateStateClear();
 }
 
 void ClearScene::DrawParticle()
@@ -179,6 +199,7 @@ void ClearScene::SetSRV(ID3D12DescriptorHeap* SRV)
 {
 	player->SetSRV(SRV);
 	enemy->SetSRV(SRV);
+	plane->SetSRV(SRV);
 }
 
 DirectX::XMMATRIX ClearScene::GetLightViewProjection()

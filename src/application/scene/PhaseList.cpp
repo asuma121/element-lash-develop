@@ -203,22 +203,22 @@ void Phase2::PhaseInitialize()
 	ui->SetGame();
 	player->SetGameScene();
 	enemy->SetGameScene();
-	miniEnemy->SetGameScene();
 }
 
 void Phase2::DrawFBXLightView()
 {
+	/*miniEnemy->DrawLightView(dxCommon->GetCommandList());*/
 	player->DrawLightView(dxCommon->GetCommandList());
 	enemy->DrawLightView(dxCommon->GetCommandList());
-	miniEnemy->DrawLightView(dxCommon->GetCommandList());
 }
 
 void Phase2::SetSRV(ID3D12DescriptorHeap* SRV)
-{
+{	
+	//SRVをセット
+	/*miniEnemy->SetSRV(SRV);*/
 	player->SetSRV(SRV);
 	enemy->SetSRV(SRV);
-	miniEnemy->SetSRV(SRV);
-	plane->SetSRV(SRV);
+	plane->SetSRV(SRV);;
 }
 
 void Phase2::NextPhase(GameScene* gameScene)
@@ -256,12 +256,12 @@ void Phase2::UpdateObject()
 	enemy->UpdateGame2();
 
 	//小さい敵
-	if (enemy->GetCallEnemyFlag())
+	/*if (enemy->GetCallEnemyFlag())
 	{
 		miniEnemy->AddEnemy(enemy->GetCallEnemyPos());
 	}
 	miniEnemy->SetPlayerPos(player->GetPosition());
-	miniEnemy->UpdateGame();
+	miniEnemy->Update();*/
 
 	//UI
 	ui->SetPlayerForm(player->GetPlayerForm(), player->GetFormChangeFlag());
@@ -338,19 +338,19 @@ void Phase2::UpdateCollider()
 	}
 
 	//時機と小さい敵の当たり判定
-	for (int i = 0; i < miniEnemy->GetEnemyNum(); i++)
-	{
-		for (int j = 0; j < player->GetBullet1Num(); j++)
-		{
-			if (ColliderManager::CheckCollider(miniEnemy->GetColliderData(i), player->GetBullet1ColliderData(j)))
-			{
-				//敵にヒットフラグ送信
-				miniEnemy->HitFire(i);
-				//自機にヒットフラグ送信
-				player->HitBullet1(j);
-			}
-		}
-	}
+	//for (int i = 0; i < miniEnemy->GetEnemyNum(); i++)
+	//{
+	//	for (int j = 0; j < player->GetBullet1Num(); j++)
+	//	{
+	//		if (ColliderManager::CheckCollider(miniEnemy->GetColliderData(i), player->GetBullet1ColliderData(j)))
+	//		{
+	//			//敵にヒットフラグ送信
+	//			miniEnemy->HitFire(i);
+	//			//自機にヒットフラグ送信
+	//			player->HitBullet1(j);
+	//		}
+	//	}
+	//}
 
 	//後処理
 	ColliderManager::PostUpdate();
@@ -358,9 +358,10 @@ void Phase2::UpdateCollider()
 
 void Phase2::DrawFBX()
 {
+	//FBX描画
+	/*miniEnemy->Draw(dxCommon->GetCommandList());*/
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
-	miniEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
 
@@ -396,17 +397,17 @@ void MovePhase::PhaseInitialize()
 void MovePhase::DrawFBXLightView()
 {
 	//ライト目線描画
+	//miniEnemy->DrawLightView(dxCommon->GetCommandList());
 	player->DrawLightView(dxCommon->GetCommandList());
 	enemy->DrawLightView(dxCommon->GetCommandList());
-	miniEnemy->DrawLightView(dxCommon->GetCommandList());
 }
 
 void MovePhase::SetSRV(ID3D12DescriptorHeap* SRV)
 {
 	//SRVをセット
+	/*miniEnemy->SetSRV(SRV);*/
 	player->SetSRV(SRV);
 	enemy->SetSRV(SRV);
-	miniEnemy->SetSRV(SRV);
 	plane->SetSRV(SRV);
 }
 
@@ -442,13 +443,13 @@ void MovePhase::UpdateObject()
 	enemy->SetPhaseTimer(phaseTimer);
 	enemy->UpdateMovePhase();
 
-	//小さい敵
-	if (enemy->GetCallEnemyFlag())
-	{
-		miniEnemy->AddEnemy(enemy->GetCallEnemyPos());
-	}
-	miniEnemy->SetPlayerPos(player->GetPosition());
-	miniEnemy->UpdateMovePhase();
+	////小さい敵
+	//if (enemy->GetCallEnemyFlag())
+	//{
+	//	miniEnemy->AddEnemy(enemy->GetCallEnemyPos());
+	//}
+	//miniEnemy->SetPlayerPos(player->GetPosition());
+	//miniEnemy->Update();
 
 	//UI
 	ui->SetPlayerForm(player->GetPlayerForm(), player->GetFormChangeFlag());
@@ -478,9 +479,9 @@ void MovePhase::UpdateCollider()
 void MovePhase::DrawFBX()
 {
 	//FBX描画
+	/*miniEnemy->Draw(dxCommon->GetCommandList());*/
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
-	miniEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
 

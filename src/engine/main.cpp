@@ -75,7 +75,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	textureManager->LoadFile(7, L"Resources/pictures/effect3.png");
 	textureManager->LoadFile(8, L"Resources/pictures/enemyHP.png");
 	textureManager->LoadFile(9, L"Resources/pictures/toriko.png");
-	textureManager->LoadFile(10, L"Resources/pictures/grassFiled.png");
+	textureManager->LoadFile(10, L"Resources/pictures/stoneTile.png");
 	textureManager->LoadFile(11, L"Resources/pictures/gravel.png");
 	textureManager->LoadFile(12, L"Resources/pictures/DissolveMap.png");
 	textureManager->LoadFile(13, L"Resources/pictures/mapping.png");
@@ -106,7 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	textureManager->LoadFile(38, L"Resources/pictures/tutorial8.png");
 	textureManager->LoadFile(39, L"Resources/pictures/tutorial10.png");
 	textureManager->LoadFile(40, L"Resources/pictures/tutorial11.png");
-	textureManager->LoadFile(41, L"Resources/pictures/plane.png");
+	textureManager->LoadFile(41, L"Resources/pictures/stoneTile.png");
 	textureManager->LoadFile(42, L"Resources/pictures/LStick.png");
 	textureManager->LoadFile(43, L"Resources/pictures/RStick.png");
 	textureManager->LoadFile(44, L"Resources/pictures/check.png");

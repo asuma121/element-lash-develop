@@ -84,6 +84,11 @@ public://メンバ関数
 	void UpdateTutorial(int tutorialTimer);
 
 	/// <summary>
+	///チュートリアルの時の更新
+	/// </summary>
+	void UpdateClear(int clearTimer);
+
+	/// <summary>
 	///ステート更新
 	/// </summary>
 	void UpdateStateGame();
@@ -97,6 +102,11 @@ public://メンバ関数
 	///ステート更新 ゲーム用
 	/// </summary>
 	void UpdateStateMovePhase();
+
+	/// <summary>
+	///ステート更新 クリア用
+	/// </summary>
+	void UpdateStateClear();
 
 	/// <summary>
 	///描画
@@ -182,6 +192,11 @@ public://メンバ関数
 	///ゲームシーンに移る
 	/// </summary>
 	void SetMovePhase();
+
+	/// <summary>
+	///クリアシーンに移る
+	/// </summary>
+	void SetClear();
 
 	/// <summary>
 	///座標取得
@@ -355,10 +370,12 @@ public:	//メンバ関数
 	virtual void Move() = 0;
 	//ステートの変更
 	virtual void UpdateState(Enemy* enemy) = 0;
-	//ステートの変更
+	//ステートの変更 チュートリアルシーン
 	virtual void UpdateStateTutorial(Enemy* enemy) {};
-	//ステートの変更
+	//ステートの変更 フェーズ移動
 	virtual void UpdateStateMovePhase(Enemy* enemy) {};
+	//ステートの変更 クリアシーン
+	virtual void UpdateStateClear(Enemy* enemy) {};
 	//描画
 	virtual void Draw(ID3D12GraphicsCommandList* cmdList) = 0;
 	//ライト目線描画
@@ -381,6 +398,8 @@ public:	//メンバ関数
 	void UpdateMovePhase();
 	//チュートリアル用の更新
 	void UpdateTutorial(int timer);
+	//クリア用の更新
+	void UpdateClear(int timer);
 	//チュートリアルの動き
 	void MoveTutorail();
 	//判定更新
@@ -412,6 +431,8 @@ public:	//メンバ関数
 	void SetTutorial(Enemy* enemy);
 	//ゲームシーンに移る際に呼び出す
 	void SetGame(Enemy* enemy);
+	//クリアシーンに移る際に呼び出す
+	void SetClear(Enemy* enemy);
 	//ゲームシーンに移る際に呼び出す
 	void SetMovePhase(Enemy* enemy);
 	bool GetCallEnemyFlag() { return callEnemyFlag; };
@@ -578,4 +599,7 @@ protected:	//メンバ変数
 
 	XMFLOAT3 addElecPos1 = XMFLOAT3(150.0f, 500.0f, 150.0f);
 	XMFLOAT3 addElecPos2 = XMFLOAT3(40.0f, 500.0f, 40.0f);
+
+	//クリアのタイマー
+	int clearTimer = 0;
 };

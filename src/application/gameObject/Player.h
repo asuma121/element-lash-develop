@@ -197,6 +197,11 @@ public:
 	void SetMovePhase();
 
 	/// <summary>
+	///クリアに移る際に呼び出す
+	/// </summary>
+	void SetClear();
+
+	/// <summary>
 	///チュートリアルのフェーズセット
 	/// </summary>
 	void SetTutorialFlag(int tutorialFlag) { this->tutorialFlag = tutorialFlag; }
@@ -441,6 +446,8 @@ public:	//メンバ関数
 	bool GetInvincibleFlag() { return invincibleFlag; }
 	//ヒットフラグ取得
 	bool GetHitElec() { return hitElecFlag; }
+	//雷攻撃中のフラグ
+	bool GetElecAttackFlag() { return elecAttackFlag; }
 	//リセット
 	void Reset();
 	//タイトルシーンに移る際に呼び出す
@@ -451,6 +458,8 @@ public:	//メンバ関数
 	void SetGameScene();
 	//フェーズ移動に移る際に呼び出す
 	void SetMovePhase(Player* player);
+	//クリアに移る際に呼び出す
+	void SetClear(Player* player);
 
 	//プレイヤー本体からセットする系
 	void SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos);
@@ -547,8 +556,13 @@ protected:	//メンバ変数
 	//チュートリアルのフェーズ
 	int tutorialFlag = 0;
 
+	//雷攻撃中のフラグ ロックオンの更新に使用
+	bool elecAttackFlag = false;
+
 	//フェーズ移動の時の座標
 	XMFLOAT3 movePhasePos = { 0.0f, 0.0f, -50.0f };
 	//ゲームシーンに移る時の座標
 	XMFLOAT3 gameScenePos = { 0.0f, 0.0f, -200.0f };
+	//ゲームシーンに移る時の座標
+	XMFLOAT3 clearPos = { 0.0f, 500.0f, -200.0f };
 };

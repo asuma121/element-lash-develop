@@ -235,6 +235,8 @@ void Attack1::UpdateState(Player* player)
 
 void Attack1::UpdateAttack()
 {
+	//ロックオンの更新を止める
+	elecAttackFlag = true;
 	//40フレームでヒットフラグを立てる(手を振ってる位のタイミング)
 	if (objectTimer == elecFlame && lockOnFlag == true)
 	{
@@ -342,12 +344,19 @@ void Attack2::UpdateState(Player* player)
 
 void Attack2::UpdateAttack()
 {
+	//ロックオンの更新を止める
+	elecAttackFlag = true;
 	//40フレームでヒットフラグを立てる(手を振ってる位のタイミング)
 	if (objectTimer == elecFlame && lockOnFlag == true)
 	{
 		hitElecFlag = true;
 	}
 
+	//雷を出す場所を調整
+	if (objectTimer == 2)
+	{
+		addElecPos2 = rollRotation(XMFLOAT3(addElecPos1.x, addElecPos1.y, addElecPos1.z), rotation1);
+	}
 	elecParticle2->Add(position + addElecPos2);
 	//40フレーム(手を振ってる位のタイミングで太い1本の雷)
 	if (objectTimer == elecFlame)

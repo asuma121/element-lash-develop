@@ -73,6 +73,8 @@ public:
 	void UpdateStateTutorial(Enemy* enemy)override;
 	//ゲームのステート更新
 	void UpdateStateMovePhase(Enemy* enemy)override;
+	//ゲームのステート更新
+	void UpdateStateClear(Enemy* enemy)override;
 	//攻撃更新
 	void UpdateAttack()override;
 	//描画

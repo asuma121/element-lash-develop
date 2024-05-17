@@ -91,7 +91,7 @@ void Player::UpdateGame()
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
 	lockOn->SetPlayerPosition(playerState->GetPosition());
-	if (form == Elec)
+	if (form == Elec && playerState->GetElecAttackFlag() != true)
 	{
 		for (int i = 0; i < enemyPos.size(); i++)
 		{
@@ -137,16 +137,10 @@ void Player::UpdateTutorial()
 	//フォルム更新
 	UpdateFormTutorial();
 
-	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
-	playerState->SetPlayerForm(form);
-	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->UpdateTutorial(tutorialFlag);
-
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
 	lockOn->SetPlayerPosition(playerState->GetPosition());
-	if (1)
+	if (tutorialFlag > 8 && playerState->GetElecAttackFlag() != true)
 	{
 		for (int i = 0; i < enemyPos.size(); i++)
 		{
@@ -154,6 +148,13 @@ void Player::UpdateTutorial()
 		}
 		lockOn->Update();
 	}
+
+	//プレイヤーステート更新
+	playerState->SetDXInput(dxInput);
+	playerState->SetPlayerForm(form);
+	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
+	playerState->UpdateTutorial(tutorialFlag);
+
 
 
 	//スプライト更新
@@ -244,39 +245,20 @@ void Player::SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderDat
 void Player::DrawSpriteGame(ID3D12GraphicsCommandList* cmdList)
 {
 	//電気フォームだったら
-	if (form == Elec)
+	if (form == Elec && playerState->GetElecAttackFlag() != true)
 	{
 		lockOn->Draw(cmdList);
 	}
-
-	//緑のHP
-	//for (int i = 0; i < HP; i++)
-	//{
-	//	hpSprite1[i]->Draw(cmdList);
-	//}
-	////赤いHP
-	//if (HP == 1)
-	//{
-	//	hpSprite2->Draw(cmdList);
-	//}
-	////HPの枠
-	//hpSprite3->Draw(cmdList);
 }
 
 void Player::DrawSpriteTutorial(ID3D12GraphicsCommandList* cmdList)
 {
 	//電気フォームだったら
-	if (form == Elec)
+	if (form == Elec && playerState->GetElecAttackFlag() != true && tutorialFlag < 12)
 	{
 		lockOn->Draw(cmdList);
 	}
 }
-
-//void Player::TitleControl(float timer)
-//{
-//	//移動
-//	TitleMove(timer);
-//}
 
 void Player::UpdateForm()
 {
@@ -374,6 +356,11 @@ void Player::SetGameScene()
 void Player::SetMovePhase()
 {
 	playerState->SetMovePhase(this);
+}
+
+void Player::SetClear()
+{
+	playerState->SetClear(this);
 }
 
 XMFLOAT3 Player::GetPosition()
@@ -767,6 +754,12 @@ void PlayerState::SetGameScene()
 void PlayerState::SetMovePhase(Player* player)
 {
 	position = movePhasePos;
+	player->ChangeState(new Wait());
+}
+
+void PlayerState::SetClear(Player* player)
+{
+	position = clearPos;
 	player->ChangeState(new Wait());
 }
 

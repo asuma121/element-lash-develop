@@ -135,6 +135,19 @@ void Enemy::UpdateTutorial(int tutorialTimer)
 	UpdateDamage();
 }
 
+void Enemy::UpdateClear(int clearTimer)
+{
+	//ステート更新
+	enemyState->SetHitPlayer(hitPlayer);
+	enemyState->UpdateClear(clearTimer);
+
+	//フラグを戻す
+	hitPlayer = false;
+
+	//ダメージ更新
+	UpdateDamage();
+}
+
 void Enemy::UpdateStateGame()
 {
 	//ステート更新
@@ -151,6 +164,12 @@ void Enemy::UpdateStateMovePhase()
 {
 	//ステート更新
 	enemyState->UpdateStateMovePhase(this);
+}
+
+void Enemy::UpdateStateClear()
+{
+	//ステート更新
+	enemyState->UpdateStateClear(this);
 }
 
 void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -388,6 +407,11 @@ void Enemy::SetGameScene()
 void Enemy::SetMovePhase()
 {
 	enemyState->SetMovePhase(this);
+}
+
+void Enemy::SetClear()
+{
+	enemyState->SetClear(this);
 }
 
 XMFLOAT3 Enemy::GetPosition()
@@ -659,6 +683,38 @@ void EnemyState::UpdateTutorial(int timer)
 	UpdateObject();
 }
 
+void EnemyState::UpdateClear(int timer)
+{
+	//タイマー更新
+	objectTimer++;
+
+	//引数からチュートリアルタイマー代入
+	clearTimer = timer;
+
+	//コライダーデータ更新
+	colliderData.scale = colliderScale;
+	colliderData.rotation = rotation;
+	colliderData.center = position;
+
+	//攻撃更新
+	UpdateAttack();
+
+	//弾更新
+	bullet->SetPlayerPos(playerPos);
+	bullet->Update();
+
+	//パーティクル更新
+	explosionParticle1->Update();
+	explosionParticle2->Update();
+	elecParticle->Update();
+
+	//動き
+	MoveTutorail();
+
+	//オブジェクト更新
+	UpdateObject();
+}
+
 void EnemyState::MoveTutorail()
 {
 	//敵登場のフェーズになったら
@@ -685,6 +741,7 @@ void EnemyState::UpdateCollider()
 	}
 }
 
+
 void EnemyState::Reset()
 {
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -701,6 +758,13 @@ void EnemyState::SetTutorial(Enemy* enemy)
 }
 
 void EnemyState::SetGame(Enemy* enemy)
+{
+	//攻撃前兆にセット
+	enemy->ChangeState(new AttackOmen1());
+	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
+
+void EnemyState::SetClear(Enemy* enemy)
 {
 	//攻撃前兆にセット
 	enemy->ChangeState(new AttackOmen1());

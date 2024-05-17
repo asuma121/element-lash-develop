@@ -81,7 +81,7 @@ private:
 	//—‹‚Ì‰¡—h‚ê‚Ì‹­‚³
 	float elecStrength = 4.0f;
 	//—‹‚ğ”­¶‚³‚¹‚éêŠ
-	XMFLOAT3 addElecPos1 = { 0.0f, 11.0f, 5.0f };
+	XMFLOAT3 addElecPos1 = { 0.0f, 11.0f, 8.0f };
 };
 
 //UŒ‚2 —‹

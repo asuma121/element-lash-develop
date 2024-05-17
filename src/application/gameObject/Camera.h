@@ -200,4 +200,6 @@ private:
 	bool debugFlag = false;
 	float debugEye[3] = { 0.0f,0.0f,0.0f };
 	float debugTarget[3] = { 0.0f,0.0f,0.0f };
+
+	XMFLOAT3 clearAddPos = { 0.0f,60.0f,0.0f };
 };

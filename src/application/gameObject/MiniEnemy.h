@@ -28,15 +28,13 @@ private:	//サブクラス
 	{
 		Dash,
 		Down,
-		Stand,
 	};
 
-	struct MEnemy
+	struct Enemy
 	{
 		//オブジェクト
 		FbxObject3D* objectDash;
 		FbxObject3D* objectDown;
-		FbxObject3D* objectStand;
 		//コライダーデータ
 		JSONLoader::ColliderData colliderData;
 		//座標
@@ -85,22 +83,17 @@ public://メンバ関数
 	/// <summary>
 	///更新
 	/// </summary>
-	void UpdateGame();
-
-	/// <summary>
-	///更新
-	/// </summary>
-	void UpdateMovePhase();
-
-	/// <summary>
-	///フェーズ移動更新
-	/// </summary>
-	void UpdateMovePhaseState();
+	void Update();
 
 	/// <summary>
 	///オブジェクト更新
 	/// </summary>
 	void UpdateObject();
+
+	/// <summary>
+	///スプライト更新
+	/// </summary>
+	void UpdateSprite();
 
 	/// <summary>
 	///コライダー
@@ -197,11 +190,6 @@ public://メンバ関数
 	/// </summary>
 	void SetPlayerPos(XMFLOAT3 playerPos) { this->playerPos = playerPos; }
 
-	/// <summary>
-	///ゲームシーンに移るとき呼ぶ
-	/// </summary>
-	void SetGameScene();
-
 	//静的メンバ変数
 private:
 	//カメラ
@@ -213,12 +201,11 @@ private:
 public:
 
 	//敵データ
-	std::vector<MEnemy>enemys;
+	std::vector<Enemy>enemys;
 
 	//モデル
 	FbxModel* modelDash = nullptr;
 	FbxModel* modelDown = nullptr;
-	FbxModel* modelStand= nullptr;
 
 	//HPのビルボード
 	BillboardSpriteModel* hpFrameSpriteModel = nullptr;

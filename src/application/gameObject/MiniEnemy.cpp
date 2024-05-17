@@ -32,11 +32,10 @@ void MiniEnemy::Initialize()
 
 	//モデル
 	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("miniEnemyDash");
-	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("miniEnemyDown");
-	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("miniEnemyStand");
+	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyDown");
 }
 
-void MiniEnemy::UpdateGame()
+void MiniEnemy::Update()
 {
 	//攻撃更新
 	UpdateAttack();
@@ -46,38 +45,15 @@ void MiniEnemy::UpdateGame()
 
 	//コライダー更新
 	UpdateCollider();
+
+	//スプライト更新
+	UpdateSprite();
 
 	//ダメージ更新
 	UpdateDamage();
 
 	//死亡処理
 	DeleteEnemy();
-}
-
-void MiniEnemy::UpdateMovePhase()
-{
-	//状態更新
-	UpdateMovePhaseState();
-
-	//攻撃更新
-	UpdateAttack();
-
-	//オブジェクト更新
-	UpdateObject();
-
-	//コライダー更新
-	UpdateCollider();
-
-	//死亡処理
-	DeleteEnemy();
-}
-
-void MiniEnemy::UpdateMovePhaseState()
-{
-	for (int i = 0; i < enemys.size(); i++)
-	{
-		enemys[i].status = Stand;
-	}
 }
 
 void MiniEnemy::UpdateObject()
@@ -91,19 +67,27 @@ void MiniEnemy::UpdateObject()
 			enemys[i].objectDash->SetRotation(enemys[i].rotation);
 			enemys[i].objectDash->Update();
 		}
-		else if (enemys[i].status == Down)
+		else
 		{
 			enemys[i].objectDown->SetPosition(enemys[i].position);
 			enemys[i].objectDown->SetRotation(enemys[i].rotation);
 			enemys[i].objectDown->Update();
 		}
-		else if (enemys[i].status == Stand)
-		{
-			enemys[i].objectStand->SetPosition(enemys[i].position);
-			enemys[i].objectStand->SetRotation(enemys[i].rotation);
-			enemys[i].objectStand->Update();
-		}
 	}
+}
+
+void MiniEnemy::UpdateSprite()
+{
+	//HPバーを現在のHPに
+	//hpBar2Scale.x = hpBar2OriginalScale.x * (HP / maxHP);
+	//hpBar3Pos.x = hpBar3OriginalPos.x - (hpBar2OriginalScale.x * ((maxHP - HP) / maxHP));
+
+	/*hpFrameSprite->SetPosition(XMFLOAT3(0.0f, 5.0f, 0.0f));
+	hpBarSprite->SetPosition(XMFLOAT3(0.0f, 5.0f, 0.0f));
+	hpBarSprite->SetScale(hpBarScale);
+
+	hpFrameSprite->Update();
+	hpBarSprite->Update();*/
 }
 
 void MiniEnemy::UpdateCollider()
@@ -161,11 +145,11 @@ void MiniEnemy::DeleteEnemy()
 void MiniEnemy::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	//ImGui
-	/*ImGui::Begin("miniEnemy");
+	ImGui::Begin("miniEnemy");
 	ImGui::SetWindowPos(ImVec2(0, 600));
 	ImGui::SetWindowSize(ImVec2(700, 150));
 	ImGui::InputInt("debugNum", debugNum);
-	ImGui::End();*/
+	ImGui::End();
 
 	for (int i = 0; i < enemys.size(); i++)
 	{
@@ -173,13 +157,9 @@ void MiniEnemy::Draw(ID3D12GraphicsCommandList* cmdList)
 		{
 			enemys[i].objectDash->Draw(cmdList);
 		}
-		else if (enemys[i].status == Down)
+		else
 		{
 			enemys[i].objectDown->Draw(cmdList);
-		}
-		else if (enemys[i].status == Stand)
-		{
-			enemys[i].objectStand->Draw(cmdList);
 		}
 	}
 
@@ -199,13 +179,9 @@ void MiniEnemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 		{
 			enemys[i].objectDash->DrawLightView(cmdList);
 		}
-		else if (enemys[i].status == Down)
+		else
 		{
 			enemys[i].objectDown->DrawLightView(cmdList);
-		}
-		else if (enemys[i].status == Stand)
-		{
-			enemys[i].objectStand->DrawLightView(cmdList);
 		}
 	}
 }
@@ -248,13 +224,9 @@ void MiniEnemy::SetSRV(ID3D12DescriptorHeap* SRV)
 		{
 			enemys[i].objectDash->SetSRV(SRV);
 		}
-		else if(enemys[i].status == Down)
+		else
 		{
 			enemys[i].objectDown->SetSRV(SRV);
-		}
-		else if (enemys[i].status == Stand)
-		{
-			enemys[i].objectStand->SetSRV(SRV);
 		}
 	}
 }
@@ -265,7 +237,7 @@ void MiniEnemy::Reset()
 
 void MiniEnemy::AddEnemy(XMFLOAT3 pos)
 {
-	MEnemy enemy;
+	Enemy enemy;
 
 	//与えられた座標をもとにオブジェクト生成
 	enemy.objectDash = new FbxObject3D;
@@ -285,15 +257,6 @@ void MiniEnemy::AddEnemy(XMFLOAT3 pos)
 	enemy.objectDown->SetPosition(pos);
 	enemy.objectDown->SetScale(scale);
 
-	//与えられた座標をもとにオブジェクト生成
-	enemy.objectStand = new FbxObject3D;
-	enemy.objectStand->Initialize();
-	enemy.objectStand->SetModel(modelStand);
-	enemy.objectStand->SetTextureNum(0);
-	enemy.objectStand->PlayAnimation();
-	enemy.objectStand->SetPosition(pos);
-	enemy.objectStand->SetScale(scale);
-
 	//コライダーの設定
 	//コライダーごとに名前をつける
 	std::string objectName = "miniEnemy" + std::to_string(number);
@@ -312,7 +275,7 @@ void MiniEnemy::AddEnemy(XMFLOAT3 pos)
 	//座標設定
 	enemy.position = pos;
 	//角度
-	enemy.rotation = XMFLOAT3(0.0f,0.0f,0.0f);
+	enemy.rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	//HP
 	enemy.HP = maxHP;
 	//当たりフラグ
@@ -327,12 +290,4 @@ void MiniEnemy::AddEnemy(XMFLOAT3 pos)
 
 	//弾につける番号を増やす
 	number++;
-}
-
-void MiniEnemy::SetGameScene()
-{
-	for (int i = 0; i < enemys.size(); i++)
-	{
-		enemys[i].status = Dash;
-	}
 }

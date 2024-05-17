@@ -317,7 +317,7 @@ void Camera::UpdateTutorial(int tutorialTimer)
 
 void Camera::UpdateClear(XMFLOAT3 enemyPos, float timer)
 {
-	target_ = { enemyPos.x,enemyPos.y,enemyPos.z };
+	target_ = clearAddPos;
 
 	float addRot = PI / 640.0f * timer;
 

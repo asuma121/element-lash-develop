@@ -234,9 +234,6 @@
     <ClCompile Include="src\application\gameObject\EnemyBullet.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\gameObject\MiniEnemy.cpp">
-      <Filter>ソース ファイル\gameObject</Filter>
-    </ClCompile>
     <ClCompile Include="src\application\gameObject\Plane.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
@@ -280,6 +277,9 @@
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\application\gameObject\EnemyStateManager.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gameObject\MiniEnemy.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -410,9 +410,6 @@
     <ClInclude Include="src\application\gameObject\EnemyBullet.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
-    <ClInclude Include="src\application\gameObject\MiniEnemy.h">
-      <Filter>ヘッダー ファイル\gameObject</Filter>
-    </ClInclude>
     <ClInclude Include="src\application\gameObject\Plane.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
@@ -456,6 +453,9 @@
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
     <ClInclude Include="src\application\gameObject\EnemyStateManager.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\MiniEnemy.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
