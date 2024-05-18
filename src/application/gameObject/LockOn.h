@@ -34,7 +34,7 @@ public:	//メンバ関数
 	/// <summary>
 	///敵の座標を追加
 	/// </summary>
-	void AddEnemyPos(XMFLOAT3 position);
+	void AddEnemyPos(XMFLOAT3 position, XMFLOAT3 addPosition);
 
 	/// <summary>
 	///描画
@@ -83,6 +83,7 @@ private:	//メンバ変数
 
 	//敵の座標
 	std::vector<XMFLOAT3> enemyPosition;
+	std::vector<XMFLOAT3> enemyAddPos;
 	//プレイヤーの角度
 	XMFLOAT3 playerRotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 playerPosition = { 0.0f,0.0f,0.0f };

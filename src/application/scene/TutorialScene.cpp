@@ -110,8 +110,7 @@ void TutorialScene::UpdateObject()
 	ui->UpdateTutorial();
 
 	//ƒvƒŒƒCƒ„[
-	player->SetEnemyPos(tutorialEnemy->GetPosition());
-	player->SetEnemyPos(enemy->GetPosition());
+	player->SetEnemyPos(tutorialEnemy->GetPosition(), tutorialEnemy->GetAddPos());
 	player->SetTutorialFlag(tutorialSpriteFlag);
 	player->UpdateTutorial();
 

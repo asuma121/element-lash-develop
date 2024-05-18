@@ -1,10 +1,10 @@
 #include "PlaneHeader.hlsli"
 
-//0”ÔƒXƒƒbƒg‚Éİ’è‚³‚ê‚½ƒeƒNƒXƒ`ƒƒ
+//0ï¿½ÔƒXï¿½ï¿½ï¿½bï¿½gï¿½Éİ’è‚³ï¿½ê‚½ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½
 Texture2D<float4> tex : register(t0);
-Texture2D<float> tex1 : register(t1);	//ƒJƒƒ‰‚©‚ç‚Ì[“x
-Texture2D<float> tex2 : register(t2);	//ƒ‰ƒCƒg‚©‚ç‚Ì[“x
-//0”ÔƒXƒƒbƒg‚Éİ’è‚³‚ê‚½ƒTƒ“ƒvƒ‰[
+Texture2D<float> tex1 : register(t1);	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì[ï¿½x
+Texture2D<float> tex2 : register(t2);	//ï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½Ì[ï¿½x
+//0ï¿½ÔƒXï¿½ï¿½ï¿½bï¿½gï¿½Éİ’è‚³ï¿½ê‚½ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½[
 SamplerState smp : register(s0);
 
 struct PSOutput 
@@ -16,8 +16,8 @@ struct PSOutput
 PSOutput main(VSOutput input) : SV_TARGET
 {
 	PSOutput output;
-	//ƒeƒNƒXƒ`ƒƒƒ}ƒbƒsƒ“ƒO
-    float2 n = input.uv * 1000;
+	//ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½}ï¿½bï¿½sï¿½ï¿½ï¿½O
+    float2 n = input.uv * 10000;
     while (n.x > 1.0f)
     {
         n.x = n.x - 1.0f;
@@ -27,27 +27,27 @@ PSOutput main(VSOutput input) : SV_TARGET
         n.y = n.y - 1.0f;
     }
     float4 texcoord = tex.Sample(smp, n);
-	//Lambert”½Ë
-	float3 light = normalize(float3(1,-1,1));	//‰E‰º‰œ Œü‚«‚Ìƒ‰ƒCƒg
+	//Lambertï¿½ï¿½ï¿½ï¿½
+	float3 light = normalize(float3(1,-1,1));	//ï¿½Eï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½g
 	float diffuse = saturate(dot(-light, input.normal));
 	float brightness = diffuse + 0.3f;
 	float4 shadecolor = float4(brightness, brightness, brightness, 1.0f);
-	//ƒ‰ƒCƒg‚©‚çŒ©‚½UV’l
+	//ï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½ï¿½çŒ©ï¿½ï¿½UVï¿½l
 	float3 posFromLightVP = input.tpos.xyz / input.tpos.w;
 	float2 shadowUV = (posFromLightVP + float2(1, -1)) * float2(0.5, -0.5);
-	//‰eƒeƒNƒXƒ`ƒƒ
+	//ï¿½eï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½
 	float depthFromLight = tex2.Sample(smp, shadowUV);
 	float shadowWeight = 1.0f;
     if (depthFromLight < posFromLightVP.z - 0.005 && depthFromLight > 0 && depthFromLight < 1)
 	{
 		shadowWeight = 0.2f;
 	}
-	//‰A‰e‚ÆƒeƒNƒXƒ`ƒƒ‚ÌF‚ğ‡¬
+	//ï¿½Aï¿½eï¿½Æƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ÌFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	texcoord.x *= 0.5f;
 	texcoord.y *= 0.5f;
 	texcoord.z *= 0.5f;
 	output.target0 = shadecolor * texcoord;
-	//‰e‚ğ‡¬
+	//ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	output.target0.x *= shadowWeight;
 	output.target0.y *= shadowWeight;
 	output.target0.z *= shadowWeight;

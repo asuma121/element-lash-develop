@@ -95,7 +95,7 @@ void Player::UpdateGame()
 	{
 		for (int i = 0; i < enemyPos.size(); i++)
 		{
-			lockOn->AddEnemyPos(enemyPos[i]);
+			lockOn->AddEnemyPos(enemyPos[i],enemyAddPos[i]);
 		}
 		lockOn->Update();
 	}
@@ -118,6 +118,7 @@ void Player::UpdateGame()
 
 	//敵クリア
 	enemyPos.clear();
+	enemyAddPos.clear();
 }
 
 void Player::UpdateMovePhase()
@@ -130,6 +131,7 @@ void Player::UpdateMovePhase()
 
 	//敵クリア
 	enemyPos.clear();
+	enemyAddPos.clear();
 }
 
 void Player::UpdateTutorial()
@@ -144,7 +146,7 @@ void Player::UpdateTutorial()
 	{
 		for (int i = 0; i < enemyPos.size(); i++)
 		{
-			lockOn->AddEnemyPos(enemyPos[i]);
+			lockOn->AddEnemyPos(enemyPos[i], enemyAddPos[i]);
 		}
 		lockOn->Update();
 	}
@@ -167,6 +169,7 @@ void Player::UpdateTutorial()
 
 	//敵クリア
 	enemyPos.clear();
+	enemyAddPos.clear();
 }
 
 void Player::UpdateTitle(float timer)
@@ -181,7 +184,7 @@ void Player::UpdateTitle(float timer)
 	{
 		for (int i = 0; i < enemyPos.size(); i++)
 		{
-			lockOn->AddEnemyPos(enemyPos[i]);
+			lockOn->AddEnemyPos(enemyPos[i], enemyAddPos[i]);
 		}
 		lockOn->Update();
 	}
@@ -202,6 +205,7 @@ void Player::UpdateTitle(float timer)
 
 	//敵クリア
 	enemyPos.clear();
+	enemyAddPos.clear();
 }
 
 void Player::UpdateSprite()

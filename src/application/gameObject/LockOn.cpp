@@ -53,7 +53,7 @@ void LockOn::Update()
 		//カメラから最短の敵を計算
 		if (length(target) > length(camera->GetEye() - enemyPosition[i]))
 		{
-			target = enemyPosition[i];
+			target = enemyPosition[i] + enemyAddPos[i];
 		}
 	}
 
@@ -61,9 +61,6 @@ void LockOn::Update()
 	{
 		//ロックオンスプライトの座標
 		XMFLOAT3 sprite1Pos = target;
-
-		//敵の足元を参照しているのでいい感じにする
-		sprite1Pos.y += 50.0f;
 
 		//ターゲット→カメラのベクトルを求める
 		XMFLOAT3 vec = sprite1Pos - camera->GetEye();
@@ -98,12 +95,16 @@ void LockOn::Update()
 
 	//敵の座標をクリアする
 	enemyPosition.clear();
+	//敵の高さをクリアする
+	enemyAddPos.clear();
 }
 
-void LockOn::AddEnemyPos(XMFLOAT3 position)
+void LockOn::AddEnemyPos(XMFLOAT3 position, XMFLOAT3 addPosition)
 {
 	//敵の座標を追加
 	enemyPosition.emplace_back(position);
+	//敵の高さを追加
+	enemyAddPos.emplace_back(addPosition);
 }
 
 void LockOn::Draw(ID3D12GraphicsCommandList* cmdList)

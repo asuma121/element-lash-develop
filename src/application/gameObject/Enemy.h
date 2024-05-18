@@ -214,6 +214,11 @@ public://メンバ関数
 	XMFLOAT3 GetScale();
 
 	/// <summary>
+	///高さ取得
+	/// </summary>
+	XMFLOAT3 GetAddPos() { return addPos; }
+
+	/// <summary>
 	///コライダー取得
 	/// </summary>
 	JSONLoader::ColliderData GetColliderData();
@@ -344,6 +349,9 @@ private:
 
 	//死亡フラグ
 	bool isDead = false;
+
+	//高さ
+	XMFLOAT3 addPos = { 0.0f,50.0f,0.0f };
 };
 
 class EnemyState

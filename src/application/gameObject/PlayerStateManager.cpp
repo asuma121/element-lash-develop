@@ -253,14 +253,14 @@ void Attack1::UpdateAttack()
 	if (objectTimer == elecFlame)
 	{
 		elecParticle1->AddParticle(attack1Time - elecFlame, position + addElecPos2,
-			lockOnPos + XMFLOAT3(0.0f, 50.0f, 0.0f), elecStartSlace1, elecEndSlace1, 10.0f, elecStrength);
+			lockOnPos, elecStartSlace1, elecEndSlace1, 10.0f, elecStrength);
 	}
 	if (objectTimer > elecFlame && (int)objectTimer % elecInterval == 0)
 	{
 		for (int i = 0; i < elecVol; i++)
 		{
 			elecParticle1->AddParticle(20.0f, position + addElecPos2,
-				lockOnPos + XMFLOAT3(0.0f, 50.0f, 0.0f), elecStartSlace2, elecEndSlace2, 20.0f, elecStrength);
+				lockOnPos, elecStartSlace2, elecEndSlace2, 20.0f, elecStrength);
 		}
 	}
 }
@@ -362,14 +362,14 @@ void Attack2::UpdateAttack()
 	if (objectTimer == elecFlame)
 	{
 		elecParticle1->AddParticle(attack2Time - elecFlame, position + addElecPos2,
-			lockOnPos + XMFLOAT3(0.0f, 50.0f, 0.0f), elecStartSlace1, elecEndSlace1, 10.0f, elecStrength);
+			lockOnPos, elecStartSlace1, elecEndSlace1, 10.0f, elecStrength);
 	}
 	if (objectTimer > elecFlame && (int)objectTimer % elecInterval == 0)
 	{
 		for (int i = 0; i < elecVol; i++)
 		{
 			elecParticle1->AddParticle(20.0f, position + addElecPos2,
-				lockOnPos + XMFLOAT3(0.0f, 50.0f, 0.0f), elecStartSlace2, elecEndSlace2, 20.0f, elecStrength);
+				lockOnPos, elecStartSlace2, elecEndSlace2, 20.0f, elecStrength);
 		}
 	}
 }

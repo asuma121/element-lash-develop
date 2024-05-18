@@ -66,7 +66,7 @@ void Phase1::UpdateObject()
 	ui->UpdateGame1();
 
 	//プレイヤー
-	player->SetEnemyPos(enemy->GetPosition());
+	player->SetEnemyPos(enemy->GetPosition(), enemy->GetAddPos());
 	player->UpdateGame();
 
 	//床
@@ -270,7 +270,7 @@ void Phase2::UpdateObject()
 	ui->UpdateGame2();
 
 	//プレイヤー
-	player->SetEnemyPos(enemy->GetPosition());
+	player->SetEnemyPos(enemy->GetPosition(), enemy->GetAddPos());
 	player->UpdateGame();
 
 	//床
@@ -457,7 +457,7 @@ void MovePhase::UpdateObject()
 	ui->UpdateMovePhase();
 
 	//プレイヤー
-	player->SetEnemyPos(enemy->GetPosition());
+	player->SetEnemyPos(enemy->GetPosition(), enemy->GetAddPos());
 	player->UpdateMovePhase();
 
 	//床

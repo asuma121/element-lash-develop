@@ -136,6 +136,11 @@ public://メンバ関数
 	XMFLOAT3 GetScale() { return scale; }
 
 	/// <summary>
+	///高さ取得
+	/// </summary>
+	XMFLOAT3 GetAddPos() { return addPos; }
+
+	/// <summary>
 	///コライダー取得
 	/// </summary>
 	JSONLoader::ColliderData GetColliderData() { return colliderData; }
@@ -175,7 +180,7 @@ public:
 	//回転
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	//サイズ
-	XMFLOAT3 scale = { 5.0f,5.0f,5.0f };
+	XMFLOAT3 scale = { 1.0f,1.0f,1.0f };
 
 	//HP
 	float maxHP = 30;
@@ -203,4 +208,7 @@ public:
 
 	//死亡フラグ
 	bool isDead = false;
+
+	//高さ
+	XMFLOAT3 addPos = { 0.0f,15.0f,0.0f };
 };

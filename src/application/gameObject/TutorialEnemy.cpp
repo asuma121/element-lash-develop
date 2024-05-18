@@ -26,12 +26,13 @@ void TutorialEnemy::Initialize()
 	hpBar4->SetTextureNum(26);
 
 	//モデル
-	model = FbxLoader::GetInstance()->LoadModelFromFile("Tree");
+	model = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
 	//オブジェクト
 	object = new FbxObject3D;
 	object->Initialize();
 	object->SetModel(model);
 	object->SetTextureNum(0);
+	object->PlayAnimation();
 
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため

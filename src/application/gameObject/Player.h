@@ -159,7 +159,7 @@ public:
 	/// <summary>
 	///敵の座標取得
 	/// </summary>
-	void SetEnemyPos(XMFLOAT3 position) { enemyPos.emplace_back(position); }
+	void SetEnemyPos(XMFLOAT3 position, XMFLOAT3 addPos) { enemyPos.emplace_back(position); enemyAddPos.emplace_back(addPos); }
 
 	/// <summary>
 	///プレイヤーの弾命中時
@@ -360,6 +360,7 @@ private:
 
 	//敵の座標
 	std::vector<XMFLOAT3>enemyPos;
+	std::vector<XMFLOAT3>enemyAddPos;
 
 	//死亡フラグ
 	bool isDead = false;
