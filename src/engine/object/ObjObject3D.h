@@ -85,6 +85,11 @@ public:
 	///スケールセット
 	/// </summary>
 	void setScale(XMFLOAT3 sca);
+
+	/// <summary>
+	///アルファ値セット
+	/// </summary>
+	void SetAlpha(float alpha);
 		
 	/// <summary>
 	///更新 追従
@@ -99,6 +104,7 @@ public:
 	struct ConstBufferDataB0
 	{
 		XMMATRIX mat;	// ３Ｄ変換行列
+		float alpha;	// 画像のアルファ
 	};
 	// 定数バッファ用データ構造体B1
 	struct ConstBufferDataB1
@@ -135,4 +141,6 @@ private:
 	XMFLOAT3 position = { 0,0,0 };
 	//ワールド変換行列
 	XMMATRIX matWorld;
+	//テクスチャのアルファ値
+	float alpha = 1.0f;
 };

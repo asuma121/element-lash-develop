@@ -74,6 +74,7 @@ void ObjObject3D::Update()
 	ConstBufferDataB0* constMap0 = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap0);
 	constMap0->mat = matWorld * camera->GetMatView() * camera->GetMatProjection();	// 行列の合成
+	constMap0->alpha = alpha;	// テクスチャのアルファ値
 	constBuffB0->Unmap(0, nullptr);
 
 	//定数バッファへデータ転送
@@ -130,6 +131,11 @@ void ObjObject3D::setRotation(XMFLOAT3 rot)
 void ObjObject3D::setScale(XMFLOAT3 sca)
 {
 	scale = sca;
+}
+
+void ObjObject3D::SetAlpha(float alpha)
+{
+	this->alpha = alpha;
 }
 
 ObjObject3D* ObjObject3D::GetInstance()

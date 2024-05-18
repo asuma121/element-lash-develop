@@ -31,6 +31,16 @@ void Terrain::Initialize(ID3D12Device* device)
 	coliseumObject->setRotation(coliseumPos);
 	coliseumObject->setPosition(coliseumRotation);
 
+	//コロシアムのモデル
+	coliseum2Model = new ObjModel();
+	coliseum2Model->Initialize(device, "coliseum2", "Resources/pictures/coliseum.png");
+	coliseum2Object = new ObjObject3D();
+	coliseum2Object->Initialize(device, coliseum2Model, camera);
+	coliseum2Object->setScale(coliseumScale);
+	coliseum2Object->setRotation(coliseumPos);
+	coliseum2Object->setPosition(coliseumRotation);
+	coliseum2Object->SetAlpha(backAlpha);
+
 	//柱のモデル
 	pillerModel = new ObjModel();
 	pillerModel->Initialize(device, "piller", "Resources/pictures/piller.png");
@@ -66,6 +76,7 @@ void Terrain::Update()
 	//オブジェクト更新
 	skySphereObject->Update();
 	coliseumObject->Update();
+	coliseum2Object->Update();
 	for (int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update();
@@ -77,6 +88,7 @@ void Terrain::Draw(ID3D12GraphicsCommandList* cmdList)
 	//オブジェクト描画
 	skySphereObject->Draw(cmdList, skySphereModel->vbView, skySphereModel->ibView);
 	coliseumObject->Draw(cmdList, coliseumModel->vbView, coliseumModel->ibView);
+	coliseum2Object->Draw(cmdList, coliseum2Model->vbView, coliseum2Model->ibView);
 	for (int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Draw(cmdList, pillerModel->vbView, pillerModel->ibView);

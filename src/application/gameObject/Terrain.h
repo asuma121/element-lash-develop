@@ -68,6 +68,13 @@ private:	//メンバ変数
 	//角度
 	XMFLOAT3 coliseumRotation = { 0.0f,0.0f,0.0f };
 
+	//コロシアムモデル2
+	ObjModel* coliseum2Model = nullptr;
+	//コロシアムオブジェクト2
+	ObjObject3D* coliseum2Object = nullptr;
+	//コロシアムの背面のアルファ
+	float backAlpha = 0.5f;
+
 	//柱モデル
 	ObjModel* pillerModel = nullptr;
 	
