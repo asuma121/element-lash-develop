@@ -48,7 +48,17 @@ public://メンバ関数
 	/// <summary>
 	///更新
 	/// </summary>
-	void Update();
+	void UpdateTutorial();
+
+	/// <summary>
+	///更新
+	/// </summary>
+	void UpdateGame();
+
+	/// <summary>
+	///更新
+	/// </summary>
+	void UpdateMovePhase();
 
 	/// <summary>
 	///オブジェクト更新
@@ -88,7 +98,12 @@ public://メンバ関数
 	/// <summary>
 	///挙動全般
 	/// </summary>
-	void Move();
+	void MoveGame();
+
+	/// <summary>
+	///挙動全般
+	/// </summary>
+	void MoveMovePhase();
 
 	/// <summary>
 	///ステータスマネージャー
@@ -104,6 +119,56 @@ public://メンバ関数
 	///座標セット
 	/// </summary>
 	void SetPosition(XMFLOAT3 position) { this->position = position; };
+
+	/// <summary>
+	///ダッシュにセット
+	/// </summary>
+	void SetDash();
+
+	/// <summary>
+	///ダウンにセット
+	/// </summary>
+	void SetDown();
+
+	/// <summary>
+	///立つにセット
+	/// </summary>
+	void SetStand();
+
+	/// <summary>
+	///チュートリアルシーンセット
+	/// </summary>
+	void SetTutorial();
+
+	/// <summary>
+	///ゲームシーンセット
+	/// </summary>
+	void SetGameScene();
+
+	/// <summary>
+	///フェーズ移動セット
+	/// </summary>
+	void SetMovePhase();
+
+	/// <summary>
+	///プレイヤーの座標セット
+	/// </summary>
+	void SetPlayerPos(XMFLOAT3 pos) { playerPos = pos; };
+
+	/// <summary>
+	///指定した座標にセット
+	/// </summary>
+	void AddEnemy(XMFLOAT3 pos);
+
+	/// <summary>
+	///指定した座標にセット
+	/// </summary>
+	void AddEnemyGameScene(XMFLOAT3 pos);
+
+	/// <summary>
+	///指定した座標にセット
+	/// </summary>
+	void AddEnemyMovePhase(XMFLOAT3 pos);
 
 	/// <summary>
 	///リセット
@@ -148,7 +213,7 @@ public://メンバ関数
 	/// <summary>
 	///死亡フラグ取得
 	/// </summary>
-	bool GetIsDead() { return isDead; }
+	bool GetIsDead() { return isDead2; }
 
 	//静的メンバ変数
 private:
@@ -166,7 +231,9 @@ public:
 	//オブジェクト
 	FbxObject3D* object = nullptr;
 	//モデル
-	FbxModel* model= nullptr;
+	FbxModel* modelDash = nullptr;
+	FbxModel* modelDown = nullptr;
+	FbxModel* modelStand= nullptr;
 
 	//スプライト
 	Sprite* hpBar1 = nullptr;	//HPバーの枠
@@ -182,8 +249,11 @@ public:
 	//サイズ
 	XMFLOAT3 scale = { 1.0f,1.0f,1.0f };
 
+	//コライダーのサイズ
+	XMFLOAT3 colliderScale = { 20.0f,10.0f,10.0f };
+
 	//HP
-	float maxHP = 30;
+	float maxHP = 20;
 	float HP = maxHP;
 
 	//スプライト用
@@ -207,8 +277,19 @@ public:
 	bool hitElec = false;
 
 	//死亡フラグ
-	bool isDead = false;
+	bool isDead1 = true;
+	bool isDead2 = true;
+	bool isDead3 = true;
 
 	//高さ
 	XMFLOAT3 addPos = { 0.0f,15.0f,0.0f };
+
+	//プレイヤーの座標
+	XMFLOAT3 playerPos = { 0.0f,0.0f,0.0f };
+	//移動攻撃のスピード
+	float speed = 0.5f;
+
+	//ダウンのアニメーション
+	int deadTime = 130;
+	int deadTimer = 0;
 };

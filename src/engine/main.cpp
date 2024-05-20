@@ -282,13 +282,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//敵の弾初期化
 	EnemyBullet::SetCamera(camera);
 
-	//小さい敵初期化
-	MiniEnemy::SetCamera(camera);
-	MiniEnemy::SetInput(input);
-	MiniEnemy* miniEnemy = nullptr;
-	miniEnemy = new MiniEnemy();
-	miniEnemy->Initialize();
-
 	//チュートリアルの敵初期化
 	TutorialEnemy::SetCamera(camera);
 	TutorialEnemy::SetInput(input);
@@ -333,7 +326,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	
 	//ゲーム フェーズ
 	PhaseState::SetDevice(dxCommon, input, dxInput);
-	PhaseState::SetGameObject(player, enemy, miniEnemy, plane, terrain,camera, light, ui);
+	PhaseState::SetGameObject(player, enemy, tutorialEnemy, plane, terrain,camera, light, ui);
 
 	//クリアシーン
 	ClearScene::SetDevice(dxCommon, input, dxInput);

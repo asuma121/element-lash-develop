@@ -664,9 +664,6 @@ void EnemyState::UpdateTutorial(int timer)
 	colliderData.rotation = rotation;
 	colliderData.center = position;
 
-	//攻撃更新
-	UpdateAttack();
-
 	//弾更新
 	bullet->SetPlayerPos(playerPos);
 	bullet->Update();
@@ -698,6 +695,9 @@ void EnemyState::UpdateClear(int timer)
 
 	//攻撃更新
 	UpdateAttack();
+
+	//クリア用パーティクル更新
+	UpdateParticleClear();
 
 	//弾更新
 	bullet->SetPlayerPos(playerPos);

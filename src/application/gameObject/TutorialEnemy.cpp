@@ -26,11 +26,13 @@ void TutorialEnemy::Initialize()
 	hpBar4->SetTextureNum(26);
 
 	//モデル
-	model = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
+	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("enemyDash");
+	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyDown");
+	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
 	//オブジェクト
 	object = new FbxObject3D;
 	object->Initialize();
-	object->SetModel(model);
+	object->SetModel(modelStand);
 	object->SetTextureNum(0);
 	object->PlayAnimation();
 
@@ -44,10 +46,9 @@ void TutorialEnemy::Initialize()
 	ColliderManager::SetCollider(colliderData);
 }
 
-void TutorialEnemy::Update()
+void TutorialEnemy::UpdateTutorial()
 {
-	//オブジェクト更新
-	UpdateObject();
+	if (isDead2 == false)return;
 
 	//コライダー更新
 	UpdateCollider();
@@ -57,6 +58,42 @@ void TutorialEnemy::Update()
 
 	//ダメージ更新
 	UpdateDamage();
+
+	//オブジェクト更新
+	UpdateObject();
+}
+
+void TutorialEnemy::UpdateGame()
+{
+	if (isDead2 == true)return;
+
+	//コライダー更新
+	UpdateCollider();
+
+	//ダメージ更新
+	UpdateDamage();
+
+	if (isDead3 == false)MoveGame();
+	
+	//オブジェクト更新
+	UpdateObject();
+}
+
+void TutorialEnemy::UpdateMovePhase()
+{
+	if (isDead2 == true)return;
+
+	//コライダー更新
+	UpdateCollider();
+
+	//ダメージ更新
+	UpdateDamage();
+
+	//挙動
+	MoveMovePhase();
+
+	//オブジェクト更新
+	UpdateObject();
 }
 
 void TutorialEnemy::UpdateObject()
@@ -83,7 +120,7 @@ void TutorialEnemy::UpdateSprite()
 
 void TutorialEnemy::UpdateCollider()
 {
-	colliderData.scale = XMFLOAT3(20.0f, 10.0f, 10.0f);
+	colliderData.scale = colliderScale;
 	colliderData.rotation = rotation;
 	colliderData.center = position + XMFLOAT3(0.0f, 5.0f, 0.0f);
 }
@@ -107,7 +144,24 @@ void TutorialEnemy::UpdateDamage()
 	//死亡
 	if (HP <= 0)
 	{
-		isDead = true;
+		isDead1 = true;
+	}
+
+	//死亡したフレームの処理
+	if (isDead1 == true && isDead3 == false)
+	{
+		SetDown();
+		isDead3 = true;
+	}
+
+	//死亡したら
+	if (isDead3 == true)
+	{
+		deadTimer++;
+		if (deadTimer >= deadTime)
+		{
+			isDead2 = true;
+		}
 	}
 
 	//フラグをもとに戻す
@@ -117,12 +171,18 @@ void TutorialEnemy::UpdateDamage()
 
 void TutorialEnemy::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	object->Draw(cmdList);
+	if (isDead2 == false)
+	{
+		object->Draw(cmdList);
+	}
 }
 
 void TutorialEnemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 {
-	object->DrawLightView(cmdList);
+	if (isDead2 == false)
+	{
+		object->DrawLightView(cmdList);
+	}
 }
 
 void TutorialEnemy::DrawSprite(ID3D12GraphicsCommandList* cmdList)
@@ -132,8 +192,26 @@ void TutorialEnemy::DrawSprite(ID3D12GraphicsCommandList* cmdList)
 	hpBar3->Draw(cmdList);
 }
 
-void TutorialEnemy::Move()
+void TutorialEnemy::MoveGame()
 {
+	//プレイヤーまでのベクトルを求める
+	XMFLOAT3 velo = XMFLOAT3(playerPos.x - position.x, 0.0f, playerPos.z - position.z);
+	//正規化
+	velo = normalize(velo) * speed;
+	//座標に加算
+	position = position + velo;
+
+	XMFLOAT3 rot = getVectorRotation(velo);
+	rotation = rot;
+}
+
+void TutorialEnemy::MoveMovePhase()
+{
+	//プレイヤーまでのベクトルを求める
+	XMFLOAT3 velo = XMFLOAT3(playerPos.x - position.x, 0.0f, playerPos.z - position.z);
+
+	XMFLOAT3 rot = getVectorRotation(velo);
+	rotation = rot;
 }
 
 void TutorialEnemy::StatusManager()
@@ -145,10 +223,80 @@ void TutorialEnemy::SetSRV(ID3D12DescriptorHeap* SRV)
 	object->SetSRV(SRV);
 }
 
+void TutorialEnemy::SetDash()
+{
+	//ダッシュモデルをセットしてアニメーション開始
+	object->SetModel(modelDash);
+	object->PlayAnimation();
+}
+
+void TutorialEnemy::SetDown()
+{
+	//ダウンモデルをセットしてアニメーション開始
+	object->SetModel(modelDown);
+	object->PlayAnimation();
+}
+
+void TutorialEnemy::SetStand()
+{
+	//立つモデルをセットしてアニメーション開始
+	object->SetModel(modelStand);
+	object->PlayAnimation();
+}
+
+void TutorialEnemy::SetTutorial()
+{
+	isDead1 = false;
+	isDead2 = false;
+	isDead3 = false;
+	SetStand();
+}
+
+void TutorialEnemy::SetGameScene()
+{
+	SetDash();
+}
+
+void TutorialEnemy::SetMovePhase()
+{
+	SetStand();
+}
+
+void TutorialEnemy::AddEnemy(XMFLOAT3 pos)
+{
+	//生き返らせる
+	isDead1 = false;
+	isDead2 = false;
+	isDead3 = false;
+	deadTimer = 0;
+	HP = maxHP;
+	//指定の座標に配置
+	position = pos;
+}
+
+void TutorialEnemy::AddEnemyGameScene(XMFLOAT3 pos)
+{
+	//まだ死んでない場合スルー
+	if (isDead2 == false)return;
+	SetDash();
+	AddEnemy(pos);
+}
+
+void TutorialEnemy::AddEnemyMovePhase(XMFLOAT3 pos)
+{
+	//まだ死んでない場合スルー
+	if (isDead2 == false)return;
+	SetStand();
+	AddEnemy(pos);
+}
+
 void TutorialEnemy::Reset()
 {
 	HP = maxHP;
-	isDead = false;
+	isDead1 = false;
+	isDead2 = false;
+	isDead3 = false;
+	deadTimer = 0;
 }
 
 void TutorialEnemy::HitBullet1()

@@ -27,7 +27,7 @@ void ShadowMap::Initialize()
 {
 	HRESULT result;
 
-	SetScale({ window_width,window_height });
+	SetScale({ width,height });
 	SetPosition({ 0.0f, 0.0 });
 
 	//頂点データ
@@ -144,8 +144,8 @@ void ShadowMap::Initialize()
 	//リソース設定
 	D3D12_RESOURCE_DESC textureResourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		window_width,
-		(UINT)window_height,
+		width,
+		(UINT)height,
 		1, 0, 1, 0,
 		D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
@@ -164,9 +164,9 @@ void ShadowMap::Initialize()
 	assert(SUCCEEDED(result));
 
 	//テクスチャ生成用設定
-	const UINT pixelCount = window_width * window_height;
-	const UINT rowPitch = sizeof(UINT) * window_width;
-	const UINT depthPitch = rowPitch * window_height;
+	const UINT pixelCount = width * height;
+	const UINT rowPitch = sizeof(UINT) * width;
+	const UINT depthPitch = rowPitch * height;
 	//画像イメージ
 	UINT* img = new UINT[pixelCount];
 	for (int i = 0; i < pixelCount; i++)
@@ -229,8 +229,8 @@ void ShadowMap::Initialize()
 	//深度バッファの作成
 	D3D12_RESOURCE_DESC depthResDesc = {};
 	depthResDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	depthResDesc.Width = window_width;
-	depthResDesc.Height = window_height;
+	depthResDesc.Width = width;
+	depthResDesc.Height = height;
 	depthResDesc.DepthOrArraySize = 1;
 	depthResDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	depthResDesc.SampleDesc.Count = 1;
@@ -330,8 +330,8 @@ void ShadowMap::Update()
 
 	//マテリアル
 	constMapMaterial->color = color;
-	constMapMaterial->window.x = window_width;
-	constMapMaterial->window.y = window_height;
+	constMapMaterial->window.x = width;
+	constMapMaterial->window.y = height;
 	constMapMaterial->resolution = resolution;
 	constMapMaterial->lightvp = lightVP;
 
@@ -352,10 +352,10 @@ void ShadowMap::Update()
 	//合成
 	constMapTransform->mat = matWorld;
 	//2D座標に変換
-	constMapTransform->mat.r[0].m128_f32[0] = 2.0f / window_width;
-	constMapTransform->mat.r[1].m128_f32[1] = -2.0f / window_height;
-	constMapTransform->mat.r[3].m128_f32[0] = -1.0f + (position.x / window_width) * 2;
-	constMapTransform->mat.r[3].m128_f32[1] = 1.0f - (position.y / window_height) * 2;
+	constMapTransform->mat.r[0].m128_f32[0] = 2.0f / width;
+	constMapTransform->mat.r[1].m128_f32[1] = -2.0f / height;
+	constMapTransform->mat.r[3].m128_f32[0] = -1.0f + (position.x / width) * 2;
+	constMapTransform->mat.r[3].m128_f32[1] = 1.0f - (position.y / height) * 2;
 }
 
 //void ShadowMap::Draw0(ID3D12GraphicsCommandList* cmdList)
@@ -652,10 +652,10 @@ void ShadowMap::PreDrawScene0(ID3D12GraphicsCommandList* cmdList)
 	cmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 
 	//ビューポートの設定
-	CD3DX12_VIEWPORT a1 = CD3DX12_VIEWPORT(0.0f, 0.0f, window_width, window_height);
+	CD3DX12_VIEWPORT a1 = CD3DX12_VIEWPORT(0.0f, 0.0f, width, height);
 	cmdList->RSSetViewports(1, &a1);
 	//シザー矩形の設定
-	CD3DX12_RECT a2 = CD3DX12_RECT(0, 0, window_width, window_height);
+	CD3DX12_RECT a2 = CD3DX12_RECT(0, 0, width, height);
 	cmdList->RSSetScissorRects(1, &a2);
 
 

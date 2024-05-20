@@ -1,7 +1,6 @@
 #include "GameScene.h"
 #include "mathOriginal.h"
 #include "ColliderManager.h"
-#include "imgui.h"
 #include "ClearScene.h"
 #include "PhaseList.h"
 
@@ -12,14 +11,14 @@ Camera* PhaseState::camera = nullptr;
 Light* PhaseState::light = nullptr;
 Player* PhaseState::player = nullptr;
 Enemy* PhaseState::enemy = nullptr;
-MiniEnemy* PhaseState::miniEnemy = nullptr;
+TutorialEnemy* PhaseState::tutorialEnemy = nullptr;
 Plane* PhaseState::plane = nullptr;
 Terrain* PhaseState::terrain = nullptr;
 UI* PhaseState::ui = nullptr;
 
 GameScene::GameScene()
 {
-	phaseState = new Phase1();
+	phaseState = new MovePhase();
 }
 
 GameScene::~GameScene()
@@ -52,13 +51,6 @@ void GameScene::Draw()
 
 	//フェーズ移動
 	phaseState->NextPhase(this);
-
-	//ImGui
-	ImGui::Begin("GameScene");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 150));
-	ImGui::InputInt("debugNum", debugNum);
-	ImGui::End();
 }
 
 void GameScene::DrawFBXLightView()
@@ -87,11 +79,11 @@ void PhaseState::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInp
 }
 
 void PhaseState::SetGameObject(Player* player, Enemy* enemy,
-	MiniEnemy* miniEnemy, Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui)
+	TutorialEnemy* tutorialEnemy, Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui)
 {
 	PhaseState::player = player;
 	PhaseState::enemy = enemy;
-	PhaseState::miniEnemy = miniEnemy;
+	PhaseState::tutorialEnemy = tutorialEnemy;
 	PhaseState::plane = plane;
 	PhaseState::terrain = terrain;
 	PhaseState::camera = camera;

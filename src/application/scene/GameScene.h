@@ -10,7 +10,7 @@
 #include "Sprite.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "MiniEnemy.h"
+#include "TutorialEnemy.h"
 #include "Plane.h"
 #include "UI.h"
 #include "SceneManager.h"
@@ -100,7 +100,7 @@ public:	//静的メンバ変数
 	///ゲームシーンで使うオブジェクトセット
 	/// </summary>
 	static void SetGameObject(Player* player, Enemy* enemy,
-		MiniEnemy* miniEnemy ,Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui);
+		TutorialEnemy* tutorialEnemy,Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui);
 
 public:	//仮想関数
 	void Initialize();
@@ -132,8 +132,8 @@ protected:	//静的メンバ変数
 	static Player* player;
 	//敵
 	static Enemy* enemy;
-	//敵
-	static MiniEnemy* miniEnemy;
+	//敵 チュートリアルのものをそのまま流用
+	static TutorialEnemy* tutorialEnemy;
 	//床
 	static Plane* plane;
 	//地形
@@ -151,13 +151,8 @@ protected:	//メンバ変数
 
 	//ライト関連
 	float lightDir[3] = { 0.0f,-1.0f , -1.0f };
-	float lightPos[3] = { 0.0f,125.0f,125.0f };
+	float lightPos[3] = { 125.0f,125.0f,200.0f };
 	float lightTarget[3] = { 0.0f,0.0f,0.0f };
 	float lightFactorAngle[2] = { 20.0f,30.0f, };
 	float lightAtten[3] = { 0.0f,0.0f,0.0f };
-
-	//デバッグ
-	float debugLightPos[3] = { 0.0f,125.0f,125.0f };
-	float debugLightTarget[3] = { 0.0f,0.0f,0.0f };
-	float debugLightDir[3] = { 0.0f,-1.0f , -1.0f };
 };

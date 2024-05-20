@@ -1,7 +1,6 @@
 #include "EnemyStateManager.h"
 #include "mathOriginal.h"
 #include "ColliderManager.h"
-#include "MiniEnemy.h"
 
 void Stand::Initialize()
 {
@@ -188,6 +187,24 @@ void AttackOmen1::Move()
 
 		//敵がプレイヤーの向きを向くようにする
 		rotation.y = getVectorRotation(velo).y;
+	}
+}
+
+void AttackOmen1::UpdateParticleClear()
+{
+	if ((int)clearTimer % (int)explosionTime == 0)
+	{
+		//乱数を生成
+		float xRand, yRand, zRand, randWidth;
+		XMFLOAT3 randVec(20.0f, 20.0f, 20.0f);
+		randWidth = 90.0f;
+		xRand = (GetRand(100.0f - randWidth, 100.0f + randWidth) - 100.0f) / 100.0f;
+		yRand = (GetRand(100.0f - randWidth, 100.0f + randWidth) - 100.0f) / 100.0f;
+		zRand = (GetRand(100.0f - randWidth, 100.0f + randWidth) - 100.0f) / 100.0f;
+		randVec = XMFLOAT3(randVec.x * xRand, randVec.y * yRand + 50, randVec.z * zRand);
+
+		explosionParticle1->Add(position + randVec);
+		explosionParticle2->Add(position + randVec);
 	}
 }
 
@@ -445,7 +462,7 @@ void CallMiniEnemy::UpdateAttackMovePhase()
 	//敵呼び出しフラグをもとに戻す
 	callEnemyFlag = false;
 	//敵呼び出し 2回呼び出す
-	if (objectTimer == 40)
+	if (objectTimer == frameCallMiniEnemy2)
 	{
 		//フラグを立てる
 		callEnemyFlag = true;
@@ -468,7 +485,7 @@ void CallMiniEnemy::UpdateAttackMovePhase()
 			for (int i = 0; i < elecVol; i++)
 			{
 				elecParticle->AddParticle(3.0f, callEnemyPos1 + addElecPos2,
-					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength);
+					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength); 
 			}
 		}
 	}

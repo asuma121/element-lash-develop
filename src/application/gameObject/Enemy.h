@@ -384,6 +384,8 @@ public:	//メンバ関数
 	virtual void UpdateStateMovePhase(Enemy* enemy) {};
 	//ステートの変更 クリアシーン
 	virtual void UpdateStateClear(Enemy* enemy) {};
+	//クリア専用更新
+	virtual void UpdateParticleClear() {};
 	//描画
 	virtual void Draw(ID3D12GraphicsCommandList* cmdList) = 0;
 	//ライト目線描画
@@ -564,7 +566,7 @@ protected:	//メンバ変数
 	float elecStrength = 1.1f;
 
 	//弾を出す位置
-	XMFLOAT3 bulletAddPos = { 20.0f, 40.0f, 50.0f };
+	XMFLOAT3 bulletAddPos = { 30.0f, 50.0f, -50.0f };
 	//一度に発射する弾の数
 	int bulletVol = 10;
 	//弾の時間差
@@ -588,8 +590,7 @@ protected:	//メンバ変数
 	bool callEnemyFlag = false;
 	//呼び出す敵の座標
 	XMFLOAT3 callEnemyPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 callEnemyPos1 = { 60.0f,0.0f,40.0f };	//フェーズ移動用
-	XMFLOAT3 callEnemyPos2 = { -60.0f,0.0f,40.0f };	//フェーズ移動用
+	XMFLOAT3 callEnemyPos1 = { 0.0f,0.0f,40.0f };	//フェーズ移動用
 
 	//コライダー
 	//コライダーの大きさ
@@ -610,4 +611,8 @@ protected:	//メンバ変数
 
 	//クリアのタイマー
 	int clearTimer = 0;
+
+	//爆発用
+	float explosionTime = 5.0f;
+	float explosionTimer = explosionTime;
 };

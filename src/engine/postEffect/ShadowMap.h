@@ -197,4 +197,8 @@ private:
 	int shakeMaxTime = 120;
 	XMFLOAT2 shakePos;
 	bool shakeFlag = false;
+
+	//横幅 立幅
+	float width = 8000.0f;
+	float height = 4000.0f;
 };

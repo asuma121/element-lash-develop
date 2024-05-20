@@ -187,6 +187,8 @@ void ClearScene::DrawParticle()
 {
 	//プレイヤーのパーティクル描画
 	player->DrawParticle(dxCommon->GetCommandList());
+	//敵のパーティクル描画
+	enemy->DrawParticle(dxCommon->GetCommandList());
 }
 
 void ClearScene::DrawFBXLightView()

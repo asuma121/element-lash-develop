@@ -97,11 +97,6 @@ public://メンバ関数
 	void Update();
 
 	/// <summary>
-	///ビルボード行列更新
-	/// </summary>
-	void UpdateBillboard();
-
-	/// <summary>
 	///コライダー更新
 	/// </summary>
 	void UpdateCollider();
@@ -192,11 +187,6 @@ public://メンバ関数
 	void SetTextureData(const JSONLoader::TextureData& textureData);
 
 	/// <summary>
-	///ビルボード行列を使うかのフラグ取得
-	/// </summary>
-	void SetBillboardFlag() { billboardFlag = true; }
-
-	/// <summary>
 	///テクスチャの番号取得
 	/// </summary>
 	void SetTextureNum(int textureNum) { this->textureNum1 = textureNum; }
@@ -261,10 +251,6 @@ private:
 	XMFLOAT3 position = { 0,0,0 };
 	//ローカルワールド変換行列
 	XMMATRIX matWorld;
-	//ビルボード行列
-	XMMATRIX matBillboard;
-	//Y軸周りビルボード行列
-	XMMATRIX matBillboiadY;
 	//モデル
 	FbxModel* model = nullptr;
 	//コライダーの中心と座標の差分
@@ -273,9 +259,6 @@ private:
 	XMFLOAT3 colliderCenter = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 colliderRotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 colliderScale = { 0.0f,0.0f,0.0f };
-
-	//ビルボードフラグ
-	bool billboardFlag = false;
 
 	//定数バッファ
 	ComPtr<ID3D12Resource>constBuffSkin;

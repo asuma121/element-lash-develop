@@ -33,6 +33,9 @@ void TutorialScene::Initialize()
 
 		//敵をチュートリアル用にセット
 		enemy->SetTutorial();
+
+		//チュートリアルの敵をセット
+		tutorialEnemy->SetTutorial();
 	}
 }
 
@@ -91,7 +94,7 @@ void TutorialScene::UpdateObject()
 	//チュートリアルの敵
 	if (tutorialSpriteFlag == 10)
 	{
-		tutorialEnemy->Update();
+		tutorialEnemy->UpdateTutorial();
 		//敵を倒したら次へ
 		if (tutorialEnemy->GetIsDead())
 		{

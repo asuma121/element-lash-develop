@@ -67,6 +67,8 @@ public:
 	void Initialize();
 	//ステートごとの動き
 	void Move();
+	//クリア専用更新
+	void UpdateParticleClear()override;
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
 	//チュートリアルのステート更新
