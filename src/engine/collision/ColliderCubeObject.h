@@ -43,11 +43,6 @@ public:	//静的メンバ関数
 	static void SetCamera(Camera* camera) { ColliderCubeObject::camera = camera; }
 
 	/// <summary>
-	///入力セット
-	/// </summary>
-	static void SetInput(Input* input) { ColliderCubeObject::input = input; }
-
-	/// <summary>
 	///モデルセット
 	/// </summary>
 	static void SetModel(ColliderCubeModel* model) { ColliderCubeObject::model = model; }
@@ -55,7 +50,6 @@ public:	//静的メンバ関数
 private://静的メンバ変数
 	static ID3D12Device* device;
 	static Camera* camera;
-	static Input* input;
 	static ColliderCubeModel* model;
 
 public://メンバ関数

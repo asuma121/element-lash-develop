@@ -7,8 +7,7 @@
 
 #pragma once
 #include "DirectXMath.h"
-#include "Input.h"
-#include "DXInput.h"
+#include "KeyManager.h"
 #include "WinApp.h"
 //#include "Player.h"
 #define PI 3.14159265359
@@ -22,12 +21,7 @@ public://静的メンバ変数
 	/// <summary>
 	///入力セット
 	/// </summary>
-	static void SetInput(Input* input) { Camera::input = input; }
-
-	/// <summary>
-	///コントローラー入力セット
-	/// </summary>
-	static void SetDXInput(DXInput* dxInput) { Camera::dxInput = dxInput; }
+	static void SetKeyManager(KeyManager* keyManager) { Camera::keyManager = keyManager; }
 
 	//コンストラクタ デストラクタ
 	Camera();
@@ -54,11 +48,6 @@ public:
 	///タイトルの更新
 	/// </summary>
 	void TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer);
-
-	/// <summary>
-	///デバッグの更新
-	/// </summary>
-	void DebugUpdate();
 
 	/// <summary>
 	///プレイヤー追尾の更新
@@ -148,9 +137,7 @@ public:
 private:
 	//入力
 	//キーボード
-	static Input* input;
-	//コントローラー
-	static DXInput* dxInput;
+	static KeyManager* keyManager;
 	//射影変換
 	XMMATRIX matProjection_ = XMMatrixIdentity();
 	//ビュー変換行列

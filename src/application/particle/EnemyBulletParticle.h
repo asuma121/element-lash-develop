@@ -92,11 +92,6 @@ public:	//静的メンバ関数
 	static void SetCamera(Camera* camera) { EnemyBulletParticle::camera = camera; }
 
 	/// <summary>
-	///入力セット
-	/// </summary>
-	static void SetInput(Input* input) { EnemyBulletParticle::input = input; }
-
-	/// <summary>
 	///パイプライン設定、作成
 	/// </summary>
 	static void CreateGraphicsPipeline();
@@ -142,7 +137,6 @@ public:	//静的メンバ変数
 	static TextureManager* spriteManager;
 	static ID3D12Device* device;
 	static Camera* camera;
-	static Input* input;
 	//頂点最大数
 	static const int vertexCount = 1024;
 	//火花1回に使う頂点数

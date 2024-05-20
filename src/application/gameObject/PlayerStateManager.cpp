@@ -22,14 +22,14 @@ void Wait::UpdateState(Player* player)
 	} 
 
 	//炎状態でRボタンを押していたら攻撃3へ
-	if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire)
+	if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire)
 	{
 		player->ChangeState(new Attack3());
 		return;
 	} 
 
 	//Rボタンで攻撃1
-	else if (form == Player::Elec && dxInput->TriggerKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+	else if (form == Player::Elec && keyManager->TriggerKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 	{
 		player->ChangeState(new Attack1());
 		return;
@@ -94,14 +94,14 @@ void Run::UpdateState(Player* player)
 	}
 
 	//炎状態でRボタンを押していたら攻撃3へ
-	if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire)
+	if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire)
 	{
 		player->ChangeState(new Attack3());
 		return;
 	}
 
 	//Rボタンで攻撃1
-	else if (form == Player::Elec && dxInput->TriggerKey(DXInput::PAD_RIGHT_SHOULDER))
+	else if (form == Player::Elec && keyManager->TriggerKey(KeyManager::PAD_RIGHT_SHOULDER))
 	{
 		player->ChangeState(new Attack1());
 		return;
@@ -213,7 +213,7 @@ void Attack1::UpdateState(Player* player)
 	}
 
 	//インターバル中にRボタンで連続攻撃 攻撃2へ
-	if (dxInput->TriggerKey(DXInput::PAD_RIGHT_SHOULDER) && 0 <= 
+	if (keyManager->TriggerKey(KeyManager::PAD_RIGHT_SHOULDER) && 0 <=
 		attack1Time - objectTimer && attack1Time - objectTimer <= AttackIntervalTime)
 	{
 		player->ChangeState(new Attack2());
@@ -269,8 +269,7 @@ void Attack1::Move()
 {
 	//プレイヤーの元になる角度
 	//AROWキーで角度変更
-	rotVelocity.y = dxInput->GetStick(DXInput::RStickX) * rot0Speed;
-	/*rotVelocity.y = (input->PushKey(DIK_RIGHT) - input->PushKey(DIK_LEFT)) * rotSpeed;*/
+	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
 
@@ -378,8 +377,7 @@ void Attack2::Move()
 {
 	//プレイヤーの元になる角度
 	//AROWキーで角度変更
-	rotVelocity.y = dxInput->GetStick(DXInput::RStickX) * rot0Speed;
-	/*rotVelocity.y = (input->PushKey(DIK_RIGHT) - input->PushKey(DIK_LEFT)) * rotSpeed;*/
+	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
 	
@@ -438,13 +436,13 @@ void Attack3::UpdateState(Player* player)
 	}
 
 	//立ち止まっている場合
-	else if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) != 1 && length(posVelocity) <= 0.01f)
+	else if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) != 1 && length(posVelocity) <= 0.01f)
 	{
 		player->ChangeState(new Wait());
 		return;
 	}
 	//普通に走っている場合
-	else if(dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) != 1)
+	else if(keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) != 1)
 	{
 		player->ChangeState(new Run());
 	}
@@ -465,8 +463,7 @@ void Attack3::Move()
 {
 	//プレイヤーの元になる角度
 	//AROWキーで角度変更
-	rotVelocity.y = dxInput->GetStick(DXInput::RStickX) * rot0Speed;
-	/*rotVelocity.y = (input->PushKey(DIK_RIGHT) - input->PushKey(DIK_LEFT)) * rotSpeed;*/
+	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
 
@@ -474,11 +471,9 @@ void Attack3::Move()
 
 	//座標
 	//左スティックで移動
-	XMFLOAT2 stick = normalize(dxInput->GetStick(DXInput::LStickX), dxInput->GetStick(DXInput::LStickY));
+	XMFLOAT2 stick = normalize(keyManager->GetStick(KeyManager::LStickX), keyManager->GetStick(KeyManager::LStickY));
 	posVelocity.x = stick.x * attack3PosSpeed;
 	posVelocity.z = stick.y * attack3PosSpeed;
-	/*posVelocity.x = (input->PushKey(DIK_D) - input->PushKey(DIK_A)) * posSpeed;
-	posVelocity.z = (input->PushKey(DIK_W) - input->PushKey(DIK_S)) * posSpeed;*/
 	//進行ベクトルを回転
 	posVelocity = rollRotation(posVelocity, rotation0);
 	//進行ベクトルを加算
@@ -536,8 +531,7 @@ void Down::Move()
 {
 	//プレイヤーの元になる角度
 	//AROWキーで角度変更
-	rotVelocity.y = dxInput->GetStick(DXInput::RStickX) * rot0Speed;
-	/*rotVelocity.y = (input->PushKey(DIK_RIGHT) - input->PushKey(DIK_LEFT)) * rotSpeed;*/
+	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
 }

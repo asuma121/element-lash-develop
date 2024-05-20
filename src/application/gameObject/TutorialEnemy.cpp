@@ -7,7 +7,6 @@
 #define GAcceleration 9.80665 * 1/10	//èdóÕâ¡ë¨ìx
 
 Camera* TutorialEnemy::camera = nullptr;
-Input* TutorialEnemy::input = nullptr;
 
 void TutorialEnemy::Initialize()
 {

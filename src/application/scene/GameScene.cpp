@@ -4,8 +4,7 @@
 #include "ClearScene.h"
 #include "PhaseList.h"
 
-DXInput* PhaseState::dxInput = nullptr;
-Input* PhaseState::input = nullptr;
+KeyManager* PhaseState::keyManager = nullptr;
 DirectXCommon* PhaseState::dxCommon = nullptr;
 Camera* PhaseState::camera = nullptr;
 Light* PhaseState::light = nullptr;
@@ -70,12 +69,11 @@ void GameScene::ChangePhase(PhaseState* newPhase)
 	phaseState = newPhase;
 }
 
-void PhaseState::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput)
+void PhaseState::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	//引数から代入
 	PhaseState::dxCommon = dxCommon;
-	PhaseState::input = input;
-	PhaseState::dxInput = dxInput;
+	PhaseState::keyManager = keyManager;
 }
 
 void PhaseState::SetGameObject(Player* player, Enemy* enemy,

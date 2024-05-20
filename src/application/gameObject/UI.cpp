@@ -2,8 +2,7 @@
 #include "mathOriginal.h"
 #include "imgui.h"
 
-Input* UI::input = nullptr;
-DXInput* UI::dxInput = nullptr;
+KeyManager* UI::keyManager = nullptr;
 
 void UI::Initialize()
 {
@@ -128,9 +127,9 @@ void UI::Initialize()
 	newTutorial12Sprite->Initialize();
 	tutorial12Sprite.reset(newTutorial12Sprite);
 	tutorial12Sprite->SetTextureNum(45);
-	if(dxInput->GetConnectFlag() == true)
+	if(keyManager->GetConnectFlag() == true)
 		tutorial12Sprite->Update(tutorial12Pos1, tutorial12Scale);
-	if (dxInput->GetConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == false)
 		tutorial12Sprite->Update(tutorial12Pos2, tutorial12Scale);
 	//Lスティックのスプライト
 	Sprite* newLStickSprite = new Sprite();
@@ -370,7 +369,7 @@ void UI::Initialize()
 	Sprite* newDownKeySprite2 = new Sprite();
 	newDownKeySprite2->Initialize();
 	DownKeySprite2.reset(newDownKeySprite2);
-	DownKeySprite2->SetTextureNum(76);
+	DownKeySprite2->SetTextureNum(7);
 	DownKeySprite2->Update(DownKeySpritePos2, keySpriteScale1);
 	//LBボタンのスプライト
 	Sprite* newLBButtonSprite2 = new Sprite();
@@ -610,7 +609,7 @@ void UI::UpdateTutorial()
 	//攻撃チュートリアル
 	if (tutorialFlag == 4)
 	{
-		if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			//ゲージ更新
 			if (attackTimer < attackTime)
@@ -665,9 +664,9 @@ void UI::UpdateTutorial()
 	}
 
 	//スキップの処理
-	if (dxInput->GetConnectFlag() == true && dxInput->GetOldConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == true && keyManager->GetOldConnectFlag() == false)
 		tutorial12Sprite->Update(tutorial12Pos1, tutorial12Scale);
-	if (dxInput->GetConnectFlag() == false && dxInput->GetOldConnectFlag() == true)
+	if (keyManager->GetConnectFlag() == false && keyManager->GetOldConnectFlag() == true)
 		tutorial12Sprite->Update(tutorial12Pos2, tutorial12Scale);
 
 	/*shiftKeySprite1->SetPosition(XMFLOAT2(debugNum));
@@ -693,7 +692,7 @@ void UI::UpdateTitle()
 		title2Sprite->SetPosition(XMFLOAT2(title2Pos.x, title2Pos.y +
 			easeOutCirc(((float)titleTimer - (float)titleTime) / 180) * (float)titleTime));
 		//コントローラー未接続時
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			spaceKeySprite1->SetPosition(XMFLOAT2(spaceKeySpritePos1.x, spaceKeySpritePos1.y +
 				easeOutCirc(((float)titleTimer - (float)titleTime) / 180) * (float)titleTime));
@@ -701,7 +700,7 @@ void UI::UpdateTitle()
 				easeOutCirc(((float)titleTimer - (float)titleTime) / 180) * (float)titleTime));
 		}
 		//コントローラー接続時
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			AButtonSprite->SetPosition(XMFLOAT2(AButtonPos.x, AButtonPos.y +
 				easeOutCirc(((float)titleTimer - (float)titleTime) / 180) * (float)titleTime));
@@ -715,13 +714,13 @@ void UI::UpdateTitle()
 		title1Sprite->SetPosition(title1Pos);
 		title2Sprite->SetPosition(title2Pos);
 		//コントローラー未接続時
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			spaceKeySprite1->SetPosition(spaceKeySpritePos1);
 			spaceKeyPushSprite1->SetPosition(spaceKeySpritePos1);
 		}
 		//コントローラー接続時
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			AButtonSprite->SetPosition(AButtonPos);
 			AButtonPushSprite->SetPosition(AButtonPos);
@@ -788,10 +787,10 @@ void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
 		changeElementSprite3->Draw(cmdList);
 	}
 	//コントローラー接続時 LBボタン
-	if (dxInput->GetConnectFlag() == true)
+	if (keyManager->GetConnectFlag() == true)
 	{
 		//ボタン押している時
-		if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 		{
 			LBButtonPushSprite1->Draw(cmdList);
 		}
@@ -802,10 +801,10 @@ void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 	//コントローラー未接続時 シフトキー
-	if (dxInput->GetConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == false)
 	{
 		//押している時
-		if (input->PushKey(DIK_LSHIFT) == 1 || input->PushKey(DIK_RSHIFT) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 		{
 			shiftKeyPushSprite1->Draw(cmdList);
 		}
@@ -826,10 +825,10 @@ void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
 		attackElecSprite->Draw(cmdList);
 	}
 	//コントローラー接続時 RBボタン
-	if (dxInput->GetConnectFlag() == true)
+	if (keyManager->GetConnectFlag() == true)
 	{
 		//ボタン押している時
-		if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			RBButtonPushSprite1->Draw(cmdList);
 		}
@@ -840,10 +839,10 @@ void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 	//コントローラー未接続時 スペースキー
-	if (dxInput->GetConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == false)
 	{
 		//スペースキー押している時
-		if (input->PushKey(DIK_SPACE) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			spaceKeyPushSprite1->Draw(cmdList);
 		}
@@ -899,10 +898,10 @@ void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
 		changeElementSprite3->Draw(cmdList);
 	}
 	//コントローラー接続時 LBボタン
-	if (dxInput->GetConnectFlag() == true)
+	if (keyManager->GetConnectFlag() == true)
 	{
 		//ボタン押している時
-		if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 		{
 			LBButtonPushSprite1->Draw(cmdList);
 		}
@@ -913,10 +912,10 @@ void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 	//コントローラー未接続時 シフトキー
-	if (dxInput->GetConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == false)
 	{
 		//押している時
-		if (input->PushKey(DIK_LSHIFT) == 1 || input->PushKey(DIK_RSHIFT) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 		{
 			shiftKeyPushSprite1->Draw(cmdList);
 		}
@@ -937,10 +936,10 @@ void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
 		attackElecSprite->Draw(cmdList);
 	}
 	//コントローラー接続時 RBボタン
-	if (dxInput->GetConnectFlag() == true)
+	if (keyManager->GetConnectFlag() == true)
 	{
 		//ボタン押している時
-		if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			RBButtonPushSprite1->Draw(cmdList);
 		}
@@ -951,10 +950,10 @@ void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 	//コントローラー未接続時 スペースキー
-	if (dxInput->GetConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == false)
 	{
 		//スペースキー押している時
-		if (input->PushKey(DIK_SPACE) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			spaceKeyPushSprite1->Draw(cmdList);
 		}
@@ -1005,8 +1004,8 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	if (tutorialFlag < 12)
 	{
 		tutorial12Sprite->Draw(cmdList);
-		if (dxInput->GetConnectFlag() == true)startButtonSprite->Draw(cmdList);
-		if (dxInput->GetConnectFlag() == false)escKeySprite->Draw(cmdList);
+		if (keyManager->GetConnectFlag() == true)startButtonSprite->Draw(cmdList);
+		if (keyManager->GetConnectFlag() == false)escKeySprite->Draw(cmdList);
 	}
 	//スティック入力の描画
 	if (tutorialFlag == 2)
@@ -1014,39 +1013,39 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 		//文字
 		tutorial2Sprite->Draw(cmdList);
 		//コントローラー接続時 スティックのUi
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			LStickSprite->Draw(cmdList);
 			RStickSprite->Draw(cmdList);
 		}
 		//コントローラー未接続時 キーボード
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
-			if(input->PushKey(DIK_A))AKeyPushSprite->Draw(cmdList);
+			if(keyManager->GetStick(KeyManager::LStickX) == -1)AKeyPushSprite->Draw(cmdList);
 			else { AKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_S))SKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickY) == -1)SKeyPushSprite->Draw(cmdList);
 			else { SKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_W))WKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickY) == 1)WKeyPushSprite->Draw(cmdList);
 			else { WKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_D))DKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickX) == 1)DKeyPushSprite->Draw(cmdList);
 			else { DKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_LEFT))LeftKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickX) == -1)LeftKeyPushSprite->Draw(cmdList);
 			else { LeftKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_RIGHT))RightKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickX) == 1)RightKeyPushSprite->Draw(cmdList);
 			else { RightKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_UP))UpKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickY) == 1)UpKeyPushSprite->Draw(cmdList);
 			else { UpKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_DOWN))DownKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickY) == -1)DownKeyPushSprite->Draw(cmdList);
 			else { DownKeySprite->Draw(cmdList); }
 		}
 		//コントローラー接続時 文に使うコントローラーのボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			LStickSprite2->Draw(cmdList);
 			RStickSprite2->Draw(cmdList);
 		}
 		//コントローラー未接続時 文に使うキーボード
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			AKeySprite2->Draw(cmdList);
 			DKeySprite2->Draw(cmdList);
@@ -1079,29 +1078,29 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	if (tutorialFlag == 3)
 	{
 		//コントローラー接続時 スティックのUi
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			LStickSprite->Draw(cmdList);
 			RStickSprite->Draw(cmdList);
 		}
 		//コントローラー未接続時 キーボード
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
-			if (input->PushKey(DIK_A))AKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickX) == -1)AKeyPushSprite->Draw(cmdList);
 			else { AKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_S))SKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickY) == -1)SKeyPushSprite->Draw(cmdList);
 			else { SKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_W))WKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickY) == 1)WKeyPushSprite->Draw(cmdList);
 			else { WKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_D))DKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::LStickX) == 1)DKeyPushSprite->Draw(cmdList);
 			else { DKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_LEFT))LeftKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickX) == -1)LeftKeyPushSprite->Draw(cmdList);
 			else { LeftKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_RIGHT))RightKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickX) == 1)RightKeyPushSprite->Draw(cmdList);
 			else { RightKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_UP))UpKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickY) == 1)UpKeyPushSprite->Draw(cmdList);
 			else { UpKeySprite->Draw(cmdList); }
-			if (input->PushKey(DIK_DOWN))DownKeyPushSprite->Draw(cmdList);
+			if (keyManager->GetStick(KeyManager::RStickY) == -1)DownKeyPushSprite->Draw(cmdList);
 			else { DownKeySprite->Draw(cmdList); }
 		}
 		//チェックマーク
@@ -1123,10 +1122,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	{
 		tutorial4Sprite->Draw(cmdList);
 		//コントローラー接続時 RBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				RBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1137,10 +1136,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 スペースキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//スペースキー押している時
-			if (input->PushKey(DIK_SPACE) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				spaceKeyPushSprite1->Draw(cmdList);
 			}
@@ -1151,12 +1150,12 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー接続時 文に使うRBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			RBButtonSprite2->Draw(cmdList);
 		}
 		//コントローラー未接続時 文に使うスペースキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			spaceKeySprite2->Draw(cmdList);
 		}
@@ -1173,10 +1172,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	if (tutorialFlag == 5)
 	{
 		//コントローラー接続時 RBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				RBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1187,10 +1186,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 スペースキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//スペースキー押している時
-			if (input->PushKey(DIK_SPACE) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				spaceKeyPushSprite1->Draw(cmdList);
 			}
@@ -1212,10 +1211,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	if (tutorialFlag == 6)
 	{
 		//コントローラー接続時 LBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 			{
 				LBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1226,10 +1225,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 シフトキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//押している時
-			if (input->PushKey(DIK_LSHIFT) == 1 || input->PushKey(DIK_RSHIFT) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 			{
 				shiftKeyPushSprite1->Draw(cmdList);
 			}
@@ -1240,12 +1239,12 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー接続時 文に使うLBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			LBButtonSprite2->Draw(cmdList);
 		}
 		//コントローラー未接続時 文に使うシフトキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			shiftKeySprite2->Draw(cmdList);
 		}
@@ -1256,10 +1255,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	{
 		tutorial7Sprite->Draw(cmdList);
 		//コントローラー接続時 LBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 			{
 				LBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1270,10 +1269,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 シフトキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//押している時
-			if (input->PushKey(DIK_LSHIFT) == 1 || input->PushKey(DIK_RSHIFT) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 			{
 				shiftKeyPushSprite1->Draw(cmdList);
 			}
@@ -1290,10 +1289,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	{
 		tutorial8Sprite->Draw(cmdList);
 		//コントローラー接続時 RBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				RBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1304,10 +1303,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 スペースキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//スペースキー押している時
-			if (input->PushKey(DIK_SPACE) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				spaceKeyPushSprite1->Draw(cmdList);
 			}
@@ -1322,10 +1321,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	if (tutorialFlag == 9)
 	{
 		//コントローラー接続時 RBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				RBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1336,10 +1335,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 スペースキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//スペースキー押している時
-			if (input->PushKey(DIK_SPACE) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				spaceKeyPushSprite1->Draw(cmdList);
 			}
@@ -1378,10 +1377,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			changeElementSprite3->Draw(cmdList);
 		}
 		//コントローラー接続時 LBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 			{
 				LBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1392,10 +1391,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 シフトキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//押している時
-			if (input->PushKey(DIK_LSHIFT) == 1 || input->PushKey(DIK_RSHIFT) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 			{
 				shiftKeyPushSprite1->Draw(cmdList);
 			}
@@ -1419,10 +1418,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			attackElecSprite->Draw(cmdList);
 		}
 		//コントローラー接続時 RBボタン
-		if (dxInput->GetConnectFlag() == true)
+		if (keyManager->GetConnectFlag() == true)
 		{
 			//ボタン押している時
-			if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				RBButtonPushSprite1->Draw(cmdList);
 			}
@@ -1433,10 +1432,10 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 		//コントローラー未接続時 スペースキー
-		if (dxInput->GetConnectFlag() == false)
+		if (keyManager->GetConnectFlag() == false)
 		{
 			//スペースキー押している時
-			if (input->PushKey(DIK_SPACE) == 1)
+			if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 			{
 				spaceKeyPushSprite1->Draw(cmdList);
 			}
@@ -1450,18 +1449,6 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 
 	if (tutorialFlag == 10)tutorial10Sprite->Draw(cmdList);
 	if (tutorialFlag == 11)tutorial11Sprite->Draw(cmdList);
-
-	//ImGui
-	//ImGui::Begin("UI Tutorial");
-	//ImGui::SetWindowPos(ImVec2(600, 0));
-	//ImGui::SetWindowSize(ImVec2(500, 300));
-	//ImGui::InputFloat2("tu12Pos", debugNum1);
-	//ImGui::InputFloat2("tu12Size", debugNum2);
-	//ImGui::InputFloat2("escPos", debugNum3);
-	//ImGui::InputFloat2("escSize", debugNum4);
-	//ImGui::InputFloat2("startPos", debugNum5);
-	//ImGui::InputFloat2("startSize", debugNum6);
-	//ImGui::End();
 }
 
 void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)
@@ -1469,7 +1456,7 @@ void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)
 	title1Sprite->Draw(cmdList);
 	title2Sprite->Draw(cmdList);
 	//コントローラー未接続時
-	if (dxInput->GetConnectFlag() == false)
+	if (keyManager->GetConnectFlag() == false)
 	{
 		//スペースキーのアニメーション
 		if (buttonTimer < buttonChangeTime)
@@ -1482,7 +1469,7 @@ void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 	//コントローラー接続時
-	if (dxInput->GetConnectFlag() == true)
+	if (keyManager->GetConnectFlag() == true)
 	{
 		//ボタンのアニメーション
 		if (buttonTimer < buttonChangeTime)

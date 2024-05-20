@@ -2,8 +2,7 @@
 #include "mathOriginal.h"
 #include "TitleScene.h"
 
-DXInput* ClearScene::dxInput = nullptr;
-Input* ClearScene::input = nullptr;
+KeyManager* ClearScene::keyManager = nullptr;
 DirectXCommon* ClearScene::dxCommon = nullptr;
 Camera* ClearScene::camera = nullptr;
 Light* ClearScene::light = nullptr;
@@ -13,12 +12,11 @@ Plane* ClearScene::plane = nullptr;
 Terrain* ClearScene::terrain = nullptr;
 UI* ClearScene::ui = nullptr;
 
-void ClearScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput)
+void ClearScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	//ˆø”‚©‚ç‘ã“ü
 	ClearScene::dxCommon = dxCommon;
-	ClearScene::input = input;
-	ClearScene::dxInput = dxInput;
+	ClearScene::keyManager = keyManager;
 }
 
 void ClearScene::SetGameObject(Player* player, Enemy* enemy, Plane* plane, Terrain* terrain,Camera* camera, Light* light, UI* ui)
@@ -107,7 +105,7 @@ void ClearScene::NextScene(Scene* pScene)
 
 void ClearScene::UpdateObject()
 {
-	if (clearFromGameTimer >= clearFromGameTime && dxInput->TriggerKey(DXInput::PAD_X))
+	if (clearFromGameTimer >= clearFromGameTime && keyManager->TriggerKey(KeyManager::PAD_X))
 	{
 		moveTitleFlag = true;
 	}

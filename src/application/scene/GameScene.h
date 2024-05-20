@@ -3,8 +3,6 @@
 #include "memory"
 #include "list"
 #include "DirectXMath.h"
-#include "Input.h"
-#include "DXInput.h"
 #include "DirectXCommon.h"
 #include "Camera.h"
 #include "Sprite.h"
@@ -94,7 +92,7 @@ public:	//静的メンバ変数
 	/// <summary>
 	///初期化
 	/// </summary>
-	static void SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput);
+	static void SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager);
 
 	/// <summary>
 	///ゲームシーンで使うオブジェクトセット
@@ -122,8 +120,7 @@ public:
 protected:	//静的メンバ変数
 	//デバイスとinput
 	static DirectXCommon* dxCommon;
-	static Input* input;
-	static DXInput* dxInput;
+	static KeyManager* keyManager;
 	//カメラ
 	static Camera* camera;
 	//ライト

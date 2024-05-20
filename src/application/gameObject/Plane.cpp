@@ -10,8 +10,6 @@
 #include "ColliderManager.h"
 
 Camera* Plane::camera = nullptr;
-Input* Plane::input = nullptr;
-DXInput* Plane::dxInput = nullptr;
 
 void Plane::Initialize()
 {

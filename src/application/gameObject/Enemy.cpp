@@ -15,8 +15,6 @@
 #define GAcceleration 9.80665 * 1/10	//重力加速度
 
 Camera* Enemy::camera = nullptr;
-Input* Enemy::input = nullptr;
-DXInput* Enemy::dxInput = nullptr;
 //立っている状態のオブジェクト
 FbxObject3D* EnemyState::objectStand = nullptr;
 //立っている状態のモデル

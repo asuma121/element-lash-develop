@@ -3,8 +3,7 @@
 #include "ColliderManager.h"
 #include "GameScene.h"
 
-DXInput* TutorialScene::dxInput = nullptr;
-Input* TutorialScene::input = nullptr;
+KeyManager* TutorialScene::keyManager = nullptr;
 DirectXCommon* TutorialScene::dxCommon = nullptr;
 Camera* TutorialScene::camera = nullptr;
 Light* TutorialScene::light = nullptr;
@@ -127,7 +126,7 @@ void TutorialScene::UpdateObject()
 void TutorialScene::UpdateSprite()
 {
 	//スキップ
-	if (tutorialSpriteFlag < 12 && dxInput->TriggerKey(DXInput::PAD_START))
+	if (tutorialSpriteFlag < 12 && keyManager->TriggerKey(KeyManager::PAD_START))
 	{
 		tutorialSpriteFlag = 12;
 	}
@@ -147,14 +146,14 @@ void TutorialScene::UpdateSprite()
 	if (tutorialSpriteFlag == 2)
 	{
 		//Rスティックの入力があればタイマー更新
-		if (dxInput->GetStick(DXInput::RStickX) >= 0.4 || dxInput->GetStick(DXInput::RStickX) <= -0.4 ||
-			dxInput->GetStick(DXInput::RStickY) >= 0.4 || dxInput->GetStick(DXInput::RStickY) <= -0.4)
+		if (keyManager->GetStick(KeyManager::RStickX) >= 0.4 || keyManager->GetStick(KeyManager::RStickX) <= -0.4 ||
+			keyManager->GetStick(KeyManager::RStickY) >= 0.4 || keyManager->GetStick(KeyManager::RStickY) <= -0.4)
 		{
 			tutorialRStickTimer++;
 		}
 		//Lスティックの入力があればタイマー更新
-		if (dxInput->GetStick(DXInput::LStickX) >= 0.4 || dxInput->GetStick(DXInput::LStickX) <= -0.4 ||
-			dxInput->GetStick(DXInput::LStickY) >= 0.4 || dxInput->GetStick(DXInput::LStickY) <= -0.4)
+		if (keyManager->GetStick(KeyManager::LStickX) >= 0.4 || keyManager->GetStick(KeyManager::LStickX) <= -0.4 ||
+			keyManager->GetStick(KeyManager::LStickY) >= 0.4 || keyManager->GetStick(KeyManager::LStickY) <= -0.4)
 		{
 			tutorialLStickTimer++;
 		}
@@ -178,7 +177,7 @@ void TutorialScene::UpdateSprite()
 	//攻撃チュートリアル
 	if (tutorialSpriteFlag == 4)
 	{
-		if (dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			tutorialAttackTimer++;
 		}
@@ -202,7 +201,7 @@ void TutorialScene::UpdateSprite()
 	//属性変化チュートリアル
 	if (tutorialSpriteFlag == 6)
 	{
-		if (dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER) == 1)
+		if (keyManager->PushKey(KeyManager::PAD_LEFT_SHOULDER) == 1)
 		{
 			tutorialSpriteFlag = 7;
 		}
@@ -221,7 +220,7 @@ void TutorialScene::UpdateSprite()
 	//攻撃チュートリアル
 	if (tutorialSpriteFlag == 8)
 	{
-		if (dxInput->TriggerKey(DXInput::PAD_RIGHT_SHOULDER) == 1)
+		if (keyManager->TriggerKey(KeyManager::PAD_RIGHT_SHOULDER) == 1)
 		{
 			tutorialAttack2Timer++;
 		}
@@ -399,12 +398,11 @@ void TutorialScene::SetSRV(ID3D12DescriptorHeap* SRV)
 	plane->SetSRV(SRV);
 }
 
-void TutorialScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput)
+void TutorialScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	// 引数から代入
 	TutorialScene::dxCommon = dxCommon;
-	TutorialScene::input = input;
-	TutorialScene::dxInput = dxInput;
+	TutorialScene::keyManager = keyManager;
 }
 
 void TutorialScene::SetGameObject(Player* player, Enemy* enemy, TutorialEnemy* tutorialEnemy,
@@ -419,17 +417,6 @@ void TutorialScene::SetGameObject(Player* player, Enemy* enemy, TutorialEnemy* t
 	TutorialScene::light = light;
 	TutorialScene::ui = ui;
 }
-
-//void TutorialScene::SetGameObject(Player* player, Enemy* enemy, TutorialEnemy* tutorialEnemy, Plane* plane, Camera* camera, Light* light, UI* ui)
-//{
-//	this->player = player;
-//	this->enemy = enemy;
-//	this->tutorialEnemy = tutorialEnemy;
-//	this->plane = plane;
-//	this->camera = camera;
-//	this->light = light;
-//	this->ui = ui;
-//}
 
 DirectX::XMMATRIX TutorialScene::GetLightViewProjection()
 {

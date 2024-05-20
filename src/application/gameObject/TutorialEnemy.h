@@ -30,11 +30,6 @@ public://メンバ関数
 	static void SetCamera(Camera* camera) { TutorialEnemy::camera = camera; }
 
 	/// <summary>
-	///入力セット
-	/// </summary>
-	static void SetInput(Input* input) { TutorialEnemy::input = input; }
-
-	/// <summary>
 	/// インストラクタ デストラクタ
 	/// </summary>
 	TutorialEnemy() {};
@@ -226,8 +221,6 @@ public://メンバ関数
 private:
 	//カメラ
 	static Camera* camera;
-	//キーボード
-	static Input* input;
 
 	//メンバ変数
 public:

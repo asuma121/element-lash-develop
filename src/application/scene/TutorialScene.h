@@ -32,7 +32,7 @@ public:	//静的メンバ変数
 	/// <summary>
 	///初期化
 	/// </summary>
-	static void SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput);
+	static void SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager);
 
 	/// <summary>
 	///チュートリアルシーンで使うオブジェクトセット
@@ -119,8 +119,7 @@ public: //メンバ関数
 private:	//静的メンバ変数
 	//デバイスとinput
 	static DirectXCommon* dxCommon;
-	static Input* input;
-	static DXInput* dxInput;
+	static KeyManager* keyManager;
 	//カメラ
 	static Camera* camera;
 	//ライト

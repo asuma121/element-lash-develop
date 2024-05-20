@@ -15,8 +15,7 @@
 #define GAcceleration 9.80665 * 1/10	//重力加速度
 
 Camera* Player::camera = nullptr;
-Input* Player::input = nullptr;
-DXInput* Player::dxInput = nullptr;
+KeyManager* Player::keyManager = nullptr;
 LockOn* Player::lockOn = nullptr;
 FbxModel* PlayerState::modelWait = nullptr;
 FbxModel* PlayerState::modelRun = nullptr;
@@ -84,7 +83,7 @@ void Player::UpdateGame()
 	}
 
 	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
+	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
 	playerState->Update();
@@ -105,7 +104,7 @@ void Player::UpdateGame()
 void Player::UpdateMovePhase()
 {
 	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
+	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
 	playerState->UpdateMovePhase();
@@ -133,7 +132,7 @@ void Player::UpdateTutorial()
 	}
 
 	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
+	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
 	playerState->UpdateTutorial(tutorialFlag);
@@ -169,7 +168,7 @@ void Player::UpdateTitle(float timer)
 	}
 
 	//プレイヤーステート更新
-	playerState->SetDXInput(dxInput);
+	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
 	playerState->UpdateTitle(timer);
@@ -244,7 +243,7 @@ void Player::DrawSpriteTutorial(ID3D12GraphicsCommandList* cmdList)
 void Player::UpdateForm()
 {
 	//Lボタンでフォルムチェンジフラグを立てる
-	if (dxInput->TriggerKey(DXInput::PAD_LEFT_SHOULDER) && formChangeFlag == false)
+	if (keyManager->TriggerKey(KeyManager::PAD_LEFT_SHOULDER) && formChangeFlag == false)
 	{
 		if (preForm == Fire)form = Elec;	//炎だったら電気に変える
 		else if (preForm == Elec)form = Fire;	//電気だったら炎に帰る
@@ -273,7 +272,7 @@ void Player::UpdateState()
 void Player::UpdateFormTutorial()
 {
 	//Lボタンでフォルムチェンジフラグを立てる
-	if (dxInput->TriggerKey(DXInput::PAD_LEFT_SHOULDER) && formChangeFlag == false)
+	if (keyManager->TriggerKey(KeyManager::PAD_LEFT_SHOULDER) && formChangeFlag == false)
 	{
 		if (preForm == Fire && tutorialFlag > 5)form = Elec;	//炎だったら電気に変える
 		else if (preForm == Elec && tutorialFlag != 6 && tutorialFlag != 7 && tutorialFlag != 8)form = Fire;	//電気だったら炎に帰る
@@ -671,36 +670,33 @@ void PlayerState::Move()
 {
 	//プレイヤーの元になる角度
 	//AROWキーで角度変更
-	rotVelocity.y = dxInput->GetStick(DXInput::RStickX) * rot0Speed;
-	/*rotVelocity.y = (input->PushKey(DIK_RIGHT) - input->PushKey(DIK_LEFT)) * rotSpeed;*/
+	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
 
 	//左スティック入力による角度変更
 	//左スティックの入力がある場合
-	if (dxInput->GetStick(DXInput::LStick) != 0.0f)
+	if (keyManager->GetStick(KeyManager::LStick) != 0.0f)
 	{
-		rotation1.y = dxInput->GetStickRot(DXInput::LStick);
+		rotation1.y = keyManager->GetStickRot(KeyManager::LStick);
 	}
 	//左スティックの入力がないけど右スティックの入力はある場合
-	else if(dxInput->GetStick(DXInput::RStick) && dxInput->GetStickRot(DXInput::RStick) <= PI)
+	else if(keyManager->GetStick(KeyManager::RStick) && keyManager->GetStickRot(KeyManager::RStick) <= PI)
 	{
 		rotation1 = rotation1 - rotVelocity;
 	}
-	else if (dxInput->GetStick(DXInput::RStick))
+	else if (keyManager->GetStick(KeyManager::RStick))
 	{
 		rotation1 = rotation1 + rotVelocity;
 	}
 
 	//座標
 	//左スティックで移動
-	XMFLOAT2 stick = normalize(dxInput->GetStick(DXInput::LStickX), dxInput->GetStick(DXInput::LStickY));
+	XMFLOAT2 stick = normalize(keyManager->GetStick(KeyManager::LStickX), keyManager->GetStick(KeyManager::LStickY));
 
 	//移動速度
 	posVelocity.x = stick.x * posSpeed;
 	posVelocity.z = stick.y * posSpeed;
-	/*posVelocity.x = (input->PushKey(DIK_D) - input->PushKey(DIK_A)) * posSpeed;
-	posVelocity.z = (input->PushKey(DIK_W) - input->PushKey(DIK_S)) * posSpeed;*/
 
 	//進行ベクトルを回転
 	posVelocity = rollRotation(posVelocity, rotation0);

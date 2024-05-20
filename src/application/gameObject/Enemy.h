@@ -43,16 +43,6 @@ public://メンバ関数
 	static void SetCamera(Camera* camera) { Enemy::camera = camera; }
 
 	/// <summary>
-	///入力セット
-	/// </summary>
-	static void SetInput(Input* input) { Enemy::input = input; }
-
-	/// <summary>
-	///デバイスセット
-	/// </summary>
-	static void SetDXInput(DXInput* dxInput) { Enemy::dxInput = dxInput; }
-
-	/// <summary>
 	/// インストラクタ デストラクタ
 	/// </summary>
 	Enemy();
@@ -132,11 +122,6 @@ public://メンバ関数
 	///コライダー
 	/// </summary>
 	void UpdateCollider();
-
-	/// <summary>
-	///ステータスマネージャー
-	/// </summary>
-	void StatusManagerGame2();
 
 	/// <summary>
 	///ステータスマネージャー
@@ -277,10 +262,6 @@ public://メンバ関数
 private:
 	//カメラ
 	static Camera* camera;
-	//キーボード
-	static Input* input;
-	//コントローラー
-	static DXInput* dxInput;
 
 	//メンバ変数
 private:

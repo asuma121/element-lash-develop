@@ -1,7 +1,6 @@
 #pragma once
 #include "Sprite.h"
-#include "Input.h"
-#include "DxInput.h"
+#include "KeyManager.h"
 
 class UI
 {
@@ -25,12 +24,7 @@ public:
 	/// <summary>
 	///入力セット
 	/// </summary>
-	static void SetInput(Input* input) { UI::input = input; }
-
-	/// <summary>
-	///コントローラー入力セット
-	/// </summary>
-	static void SetDXInput(DXInput* dxInput) { UI::dxInput = dxInput; }
+	static void SetKeyManager(KeyManager* keyManager) { UI::keyManager = keyManager; }
 
 	/// <summary>
 	///初期化
@@ -131,10 +125,8 @@ public:
 
 	//静的メンバ変数
 private:
-	//キーボード
-	static Input* input;
-	//コントローラー
-	static DXInput* dxInput;
+	//キーマネージャー
+	static KeyManager* keyManager;
 
 	//メンバ変数
 private:

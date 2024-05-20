@@ -16,7 +16,6 @@ ComPtr<ID3D12PipelineState>EnemyBulletParticle::pipelinestate;
 TextureManager* EnemyBulletParticle::spriteManager = nullptr;
 ID3D12Device* EnemyBulletParticle::device = nullptr;
 Camera* EnemyBulletParticle::camera = nullptr;
-Input* EnemyBulletParticle::input = nullptr;
 
 
 void EnemyBulletParticle::CreateGraphicsPipeline()

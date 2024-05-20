@@ -54,6 +54,7 @@
     <ClCompile Include="src\engine\base\ImGuiManager.cpp" />
     <ClCompile Include="src\engine\base\Input.cpp" />
     <ClCompile Include="src\engine\base\JSONLoader.cpp" />
+    <ClCompile Include="src\engine\base\KeyManager.cpp" />
     <ClCompile Include="src\engine\base\Message.cpp" />
     <ClCompile Include="src\engine\base\TextureManager.cpp" />
     <ClCompile Include="src\engine\base\WinApp.cpp" />
@@ -67,8 +68,8 @@
     <ClCompile Include="src\engine\collision\ColliderSphereModel.cpp" />
     <ClCompile Include="src\engine\collision\ColliderSphereObject .cpp" />
     <ClCompile Include="src\engine\main.cpp" />
-    <ClCompile Include="src\engine\mathOriginal.cpp" />
-    <ClCompile Include="src\engine\Matrix4.cpp" />
+    <ClCompile Include="src\engine\math\mathOriginal.cpp" />
+    <ClCompile Include="src\engine\math\Matrix4.cpp" />
     <ClCompile Include="src\engine\object\BillboardSprite.cpp" />
     <ClCompile Include="src\engine\object\BillboardSpriteModel.cpp" />
     <ClCompile Include="src\engine\object\FbxLoader.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="src\engine\base\FPS.h" />
     <ClInclude Include="src\engine\base\Input.h" />
     <ClInclude Include="src\engine\base\JSONLoader.h" />
+    <ClInclude Include="src\engine\base\KeyManager.h" />
     <ClInclude Include="src\engine\base\Message.h" />
     <ClInclude Include="src\engine\base\WinApp.h" />
     <ClInclude Include="src\engine\collision\ColliderCubeModel.h" />
@@ -129,8 +131,8 @@
     <ClInclude Include="src\engine\collision\ColliderPlaneObject.h" />
     <ClInclude Include="src\engine\collision\ColliderSphereModel.h" />
     <ClInclude Include="src\engine\collision\ColliderSphereObject.h" />
-    <ClInclude Include="src\engine\mathOriginal.h" />
-    <ClInclude Include="src\engine\Matrix4.h" />
+    <ClInclude Include="src\engine\math\mathOriginal.h" />
+    <ClInclude Include="src\engine\math\Matrix4.h" />
     <ClInclude Include="src\engine\object\BillboardSprite.h" />
     <ClInclude Include="src\engine\object\BillboardSpriteModel.h" />
     <ClInclude Include="src\engine\object\FbxLoader.h" />
@@ -379,7 +381,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\engine;$(SolutionDir)src\engine\base;$(SolutionDir)src\engine\object;$(SolutionDir)src\application\gameObject;$(SolutionDir)src\application\gameObject\light;$(SolutionDir)src\engine\collision;$(SolutionDir)src\application\particle;$(SolutionDir)src\application\scene;$(SolutionDir)src\engine\postEffect;$(SolutionDir)Resources\Shaders\Plane</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\engine;$(SolutionDir)src\engine\base;$(SolutionDir)src\engine\object;$(SolutionDir)src\application\gameObject;$(SolutionDir)src\application\gameObject\light;$(SolutionDir)src\engine\collision;$(SolutionDir)src\application\particle;$(SolutionDir)src\application\scene;$(SolutionDir)src\engine\postEffect;$(SolutionDir)src\engine\math</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -402,7 +404,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\engine;$(SolutionDir)src\engine\base;$(SolutionDir)src\engine\object;$(SolutionDir)src\application\gameObject;$(SolutionDir)src\application\gameObject\light;$(SolutionDir)src\engine\collision;$(SolutionDir)src\application\particle;$(SolutionDir)src\application\scene;$(SolutionDir)src\engine\postEffect</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\engine;$(SolutionDir)src\engine\base;$(SolutionDir)src\engine\object;$(SolutionDir)src\application\gameObject;$(SolutionDir)src\application\gameObject\light;$(SolutionDir)src\engine\collision;$(SolutionDir)src\application\particle;$(SolutionDir)src\application\scene;$(SolutionDir)src\engine\postEffect;$(SolutionDir)src\engine\math</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>

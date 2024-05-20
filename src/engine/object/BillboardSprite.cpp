@@ -19,7 +19,6 @@ ComPtr<ID3D12PipelineState>BillboardSprite::pipelinestate;
 
 ID3D12Device* BillboardSprite::device = nullptr;
 Camera* BillboardSprite::camera = nullptr;
-Input* BillboardSprite::input = nullptr;
 
 void BillboardSprite::Initialize()
 {

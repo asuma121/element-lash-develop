@@ -16,6 +16,19 @@ DXInput* DXInput::GetInstance()
 
 DXInput::DXInput()
 {
+    HRESULT result;
+
+    result = XInputGetState(0, &GamePad.state);
+    //コントローラーが接続されていなかったら
+    if (result == ERROR_DEVICE_NOT_CONNECTED)
+    {
+        connectFlag = false;
+    }
+    //接続されていたら
+    else
+    {
+        connectFlag = true;
+    }
 }
 
 DXInput::~DXInput()

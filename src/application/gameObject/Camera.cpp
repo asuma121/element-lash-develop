@@ -11,8 +11,7 @@
 #include "imgui.h"
 #define PI 3.14159265359
 
-Input* Camera::input = nullptr;
-DXInput* Camera::dxInput = nullptr;
+KeyManager* Camera::keyManager = nullptr;
 
 Camera* Camera::GetInstance()
 {
@@ -138,96 +137,6 @@ void Camera::BillboardUpdate()
 	matBillboard_.r[3] = XMVectorSet(0, 0, 0, 1);
 }
 
-void Camera::DebugUpdate()
-{
-	//射影変換
-	matProjection_ = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(45.0f),			//上下画角45度
-		(float)window_width / window_height,//アスペクト比(画面横幅/画面立幅)
-		0.0f, 10000.0f						//前端、奥端
-	);
-
-	//1フレームあたりの移動量
-	float rot = (float)PI / 120.0f;
-
-	//視点座標を変更
-	if (input->PushKey(DIK_LEFT))
-	{
-		eye_.x -= 0.5f;
-	}
-	if (input->PushKey(DIK_RIGHT))
-	{
-		eye_.x += 0.5f;
-	}
-	if (input->PushKey(DIK_UP))
-	{
-		eye_.y -= 0.5f;
-	}
-	if (input->PushKey(DIK_DOWN))
-	{
-		eye_.y += 0.5f;
-	}
-	if (input->PushKey(DIK_O))
-	{
-		eye_.z -= 0.5f;
-	}
-	if (input->PushKey(DIK_P))
-	{
-		eye_.z += 0.5f;
-	}
-
-	//注視点座標を変更
-	if (input->PushKey(DIK_Q))
-	{
-		target_.x -= 0.5f;
-	}
-	if (input->PushKey(DIK_W))
-	{
-		target_.x += 0.5f;
-	}
-	if (input->PushKey(DIK_A))
-	{
-		target_.y -= 0.5f;
-	}
-	if (input->PushKey(DIK_S))
-	{
-		target_.y += 0.5f;
-	}
-	if (input->PushKey(DIK_Z))
-	{
-		target_.z -= 0.5f;
-	}
-	if (input->PushKey(DIK_X))
-	{
-		target_.z += 0.5f;
-	}
-
-	//ターゲットまでの距離を変更
-	if (input->PushKey(DIK_O))
-	{
-		DebugTargetDistance -= 0.2f;
-	}
-	if (input->PushKey(DIK_P))
-	{
-		DebugTargetDistance += 0.2f;
-	}
-
-	debugEye[0] = eye_.x;
-	debugEye[1] = eye_.y;
-	debugEye[2] = eye_.z;
-	debugTarget[0] = target_.x;
-	debugTarget[1] = target_.y;
-	debugTarget[2] = target_.z;
-
-	//ImGui
-	ImGui::Begin("camera");
-	ImGui::SetWindowPos(ImVec2(500, 0));
-	ImGui::SetWindowSize(ImVec2(500, 150));
-	ImGui::InputFloat3("debugEye", debugEye);
-	ImGui::InputFloat3("debugTarget", debugTarget);
-	ImGui::End();
-}
-
 void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
 {
 	target_ = { playerPos.x,5.0f,playerPos.z };
@@ -237,17 +146,9 @@ void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
 	eye_.z = cos(playerChangeRot) * playerTargetDistance + target_.z;*/
 
 	//1フレームあたりの移動量
-	float rot = ((float)PI / 120.0f) * (-dxInput->GetStick(DXInput::RStickY));
+	float rot = ((float)PI / 200.0f) * (-keyManager->GetStick(KeyManager::RStickY));
 
 	//視点座標を変更
-	if (input->PushKey(DIK_UP))
-	{
-		DebugChangeRot2 -= (float)rot;
-	}
-	if (input->PushKey(DIK_DOWN))
-	{
-		DebugChangeRot2 += (float)rot;
-	}
 	if (DebugChangeRot2 < maxDebugChangeRot2 && DebugChangeRot2 > minDebugChangeRot2)
 	{
 		DebugChangeRot2 += (float)rot;

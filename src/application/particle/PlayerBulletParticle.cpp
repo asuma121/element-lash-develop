@@ -16,7 +16,6 @@ ComPtr<ID3D12PipelineState>PlayerBulletParticle::pipelinestate;
 TextureManager* PlayerBulletParticle::spriteManager = nullptr;
 ID3D12Device* PlayerBulletParticle::device = nullptr;
 Camera* PlayerBulletParticle::camera = nullptr;
-Input* PlayerBulletParticle::input = nullptr;
 
 
 void PlayerBulletParticle::CreateGraphicsPipeline()

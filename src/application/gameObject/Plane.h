@@ -29,16 +29,6 @@ public://静的メンバ関数
 	static void SetCamera(Camera* camera) { Plane::camera = camera; }
 
 	/// <summary>
-	///入力セット
-	/// </summary>
-	static void SetInput(Input* input) { Plane::input = input; }
-
-	/// <summary>
-	///コントローラー入力セット
-	/// </summary>
-	static void SetDXInput(DXInput* dxInput) { Plane::dxInput = dxInput; }
-
-	/// <summary>
 	///初期化
 	/// </summary>
 	void Initialize();
@@ -92,10 +82,6 @@ public://静的メンバ関数
 private:
 	//カメラ
 	static Camera* camera;
-	//キーボード
-	static Input* input;
-	//コントローラー
-	static DXInput* dxInput;
 
 	//メンバ変数
 public:

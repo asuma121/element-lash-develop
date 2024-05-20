@@ -3,8 +3,7 @@
 #include "imgui.h"
 #include "TutorialScene.h"
 
-DXInput* TitleScene::dxInput = nullptr;
-Input* TitleScene::input = nullptr;
+KeyManager* TitleScene::keyManager = nullptr;
 DirectXCommon* TitleScene::dxCommon = nullptr;
 Camera* TitleScene::camera = nullptr;
 Light* TitleScene::light = nullptr;
@@ -116,7 +115,7 @@ void TitleScene::UpdateSprite()
 void TitleScene::UpdateMoveScene()
 {
 	//スペースかAボタン押されたら
-	if (input->TriggerKey(DIK_SPACE) || dxInput->TriggerKey(DXInput::PAD_A))
+	if (keyManager->TriggerKey(KeyManager::PAD_A))
 	{
 		//シーン遷移フラグオン
 		moveTutorialFlag2 = true;
@@ -188,12 +187,11 @@ void TitleScene::SetSRV(ID3D12DescriptorHeap* SRV)
 	player->SetSRV(SRV);
 }
 
-void TitleScene::SetDevice(DirectXCommon* dxCommon, Input* input, DXInput* dxInput)
+void TitleScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	//引数から代入
 	TitleScene::dxCommon = dxCommon;
-	TitleScene::input = input;
-	TitleScene::dxInput = dxInput;
+	TitleScene::keyManager = keyManager;
 }
 
 void TitleScene::SetGameObject(Player* player, Terrain* terrain, Camera* camera, Light* light, UI* ui)

@@ -9,7 +9,6 @@ ComPtr<ID3D12PipelineState>ElecParticle::pipelinestate;
 TextureManager* ElecParticle::spriteManager = nullptr;
 ID3D12Device* ElecParticle::device = nullptr;
 Camera* ElecParticle::camera = nullptr;
-Input* ElecParticle::input = nullptr;
 
 
 void ElecParticle::CreateGraphicsPipeline()

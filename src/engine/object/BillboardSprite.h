@@ -10,7 +10,6 @@
 #include "BillboardSpriteModel.h"
 #include "Camera.h"
 #include "string.h"
-#include "input.h"
 
 class BillboardSprite
 {
@@ -43,15 +42,9 @@ public:	//静的メンバ関数
 	/// </summary>
 	static void SetCamera(Camera* camera) { BillboardSprite::camera = camera; }
 
-	/// <summary>
-	///入力セット
-	/// </summary>
-	static void SetInput(Input* input) { BillboardSprite::input = input; }
-
 private://静的メンバ変数
 	static ID3D12Device* device;
 	static Camera* camera;
-	static Input* input;
 
 public://メンバ関数
 

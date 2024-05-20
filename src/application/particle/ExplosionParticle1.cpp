@@ -16,7 +16,6 @@ ComPtr<ID3D12PipelineState>ExplosionParticle1::pipelinestate;
 TextureManager* ExplosionParticle1::spriteManager = nullptr;
 ID3D12Device* ExplosionParticle1::device = nullptr;
 Camera* ExplosionParticle1::camera = nullptr;
-Input* ExplosionParticle1::input = nullptr;
 
 
 void ExplosionParticle1::CreateGraphicsPipeline()

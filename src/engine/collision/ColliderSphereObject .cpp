@@ -18,7 +18,6 @@ ComPtr<ID3D12PipelineState>ColliderSphereObject::pipelinestate;
 
 ID3D12Device* ColliderSphereObject::device = nullptr;
 Camera* ColliderSphereObject::camera = nullptr;
-Input* ColliderSphereObject::input = nullptr;
 ColliderSphereModel* ColliderSphereObject::model = nullptr;
 
 void ColliderSphereObject::Initialize()

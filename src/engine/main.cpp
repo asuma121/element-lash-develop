@@ -25,7 +25,9 @@
 #include "ClearScene.h"
 #include "ShadowMap.h"
 #include "ObjObject3D.h"
+#include "KeyManager.h"
 #include "FPS.h"
+#include "imgui.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -51,6 +53,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//コントローラー
 	DXInput* dxInput = nullptr;
 	dxInput = DXInput::GetInstance();
+
+	//キーマネージャー
+	KeyState::SetDXInput(dxInput);
+	KeyState::SetInput(input);
+	KeyManager* keyManager = nullptr;
+	keyManager = new KeyManager();
 
 	//ImGuiManager
 	ImGuiManager* imGuiManager = nullptr;
@@ -162,8 +170,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	FbxModel::SetDevice(dxCommon->GetDevice());
 
 	//カメラ初期化
-	Camera::SetInput(input);
-	Camera::SetDXInput(dxInput);
+	Camera::SetKeyManager(keyManager);
 	Camera* camera = nullptr;
 	camera = new Camera();
 	camera->Initialize();
@@ -173,7 +180,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	BillboardSpriteModel::SetSpriteManager(textureManager);
 	BillboardSprite::SetDevice(dxCommon->GetDevice());
 	BillboardSprite::SetCamera(camera);
-	BillboardSprite::SetInput(input);
 	BillboardSprite::CreateGraphicsPipeline();
 
 	//ライト(影用)初期化
@@ -203,51 +209,42 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//コライダーの球
 	ColliderSphereObject::SetDevice(dxCommon->GetDevice());
 	ColliderSphereObject::SetCamera(camera);
-	ColliderSphereObject::SetInput(input);
 
 	//コライダーのキューブ
 	ColliderCubeObject::SetDevice(dxCommon->GetDevice());
 	ColliderCubeObject::SetCamera(camera);
-	ColliderCubeObject::SetInput(input);
 
 	//コライダーマネージャー
 	ColliderManager::StaticInitialize(dxCommon->GetDevice());
-	ColliderManager* colliderManager = nullptr;
-	colliderManager = new ColliderManager();
 
 	//自機の弾パーティクル
 	PlayerBulletParticle::SetSpriteManager(textureManager);
 	PlayerBulletParticle::SetDevice(dxCommon->GetDevice());
 	PlayerBulletParticle::SetCamera(camera);
-	PlayerBulletParticle::SetInput(input);
 	PlayerBulletParticle::CreateGraphicsPipeline();
 
 	//敵の弾パーティクル
 	EnemyBulletParticle::SetSpriteManager(textureManager);
 	EnemyBulletParticle::SetDevice(dxCommon->GetDevice());
 	EnemyBulletParticle::SetCamera(camera);
-	EnemyBulletParticle::SetInput(input);
 	EnemyBulletParticle::CreateGraphicsPipeline();
 
 	//雷パーティクル
 	ElecParticle::SetSpriteManager(textureManager);
 	ElecParticle::SetDevice(dxCommon->GetDevice());
 	ElecParticle::SetCamera(camera);
-	ElecParticle::SetInput(input);
 	ElecParticle::CreateGraphicsPipeline();
 
 	//爆発パーティクル
 	ExplosionParticle1::SetSpriteManager(textureManager);
 	ExplosionParticle1::SetDevice(dxCommon->GetDevice());
 	ExplosionParticle1::SetCamera(camera);
-	ExplosionParticle1::SetInput(input);
 	ExplosionParticle1::CreateGraphicsPipeline();
 
 	//爆発パーティクル
 	ExplosionParticle2::SetSpriteManager(textureManager);
 	ExplosionParticle2::SetDevice(dxCommon->GetDevice());
 	ExplosionParticle2::SetCamera(camera);
-	ExplosionParticle2::SetInput(input);
 	ExplosionParticle2::CreateGraphicsPipeline();
 
 	//ロックオン
@@ -261,8 +258,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//プレイヤー初期化
 	Player::SetCamera(camera);
-	Player::SetInput(input);
-	Player::SetDXInput(dxInput);
+	Player::SetKeyManager(keyManager);
 	Player::SetLockOn(lockOn);
 	Player* player = nullptr;
 	player = new Player();
@@ -273,7 +269,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//敵初期化
 	Enemy::SetCamera(camera);
-	Enemy::SetInput(input);
 	Enemy* enemy = nullptr;
 	enemy = new Enemy();
 	enemy->Initialize();
@@ -282,21 +277,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//チュートリアルの敵初期化
 	TutorialEnemy::SetCamera(camera);
-	TutorialEnemy::SetInput(input);
 	TutorialEnemy* tutorialEnemy = nullptr;
 	tutorialEnemy = new TutorialEnemy();
 	tutorialEnemy->Initialize();
 
 	//無限に続く床
 	Plane::SetCamera(camera);
-	Plane::SetInput(input);
 	Plane* plane = nullptr;
 	plane = new Plane();
 	plane->Initialize();
 
 	//UI初期化
-	UI::SetInput(input);
-	UI::SetDXInput(dxInput);
+	UI::SetKeyManager(keyManager);
 	UI* ui = nullptr;
 	ui = new UI();
 	ui->Initialize();
@@ -315,19 +307,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	shadowMap->CreateGraphicsPipeLine0();
 
 	//タイトルシーン
-	TitleScene::SetDevice(dxCommon, input, dxInput);
+	TitleScene::SetDevice(dxCommon, keyManager);
 	TitleScene::SetGameObject(player, terrain, camera, light, ui);
 
 	//チュートリアルシーン
-	TutorialScene::SetDevice(dxCommon, input, dxInput);
+	TutorialScene::SetDevice(dxCommon, keyManager);
 	TutorialScene::SetGameObject(player, enemy, tutorialEnemy, plane,terrain, camera, light, ui);
 	
 	//ゲーム フェーズ
-	PhaseState::SetDevice(dxCommon, input, dxInput);
+	PhaseState::SetDevice(dxCommon, keyManager);
 	PhaseState::SetGameObject(player, enemy, tutorialEnemy, plane, terrain,camera, light, ui);
 
 	//クリアシーン
-	ClearScene::SetDevice(dxCommon, input, dxInput);
+	ClearScene::SetDevice(dxCommon, keyManager);
 	ClearScene::SetGameObject(player, enemy, plane,terrain, camera, light, ui);
 
 	//シーン
@@ -346,11 +338,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//✖ボタンでゲームループ終了
 		if (message->Update() == 1)break;
 
-		//キーボード更新
-		input->Update();
-
-		//コントローラ更新
-		dxInput->Update();
+		//キーマネージャー更新
+		keyManager->Update();
 
 		imGuiManager->Begin();
 
@@ -382,6 +371,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//シーン遷移
 		scene->NextScene(scene);
 
+		//キー更新
+		keyManager->UpdateState();
+
 
 		imGuiManager->End();
 		imGuiManager->Draw();
@@ -397,14 +389,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	delete shadowMap;
 	delete imGuiManager;
-	//delete titleScene;
-	//delete tutorialScene;
-	//delete gameScene;
-	//delete clearScene;
 	delete scene;
 	delete player;
+	delete lockOn;
+	delete plane;
+	delete terrain;
 	delete enemy;
 	delete tutorialEnemy;
+	delete ui;
+	delete light;
+	delete lightGroup;
+	delete textureManager;
+	delete camera;
+	delete keyManager;
 
 	//ウィンドウクラスを登録解除
 	winApp->deleteWindow();

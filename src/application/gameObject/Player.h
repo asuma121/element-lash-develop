@@ -51,15 +51,9 @@ public:
 	static void SetCamera(Camera* camera) { Player::camera = camera; }
 
 	/// <summary>
-	///入力セット
+	///キーマネージャーセット
 	/// </summary>
-	static void SetInput(Input* input) { Player::input = input; }
-
-	/// <summary>
-	///コントローラー入力セット
-	/// </summary>
-	static void SetDXInput(DXInput* dxInput) { Player::dxInput = dxInput; }
-
+	static void SetKeyManager(KeyManager* keyManager) { Player::keyManager = keyManager; }
 
 	/// <summary>
 	///ロックオンセット
@@ -105,7 +99,7 @@ public:
 	///描画
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
-
+	
 	/// <summary>
 	///ライト視点描画
 	/// </summary>
@@ -285,10 +279,8 @@ public:
 private:
 	//カメラ
 	static Camera* camera;
-	//キーボード
-	static Input* input;
-	//コントローラー
-	static DXInput* dxInput;	
+	//キーマネージャー
+	static KeyManager* keyManager;
 	//ロックオン
 	static LockOn* lockOn;
 
@@ -464,7 +456,7 @@ public:	//メンバ関数
 
 	//プレイヤー本体からセットする系
 	void SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos);
-	void SetDXInput(DXInput* dxInput) { this->dxInput = dxInput; };
+	void SetKeyManager(KeyManager* keyManager) { this->keyManager = keyManager; };
 	void SetPlayerForm(Player::Form form) { this->form = form; }
 	void HitEnemy();
 
@@ -508,8 +500,8 @@ protected:	//静的メンバ変数
 
 protected:	//メンバ変数
 
-	//コントローラー
-	DXInput* dxInput = nullptr;
+	//キーマネージャー
+	KeyManager* keyManager = nullptr;
 
 	//オブジェクトごとのタイマー
 	int objectTimer = 0;
