@@ -602,8 +602,8 @@ void PlayerState::StaticInitialize()
 	//プレイヤーのシェーダを別に設定
 	textureData.textureVol = 2;
 	textureData.shaderVol = 2;
-	textureData.textureNum1 = 27;	//白いテクスチャ
-	textureData.textureNum2 = 31;	//炎のテクスチャ
+	textureData.textureNum1 = 71;	//白いテクスチャ
+	textureData.textureNum2 = 70;	//炎のテクスチャ
 	textureData.shaderName = "PlayerFire";	//シェーダの名前
 	textureData.shaderName2 = "PlayerElec";	//シェーダの名前
 
@@ -652,7 +652,7 @@ void PlayerState::StaticInitialize()
 	//雷パーティクル2
 	elecParticle2 = new EnemyBulletParticle();
 	elecParticle2->CreateBuffers();
-	elecParticle2->SetTextureNum(4);
+	elecParticle2->SetTextureNum(80);
 
 	//座標
 	position = { 0.0f,0.0f,0.0f };

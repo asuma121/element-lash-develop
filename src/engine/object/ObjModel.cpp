@@ -44,7 +44,7 @@ void ObjModel::InitializeVertex(const std::string& filename)
 	std::ifstream file;
 	const std::string modelname = filename;
 	const std::string filename2 = modelname + ".obj";
-	const std::string directoryPath = "Resources/obj/" + modelname + "/";
+	const std::string directoryPath = "Resources/ObjModel/" + modelname + "/";
 	//objファイルを開く
 	file.open(directoryPath + filename2);
 	assert(!file.fail());

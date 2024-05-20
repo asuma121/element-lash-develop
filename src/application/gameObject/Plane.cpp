@@ -19,7 +19,7 @@ void Plane::Initialize()
 	JSONLoader::TextureData textureData;
 	textureData.textureVol = 1;
 	textureData.shaderVol = 1;
-	textureData.textureNum1 = 41;	//白いテクスチャ
+	textureData.textureNum1 = 74;	//床のテクスチャ
 	textureData.shaderName = "Plane";	//シェーダの名前
 
 	//モデル

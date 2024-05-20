@@ -15,7 +15,7 @@ void Terrain::Initialize(ID3D12Device* device)
 {
 	//天球
 	skySphereModel = new ObjModel();
-	skySphereModel->Initialize(device, "skyBox", "Resources/pictures/skyBox.png");
+	skySphereModel->Initialize(device, "skyBox", "Resources/pictures/Object/skyBox.png");
 	skySphereObject = new ObjObject3D();
 	skySphereObject->Initialize(device, skySphereModel, camera);
 	skySphereObject->setScale(skySphereScale);
@@ -24,7 +24,7 @@ void Terrain::Initialize(ID3D12Device* device)
 
 	//コロシアムのモデル
 	coliseumModel = new ObjModel();
-	coliseumModel->Initialize(device, "coliseum", "Resources/pictures/coliseum.png");
+	coliseumModel->Initialize(device, "coliseum", "Resources/pictures/Object/coliseum.png");
 	coliseumObject = new ObjObject3D();
 	coliseumObject->Initialize(device, coliseumModel, camera);
 	coliseumObject->setScale(coliseumScale);
@@ -33,7 +33,7 @@ void Terrain::Initialize(ID3D12Device* device)
 
 	//コロシアムのモデル
 	coliseum2Model = new ObjModel();
-	coliseum2Model->Initialize(device, "coliseum2", "Resources/pictures/coliseum.png");
+	coliseum2Model->Initialize(device, "coliseum2", "Resources/pictures/Object/coliseum.png");
 	coliseum2Object = new ObjObject3D();
 	coliseum2Object->Initialize(device, coliseum2Model, camera);
 	coliseum2Object->setScale(coliseumScale);
@@ -43,7 +43,7 @@ void Terrain::Initialize(ID3D12Device* device)
 
 	//柱のモデル
 	pillerModel = new ObjModel();
-	pillerModel->Initialize(device, "piller", "Resources/pictures/piller.png");
+	pillerModel->Initialize(device, "piller", "Resources/pictures/Object/piller.png");
 
 	//天球以外のオブジェクト読み込み
 	objectData = JSONLoader::LoadTerrainObject("Resources/json/stage.json");

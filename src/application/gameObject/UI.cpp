@@ -11,123 +11,123 @@ void UI::Initialize()
 	Sprite* newBlackSprite1 = new Sprite();
 	newBlackSprite1->Initialize();
 	blackSprite1.reset(newBlackSprite1);
-	blackSprite1->SetTextureNum(14);
+	blackSprite1->SetTextureNum(83);
 	blackSprite1->Update(black1Pos,black1Scale);
 	//黒いスプライト2
 	Sprite* newBlackSprite2 = new Sprite();
 	newBlackSprite2->Initialize();
 	blackSprite2.reset(newBlackSprite2);
-	blackSprite2->SetTextureNum(14);
+	blackSprite2->SetTextureNum(83);
 	blackSprite2->Update(black2Pos, black2Scale);
 	//黒いスプライト2
 	Sprite* newBlackSprite3 = new Sprite();
 	newBlackSprite3->Initialize();
 	blackSprite3.reset(newBlackSprite3);
-	blackSprite3->SetTextureNum(14);
+	blackSprite3->SetTextureNum(83);
 	blackSprite3->Update(black3Pos, black3Scale);
 
 	//タイトルのスプライト
 	Sprite* newTitle1Sprite = new Sprite();
 	newTitle1Sprite->Initialize();
 	title1Sprite.reset(newTitle1Sprite);
-	title1Sprite->SetTextureNum(18);
+	title1Sprite->SetTextureNum(34);
 	title1Sprite->Update(title1Pos,title1Scale);
 	//タイトルのスプライト2
 	Sprite* newTitle2Sprite = new Sprite();
 	newTitle2Sprite->Initialize();
 	title2Sprite.reset(newTitle2Sprite);
-	title2Sprite->SetTextureNum(19);
+	title2Sprite->SetTextureNum(35);
 	title2Sprite->Update(title2Pos, title2Scale);
 	//タイトルのスプライト3
 	Sprite* newTitle3Sprite = new Sprite();
 	newTitle3Sprite->Initialize();
 	title3Sprite.reset(newTitle3Sprite);
-	title3Sprite->SetTextureNum(63);
+	title3Sprite->SetTextureNum(36);
 	title3Sprite->Update(title3Pos, title3Scale);
 	//スペースキーの
 	Sprite* newSpaceKeySprite = new Sprite();
 	newSpaceKeySprite->Initialize();
 	spaceKeySprite1.reset(newSpaceKeySprite);
-	spaceKeySprite1->SetTextureNum(59);
+	spaceKeySprite1->SetTextureNum(27);
 	spaceKeySprite1->Update(spaceKeySpritePos1, spaceKeySpriteScale1);
 	//押しているスペースキーのスプライト
 	Sprite* newSpaceKeyPushSprite = new Sprite();
 	newSpaceKeyPushSprite->Initialize();
 	spaceKeyPushSprite1.reset(newSpaceKeyPushSprite);
-	spaceKeyPushSprite1->SetTextureNum(60);
+	spaceKeyPushSprite1->SetTextureNum(28);
 	spaceKeyPushSprite1->Update(spaceKeySpritePos1, spaceKeySpriteScale1);
 	//Aボタンのスプライト
 	Sprite* newAButtonSprite = new Sprite();
 	newAButtonSprite->Initialize();
 	AButtonSprite.reset(newAButtonSprite);
-	AButtonSprite->SetTextureNum(61);
+	AButtonSprite->SetTextureNum(1);
 	AButtonSprite->Update(AButtonPos, AButtonScale);
 	//押しているAボタンのスプライト
 	Sprite* newAButtonPushSprite = new Sprite();
 	newAButtonPushSprite->Initialize();
 	AButtonPushSprite.reset(newAButtonPushSprite);
-	AButtonPushSprite->SetTextureNum(62);
+	AButtonPushSprite->SetTextureNum(2);
 	AButtonPushSprite->Update(AButtonPos, AButtonScale);
 
 	//チュートリアルのスプライト1
 	Sprite* newTutorial1Sprite = new Sprite();
 	newTutorial1Sprite->Initialize();
 	tutorial1Sprite.reset(newTutorial1Sprite);
-	tutorial1Sprite->SetTextureNum(32);
+	tutorial1Sprite->SetTextureNum(66);
 	tutorial1Sprite->Update(tutorial1Pos, tutorial1Scale);
 	//チュートリアルのスプライト2
 	Sprite* newTutorial2Sprite = new Sprite();
 	newTutorial2Sprite->Initialize();
 	tutorial2Sprite.reset(newTutorial2Sprite);
-	tutorial2Sprite->SetTextureNum(33);
+	tutorial2Sprite->SetTextureNum(37);
 	tutorial2Sprite->Update(tutorial2Pos, tutorial2Scale);
 	//チュートリアルのスプライト3
 	Sprite* newTutorial3Sprite = new Sprite();
 	newTutorial3Sprite->Initialize();
 	tutorial3Sprite.reset(newTutorial3Sprite);
-	tutorial3Sprite->SetTextureNum(34);
+	tutorial3Sprite->SetTextureNum(38);
 	tutorial3Sprite->Update(tutorial3Pos, tutorial3Scale);
 	//チュートリアルのスプライト4
 	Sprite* newTutorial4Sprite = new Sprite();
 	newTutorial4Sprite->Initialize();
 	tutorial4Sprite.reset(newTutorial4Sprite);
-	tutorial4Sprite->SetTextureNum(35);
+	tutorial4Sprite->SetTextureNum(39);
 	tutorial4Sprite->Update(tutorial4Pos, tutorial4Scale);
 	//チュートリアルのスプライト6
 	Sprite* newTutorial6Sprite = new Sprite();
 	newTutorial6Sprite->Initialize();
 	tutorial6Sprite.reset(newTutorial6Sprite);
-	tutorial6Sprite->SetTextureNum(36);
+	tutorial6Sprite->SetTextureNum(40);
 	tutorial6Sprite->Update(tutorial6Pos, tutorial6Scale);
 	//チュートリアルのスプライト7
 	Sprite* newTutorial7Sprite = new Sprite();
 	newTutorial7Sprite->Initialize();
 	tutorial7Sprite.reset(newTutorial7Sprite);
-	tutorial7Sprite->SetTextureNum(37);
+	tutorial7Sprite->SetTextureNum(41);
 	tutorial7Sprite->Update(tutorial6Pos,tutorial6Scale);
 	//チュートリアルのスプライト8
 	Sprite* newTutorial8Sprite = new Sprite();
 	newTutorial8Sprite->Initialize();
 	tutorial8Sprite.reset(newTutorial8Sprite);
-	tutorial8Sprite->SetTextureNum(38);
+	tutorial8Sprite->SetTextureNum(42);
 	tutorial8Sprite->Update(tutorial8Pos, tutorial8Scale);
 	//チュートリアルのスプライト10
 	Sprite* newTutorial10Sprite = new Sprite();
 	newTutorial10Sprite->Initialize();
 	tutorial10Sprite.reset(newTutorial10Sprite);
-	tutorial10Sprite->SetTextureNum(39);
+	tutorial10Sprite->SetTextureNum(43);
 	tutorial10Sprite->Update(tutorial10Pos, tutorial10Scale);
 	//チュートリアルのスプライト11
 	Sprite* newTutorial11Sprite = new Sprite();
 	newTutorial11Sprite->Initialize();
 	tutorial11Sprite.reset(newTutorial11Sprite);
-	tutorial11Sprite->SetTextureNum(40);
+	tutorial11Sprite->SetTextureNum(44);
 	tutorial11Sprite->Update(tutorial11Pos, tutorial11Scale);
 	//チュートリアルのスプライト12
 	Sprite* newTutorial12Sprite = new Sprite();
 	newTutorial12Sprite->Initialize();
 	tutorial12Sprite.reset(newTutorial12Sprite);
-	tutorial12Sprite->SetTextureNum(51);
+	tutorial12Sprite->SetTextureNum(45);
 	if(dxInput->GetConnectFlag() == true)
 		tutorial12Sprite->Update(tutorial12Pos1, tutorial12Scale);
 	if (dxInput->GetConnectFlag() == false)
@@ -136,235 +136,235 @@ void UI::Initialize()
 	Sprite* newLStickSprite = new Sprite();
 	newLStickSprite->Initialize();
 	LStickSprite.reset(newLStickSprite);
-	LStickSprite->SetTextureNum(42);
+	LStickSprite->SetTextureNum(13);
 	LStickSprite->Update(LStickSpritePos, stickSpriteScale);
 	//Rスティックのスプライト
 	Sprite* newRStickSprite = new Sprite();
 	newRStickSprite->Initialize();
 	RStickSprite.reset(newRStickSprite);
-	RStickSprite->SetTextureNum(43);
+	RStickSprite->SetTextureNum(18);
 	RStickSprite->Update(RStickSpritePos, stickSpriteScale);
 	//LBボタンのスプライト
 	Sprite* newLBButtonSprite = new Sprite();
 	newLBButtonSprite->Initialize();
 	LBButtonSprite1.reset(newLBButtonSprite);
-	LBButtonSprite1->SetTextureNum(47);
+	LBButtonSprite1->SetTextureNum(9);
 	LBButtonSprite1->Update(LBButtonSpritePos, BButtonSpriteScale);
 	//LBボタンのスプライト 押している時
 	Sprite* newLBButtonPushSprite = new Sprite();
 	newLBButtonPushSprite->Initialize();
 	LBButtonPushSprite1.reset(newLBButtonPushSprite);
-	LBButtonPushSprite1->SetTextureNum(49);
+	LBButtonPushSprite1->SetTextureNum(10);
 	LBButtonPushSprite1->Update(LBButtonSpritePos, BButtonSpriteScale);
 	//RBボタンのスプライト
 	Sprite* newRBButtonSprite = new Sprite();
 	newRBButtonSprite->Initialize();
 	RBButtonSprite1.reset(newRBButtonSprite);
-	RBButtonSprite1->SetTextureNum(48);
+	RBButtonSprite1->SetTextureNum(14);
 	RBButtonSprite1->Update(RBButtonSpritePos, BButtonSpriteScale);
 	//RBボタンのスプライト 押している時
 	Sprite* newRBButtonPushSprite = new Sprite();
 	newRBButtonPushSprite->Initialize();
 	RBButtonPushSprite1.reset(newRBButtonPushSprite);
-	RBButtonPushSprite1->SetTextureNum(50);
+	RBButtonPushSprite1->SetTextureNum(15);
 	RBButtonPushSprite1->Update(RBButtonSpritePos, BButtonSpriteScale);
 	//チェックマークのスプライト
 	Sprite* newCheckSprite1 = new Sprite();
 	newCheckSprite1->Initialize();
 	checkSprite1.reset(newCheckSprite1);
-	checkSprite1->SetTextureNum(44);
+	checkSprite1->SetTextureNum(56);
 	checkSprite1->Update(checkSprite1Pos, checkSpriteScale);
 	//チェックマークのスプライト
 	Sprite* newCheckSprite2 = new Sprite();
 	newCheckSprite2->Initialize();
 	checkSprite2.reset(newCheckSprite2);
-	checkSprite2->SetTextureNum(44);
+	checkSprite2->SetTextureNum(56);
 	checkSprite2->Update(checkSprite2Pos, checkSpriteScale);
 	//チェックマークの枠のスプライト
 	Sprite* newCheckFrameSprite = new Sprite();
 	newCheckFrameSprite->Initialize();
 	checkFrameSprite1.reset(newCheckFrameSprite);
-	checkFrameSprite1->SetTextureNum(45);
+	checkFrameSprite1->SetTextureNum(57);
 	checkFrameSprite1->Update(checkFrameSprite1Pos, checkFrameSpriteScale);
 	//チェックマークの枠のスプライト
 	Sprite* newCheckFrameSprite2 = new Sprite();
 	newCheckFrameSprite2->Initialize();
 	checkFrameSprite2.reset(newCheckFrameSprite2);
-	checkFrameSprite2->SetTextureNum(45);
+	checkFrameSprite2->SetTextureNum(57);
 	checkFrameSprite2->Update(checkFrameSprite2Pos, checkFrameSpriteScale);
 	//枠のスプライト
 	Sprite* newTutorialFrameSprite1 = new Sprite();
 	newTutorialFrameSprite1->Initialize();
 	tutorialFrameSprite1.reset(newTutorialFrameSprite1);
-	tutorialFrameSprite1->SetTextureNum(46);
+	tutorialFrameSprite1->SetTextureNum(67);
 	tutorialFrameSprite1->Update(tutorialFrameSprite1Pos, tutorialFrameSpriteScale);
 	//枠のスプライト
 	Sprite* newTutorialFrameSprite2 = new Sprite();
 	newTutorialFrameSprite2->Initialize();
 	tutorialFrameSprite2.reset(newTutorialFrameSprite2);
-	tutorialFrameSprite2->SetTextureNum(46);
+	tutorialFrameSprite2->SetTextureNum(67);
 	tutorialFrameSprite2->Update(tutorialFrameSprite2Pos, tutorialFrameSpriteScale);
 	//ゲージのスプライト
 	Sprite* newGaugeSprite1 = new Sprite();
 	newGaugeSprite1->Initialize();
 	gaugeSprite1.reset(newGaugeSprite1);
-	gaugeSprite1->SetTextureNum(24);
+	gaugeSprite1->SetTextureNum(59);
 	gaugeSprite1->Update(gaugeSprite1Pos, { 0.0f,0.0f });
 	//ゲージのスプライト
 	Sprite* newGaugeSprite2 = new Sprite();
 	newGaugeSprite2->Initialize();
 	gaugeSprite2.reset(newGaugeSprite2);
-	gaugeSprite2->SetTextureNum(24);
+	gaugeSprite2->SetTextureNum(59);
 	gaugeSprite2->Update(gaugeSprite2Pos, { 0.0f,0.0f });
 	//Aキーのスプライト
 	Sprite* newAKeySprite = new Sprite();
 	newAKeySprite->Initialize();
 	AKeySprite.reset(newAKeySprite);
-	AKeySprite->SetTextureNum(64);
+	AKeySprite->SetTextureNum(3);
 	AKeySprite->Update(AKeySpritePos, keySpriteScale1);
 	//Aキーのスプライト 押している時
 	Sprite* newAKeyPushSprite = new Sprite();
 	newAKeyPushSprite->Initialize();
 	AKeyPushSprite.reset(newAKeyPushSprite);
-	AKeyPushSprite->SetTextureNum(65);
+	AKeyPushSprite->SetTextureNum(4);
 	AKeyPushSprite->Update(AKeySpritePos, keySpriteScale1);
 	//Dキーのスプライト
 	Sprite* newDKeySprite = new Sprite();
 	newDKeySprite->Initialize();
 	DKeySprite.reset(newDKeySprite);
-	DKeySprite->SetTextureNum(70);
+	DKeySprite->SetTextureNum(5);
 	DKeySprite->Update(DKeySpritePos, keySpriteScale1);
 	//Dキーのスプライト 押している時
 	Sprite* newDKeyPushSprite = new Sprite();
 	newDKeyPushSprite->Initialize();
 	DKeyPushSprite.reset(newDKeyPushSprite);
-	DKeyPushSprite->SetTextureNum(71);
+	DKeyPushSprite->SetTextureNum(6);
 	DKeyPushSprite->Update(DKeySpritePos, keySpriteScale1);
 	//Sキーのスプライト
 	Sprite* newSKeySprite = new Sprite();
 	newSKeySprite->Initialize();
 	SKeySprite.reset(newSKeySprite);
-	SKeySprite->SetTextureNum(68);
+	SKeySprite->SetTextureNum(25);
 	SKeySprite->Update(SKeySpritePos, keySpriteScale1);
 	//Sキーのスプライト 押している時
 	Sprite* newSKeyPushSprite = new Sprite();
 	newSKeyPushSprite->Initialize();
 	SKeyPushSprite.reset(newSKeyPushSprite);
-	SKeyPushSprite->SetTextureNum(69);
+	SKeyPushSprite->SetTextureNum(26);
 	SKeyPushSprite->Update(SKeySpritePos, keySpriteScale1);
 	//Wキーのスプライト
 	Sprite* newWKeySprite = new Sprite();
 	newWKeySprite->Initialize();
 	WKeySprite.reset(newWKeySprite);
-	WKeySprite->SetTextureNum(66);
+	WKeySprite->SetTextureNum(23);
 	WKeySprite->Update(WKeySpritePos, keySpriteScale1);
 	//Wキーのスプライト 押している時
 	Sprite* newWKeyPushSprite = new Sprite();
 	newWKeyPushSprite->Initialize();
 	WKeyPushSprite.reset(newWKeyPushSprite);
-	WKeyPushSprite->SetTextureNum(67);
+	WKeyPushSprite->SetTextureNum(24);
 	WKeyPushSprite->Update(WKeySpritePos, keySpriteScale1);
 	//Leftキーのスプライト
 	Sprite* newLeftKeySprite = new Sprite();
 	newLeftKeySprite->Initialize();
 	LeftKeySprite.reset(newLeftKeySprite);
-	LeftKeySprite->SetTextureNum(72);
+	LeftKeySprite->SetTextureNum(11);
 	LeftKeySprite->Update(LeftKeySpritePos, keySpriteScale1);
 	//Leftキーのスプライト 押している時
 	Sprite* newLeftKeyPushSprite = new Sprite();
 	newLeftKeyPushSprite->Initialize();
 	LeftKeyPushSprite.reset(newLeftKeyPushSprite);
-	LeftKeyPushSprite->SetTextureNum(73);
+	LeftKeyPushSprite->SetTextureNum(12);
 	LeftKeyPushSprite->Update(LeftKeySpritePos, keySpriteScale1);
 	//Rightキーのスプライト
 	Sprite* newRightKeySprite = new Sprite();
 	newRightKeySprite->Initialize();
 	RightKeySprite.reset(newRightKeySprite);
-	RightKeySprite->SetTextureNum(78);
+	RightKeySprite->SetTextureNum(16);
 	RightKeySprite->Update(RightKeySpritePos, keySpriteScale1);
 	//Rightキーのスプライト 押している時
 	Sprite* newRightKeyPushSprite = new Sprite();
 	newRightKeyPushSprite->Initialize();
 	RightKeyPushSprite.reset(newRightKeyPushSprite);
-	RightKeyPushSprite->SetTextureNum(79);
+	RightKeyPushSprite->SetTextureNum(17);
 	RightKeyPushSprite->Update(RightKeySpritePos, keySpriteScale1);
 	//Upキーのスプライト
 	Sprite* newUpKeySprite = new Sprite();
 	newUpKeySprite->Initialize();
 	UpKeySprite.reset(newUpKeySprite);
-	UpKeySprite->SetTextureNum(74);
+	UpKeySprite->SetTextureNum(21);
 	UpKeySprite->Update(UpKeySpritePos, keySpriteScale1);
 	//Upキーのスプライト 押している時
 	Sprite* newUpKeyPushSprite = new Sprite();
 	newUpKeyPushSprite->Initialize();
 	UpKeyPushSprite.reset(newUpKeyPushSprite);
-	UpKeyPushSprite->SetTextureNum(75);
+	UpKeyPushSprite->SetTextureNum(22);
 	UpKeyPushSprite->Update(UpKeySpritePos, keySpriteScale1);
 	//Downキーのスプライト
 	Sprite* newDownKeySprite = new Sprite();
 	newDownKeySprite->Initialize();
 	DownKeySprite.reset(newDownKeySprite);
-	DownKeySprite->SetTextureNum(76);
+	DownKeySprite->SetTextureNum(7);
 	DownKeySprite->Update(DownKeySpritePos, keySpriteScale1);
 	//Downキーのスプライト 押している時
 	Sprite* newDownKeyPushSprite = new Sprite();
 	newDownKeyPushSprite->Initialize();
 	DownKeyPushSprite.reset(newDownKeyPushSprite);
-	DownKeyPushSprite->SetTextureNum(77);
+	DownKeyPushSprite->SetTextureNum(8);
 	DownKeyPushSprite->Update(DownKeySpritePos, keySpriteScale1);
 	//Lスティックのスプライト
 	Sprite* newLStickSprite2 = new Sprite();
 	newLStickSprite2->Initialize();
 	LStickSprite2.reset(newLStickSprite2);
-	LStickSprite2->SetTextureNum(42);
+	LStickSprite2->SetTextureNum(13);
 	LStickSprite2->Update(LStickSpritePos2, stickSpriteScale);
 	//Rスティックのスプライト
 	Sprite* newRStickSprite2 = new Sprite();
 	newRStickSprite2->Initialize();
 	RStickSprite2.reset(newRStickSprite2);
-	RStickSprite2->SetTextureNum(43);
+	RStickSprite2->SetTextureNum(18);
 	RStickSprite2->Update(RStickSpritePos2, stickSpriteScale);
 	//Aキーのスプライト
 	Sprite* newAKeySprite2 = new Sprite();
 	newAKeySprite2->Initialize();
 	AKeySprite2.reset(newAKeySprite2);
-	AKeySprite2->SetTextureNum(64);
+	AKeySprite2->SetTextureNum(3);
 	AKeySprite2->Update(AKeySpritePos2, keySpriteScale1);
 	//Dキーのスプライト
 	Sprite* newDKeySprite2 = new Sprite();
 	newDKeySprite2->Initialize();
 	DKeySprite2.reset(newDKeySprite2);
-	DKeySprite2->SetTextureNum(70);
+	DKeySprite2->SetTextureNum(5);
 	DKeySprite2->Update(DKeySpritePos2, keySpriteScale1); 
 	//Sキーのスプライト
 	Sprite* newSKeySprite2 = new Sprite();
 	newSKeySprite2->Initialize();
 	SKeySprite2.reset(newSKeySprite2);
-	SKeySprite2->SetTextureNum(68);
+	SKeySprite2->SetTextureNum(25);
 	SKeySprite2->Update(SKeySpritePos2, keySpriteScale1);
 	//Wキーのスプライト
 	Sprite* newWKeySprite2 = new Sprite();
 	newWKeySprite2->Initialize();
 	WKeySprite2.reset(newWKeySprite2);
-	WKeySprite2->SetTextureNum(66);
+	WKeySprite2->SetTextureNum(23);
 	WKeySprite2->Update(WKeySpritePos2, keySpriteScale1);
 	//Leftキーのスプライト
 	Sprite* newLeftKeySprite2 = new Sprite();
 	newLeftKeySprite2->Initialize();
 	LeftKeySprite2.reset(newLeftKeySprite2);
-	LeftKeySprite2->SetTextureNum(72);
+	LeftKeySprite2->SetTextureNum(11);
 	LeftKeySprite2->Update(LeftKeySpritePos2, keySpriteScale1);
 	//Rightキーのスプライト
 	Sprite* newRightKeySprite2 = new Sprite();
 	newRightKeySprite2->Initialize();
 	RightKeySprite2.reset(newRightKeySprite2);
-	RightKeySprite2->SetTextureNum(78);
+	RightKeySprite2->SetTextureNum(16);
 	RightKeySprite2->Update(RightKeySpritePos2, keySpriteScale1);
 	//Upキーのスプライト
 	Sprite* newUpKeySprite2 = new Sprite();
 	newUpKeySprite2->Initialize();
 	UpKeySprite2.reset(newUpKeySprite2);
-	UpKeySprite2->SetTextureNum(74);
+	UpKeySprite2->SetTextureNum(21);
 	UpKeySprite2->Update(UpKeySpritePos2, keySpriteScale1);
 	//Downキーのスプライト
 	Sprite* newDownKeySprite2 = new Sprite();
@@ -376,137 +376,137 @@ void UI::Initialize()
 	Sprite* newLBButtonSprite2 = new Sprite();
 	newLBButtonSprite2->Initialize();
 	LBButtonSprite2.reset(newLBButtonSprite2);
-	LBButtonSprite2->SetTextureNum(47);
+	LBButtonSprite2->SetTextureNum(9);
 	LBButtonSprite2->Update(LBButtonSpritePos2, BButtonSpriteScale);
 	//RBボタンのスプライト
 	Sprite* newRBButtonSprite2 = new Sprite();
 	newRBButtonSprite2->Initialize();
 	RBButtonSprite2.reset(newRBButtonSprite2);
-	RBButtonSprite2->SetTextureNum(48);
+	RBButtonSprite2->SetTextureNum(14);
 	RBButtonSprite2->Update(RBButtonSpritePos2, BButtonSpriteScale);
 	//スペースキーのスプライト
 	Sprite* newSpaceKeySprite2 = new Sprite();
 	newSpaceKeySprite2->Initialize();
 	spaceKeySprite2.reset(newSpaceKeySprite2);
-	spaceKeySprite2->SetTextureNum(80);
+	spaceKeySprite2->SetTextureNum(27);
 	spaceKeySprite2->Update(SpaceKeySpritePos3, keySpriteScale2);
 	//シフトキーのスプライト
 	Sprite* newShiftKeySprite = new Sprite();
 	newShiftKeySprite->Initialize();
 	shiftKeySprite1.reset(newShiftKeySprite);
-	shiftKeySprite1->SetTextureNum(82);
+	shiftKeySprite1->SetTextureNum(19);
 	shiftKeySprite1->Update(shiftKeySpritePos1, keySpriteScale2);
 	//シフトキーのスプライト
 	Sprite* newShiftKeyPushSprite = new Sprite();
 	newShiftKeyPushSprite->Initialize();
 	shiftKeyPushSprite1.reset(newShiftKeyPushSprite);
-	shiftKeyPushSprite1->SetTextureNum(83);
+	shiftKeyPushSprite1->SetTextureNum(20);
 	shiftKeyPushSprite1->Update(shiftKeySpritePos1, keySpriteScale2);
 	//シフトキーのスプライト
 	Sprite* newShiftKeySprite2 = new Sprite();
 	newShiftKeySprite2->Initialize();
 	shiftKeySprite2.reset(newShiftKeySprite2);
-	shiftKeySprite2->SetTextureNum(82);
+	shiftKeySprite2->SetTextureNum(19);
 	shiftKeySprite2->Update(shiftKeySpritePos2, keySpriteScale3);
 	//属性変化のUIスプライト
 	Sprite* newChangeElementSprite1 = new Sprite();
 	newChangeElementSprite1->Initialize();
 	changeElementSprite1.reset(newChangeElementSprite1);
-	changeElementSprite1->SetTextureNum(52);
+	changeElementSprite1->SetTextureNum(54);
 	changeElementSprite1->Update(changeElementSpritePos, changeElementspriteScale);
 	//属性変化のUIスプライト
 	Sprite* newChangeElementSprite2 = new Sprite();
 	newChangeElementSprite2->Initialize();
 	changeElementSprite2.reset(newChangeElementSprite2);
-	changeElementSprite2->SetTextureNum(53);
+	changeElementSprite2->SetTextureNum(55);
 	changeElementSprite2->Update(changeElementSpritePos, changeElementspriteScale);
 	//属性変化のUIスプライト
 	Sprite* newChangeElementSprite3 = new Sprite();
 	newChangeElementSprite3->Initialize();
 	changeElementSprite3.reset(newChangeElementSprite3);
-	changeElementSprite3->SetTextureNum(54);
+	changeElementSprite3->SetTextureNum(52);
 	changeElementSprite3->SetAlpha(0.5f);
 	changeElementSprite3->Update(changeElementSpritePos, changeElementspriteScale);
 	//属性変化のUIスプライト
 	Sprite* newChangeElementSprite4 = new Sprite();
 	newChangeElementSprite4->Initialize();
 	changeElementSprite4.reset(newChangeElementSprite4);
-	changeElementSprite4->SetTextureNum(55);
+	changeElementSprite4->SetTextureNum(53);
 	changeElementSprite4->SetAlpha(0.5f);
 	changeElementSprite4->Update(changeElementSpritePos, changeElementspriteScale);
 	//攻撃UIスプライト
 	Sprite* newAttackElecSpriteSprite = new Sprite();
 	newAttackElecSpriteSprite->Initialize();
 	attackElecSprite.reset(newAttackElecSpriteSprite);
-	attackElecSprite->SetTextureNum(56);
+	attackElecSprite->SetTextureNum(50);
 	attackElecSprite->Update(attackSpritePos, attackSpriteScale);
 	//攻撃UIスプライト
 	Sprite* newAttackFireSpriteSprite = new Sprite();
 	newAttackFireSpriteSprite->Initialize();
 	attackFireSprite.reset(newAttackFireSpriteSprite);
-	attackFireSprite->SetTextureNum(57);
+	attackFireSprite->SetTextureNum(51);
 	attackFireSprite->Update(attackSpritePos, attackSpriteScale);
 	//ESCキーのスプライト
 	Sprite* newEscKeySprite = new Sprite();
 	newEscKeySprite->Initialize();
 	escKeySprite.reset(newEscKeySprite);
-	escKeySprite->SetTextureNum(84);
+	escKeySprite->SetTextureNum(30);
 	escKeySprite->Update(escKeySpritePos, escKeySpriteScale);
 	//STARTボタンのスプライト
 	Sprite* newStartButtonSprite = new Sprite();
 	newStartButtonSprite->Initialize();
 	startButtonSprite.reset(newStartButtonSprite);
-	startButtonSprite->SetTextureNum(85);
+	startButtonSprite->SetTextureNum(33);
 	startButtonSprite->Update(startButtonSpritePos, startButtonSpriteScale);
 	//敵のHPバーの枠
 	Sprite* newHpBar1Sprite = new Sprite();
 	newHpBar1Sprite->Initialize();
 	enemyHpBar1.reset(newHpBar1Sprite);
-	enemyHpBar1->SetTextureNum(23);
+	enemyHpBar1->SetTextureNum(58);
 	enemyHpBar1->Update(enemyHpBar1Pos, enemyHpBar1Scale);
 	//敵のHPバー
 	Sprite* newHpBar2Sprite = new Sprite();
 	newHpBar2Sprite->Initialize();
 	enemyHpBar2.reset(newHpBar2Sprite);
-	enemyHpBar2->SetTextureNum(24);
+	enemyHpBar2->SetTextureNum(59);
 	enemyHpBar2->Update(enemyHpBar2Pos, enemyHpBar2Scale);
 	//敵の現在のHPのとこにつけるやつ
 	Sprite* newHpBar3Sprite = new Sprite();
 	newHpBar3Sprite->Initialize();
 	enemyHpBar3.reset(newHpBar3Sprite);
-	enemyHpBar3->SetTextureNum(25);
+	enemyHpBar3->SetTextureNum(60);
 	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
 	//敵のBOSS HPのテキスト
 	Sprite* newHpBar4Sprite = new Sprite();
 	newHpBar4Sprite->Initialize();
 	enemyHpBar4.reset(newHpBar4Sprite);
-	enemyHpBar4->SetTextureNum(26);
+	enemyHpBar4->SetTextureNum(61);
 	enemyHpBar4->Update(enemyHpBar4Pos, enemyHpBar4Scale);
 	//敵のHPバーオレンジ
 	Sprite* newHpBar5Sprite = new Sprite();
 	newHpBar5Sprite->Initialize();
 	enemyHpBar5.reset(newHpBar5Sprite);
-	enemyHpBar5->SetTextureNum(58);
+	enemyHpBar5->SetTextureNum(61);
 	enemyHpBar5->Update(enemyHpBar5Pos, enemyHpBar5Scale);
 	//プレイヤーの緑のHP
 	for (int i = 0; i < hpSprite1Num; i++)
 	{
 		Sprite* newHpSprite1 = new Sprite();
 		newHpSprite1->Initialize();
-		newHpSprite1->SetTextureNum(28);
+		newHpSprite1->SetTextureNum(63);
 		hpSprite1.emplace_back(newHpSprite1);
 	}
 	//プレイヤーの赤いHP
 	Sprite* newHpSprite2 = new Sprite();
 	newHpSprite2->Initialize();
 	hpSprite2.reset(newHpSprite2);
-	hpSprite2->SetTextureNum(29);
+	hpSprite2->SetTextureNum(64);
 	hpSprite2->Update(hpSpritePos + XMFLOAT2(hpFrameScale1, hpFrameScale3), hpSprite2Scale);
 	//プレイヤーのHPバーオレンジ
 	Sprite* newHpSprite3 = new Sprite();
 	newHpSprite3->Initialize();
 	hpSprite3.reset(newHpSprite3);
-	hpSprite3->SetTextureNum(30);
+	hpSprite3->SetTextureNum(65);
 	hpSprite3->Update(hpSpritePos, hpSprite3Scale);
 }
 

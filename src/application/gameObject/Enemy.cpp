@@ -562,12 +562,12 @@ void EnemyState::StaticInitialize()
 	//爆発パーティクル
 	explosionParticle1 = new ExplosionParticle1();
 	explosionParticle1->CreateBuffers();
-	explosionParticle1->SetTextureNum(16);
+	explosionParticle1->SetTextureNum(79);
 
 	//爆発パーティクル
 	explosionParticle2 = new ExplosionParticle2();
 	explosionParticle2->CreateBuffers();
-	explosionParticle2->SetTextureNum(16);
+	explosionParticle2->SetTextureNum(79);
 
 	//敵の弾
 	bullet = new EnemyBullet;

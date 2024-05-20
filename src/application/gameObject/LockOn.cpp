@@ -7,7 +7,7 @@ void LockOn::Initialize()
 	//ビルボードのスプライト モデル
 	lockOnSpriteModel1 = new BillboardSpriteModel();
 	lockOnSpriteModel1->CreateBuffers();
-	lockOnSpriteModel1->SetTextureNum(22);
+	lockOnSpriteModel1->SetTextureNum(75);
 
 	//ビルボードのスプライト
 	lockOnSprite1 = new BillboardSprite();
@@ -17,7 +17,7 @@ void LockOn::Initialize()
 	//ロックオンしていない時のスプライト
 	lockOnSprite2 = new Sprite();
 	lockOnSprite2->Initialize();
-	lockOnSprite2->SetTextureNum(22);
+	lockOnSprite2->SetTextureNum(75);
 	lockOnSprite2->SetAlpha(0.2f);
 	lockOnSprite2->SetScale(lockOnSpriteScale);
 	lockOnSprite2->SetPosition(lockOnSpritePos);

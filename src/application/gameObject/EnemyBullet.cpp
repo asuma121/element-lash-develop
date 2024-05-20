@@ -16,7 +16,7 @@ void EnemyBullet::Initialize()
 {
 	EnemyBulletParticle* newParticle = new EnemyBulletParticle();
 	newParticle->CreateBuffers();
-	newParticle->SetTextureNum(4);
+	newParticle->SetTextureNum(80);
 	particle.reset(newParticle);
 }
 

@@ -32,7 +32,7 @@ void TitleScene::Initialize()
 		Sprite* newBlackSprite1 = new Sprite();
 		newBlackSprite1->Initialize();
 		blackSprite1.reset(newBlackSprite1);
-		blackSprite1->SetTextureNum(14);
+		blackSprite1->SetTextureNum(83);
 		blackSprite1->SetScale(black1Scale);
 	}
 }
