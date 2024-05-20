@@ -134,6 +134,8 @@ class CallMiniEnemy : public EnemyState
 		void UpdateState(Enemy* enemy);
 		//ゲームのステート更新
 		void UpdateStateMovePhase(Enemy* enemy)override;
+		//攻撃更新
+		void UpdateAttack()override;
 		//フェーズ移動の処理
 		void UpdateAttackMovePhase()override;
 		//描画

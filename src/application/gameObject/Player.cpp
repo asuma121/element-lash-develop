@@ -65,23 +65,6 @@ void Player::Initialize()
 {
 	//プレイヤーステートの初期化
 	playerState->Initialize();
-
-	//HP用スプライト
-	//緑のHP
-	//for (int i = 0; i < MaxHP; i++)
-	//{
-	//	hpSprite1[i] = new Sprite();
-	//	hpSprite1[i]->Initialize();
-	//	hpSprite1[i]->SetTextureNum(28);
-	//}
-	////赤いHP
-	//hpSprite2 = new Sprite();
-	//hpSprite2->Initialize();
-	//hpSprite2->SetTextureNum(29);
-	////HPの枠
-	//hpSprite3 = new Sprite();
-	//hpSprite3->Initialize();
-	//hpSprite3->SetTextureNum(30);
 }
 void Player::UpdateGame()
 {
@@ -113,8 +96,6 @@ void Player::UpdateGame()
 
 	//1フレーム前のフォルムを代入
 	preForm = form;
-
-	if (HP <= 0)HP = MaxHP;
 
 	//敵クリア
 	enemyPos.clear();
@@ -165,8 +146,6 @@ void Player::UpdateTutorial()
 	//1フレーム前のフォルムを代入
 	preForm = form;
 
-	if (HP <= 0)HP = MaxHP;
-
 	//敵クリア
 	enemyPos.clear();
 	enemyAddPos.clear();
@@ -200,8 +179,6 @@ void Player::UpdateTitle(float timer)
 
 	//1フレーム前のフォルムを代入
 	preForm = form;
-
-	if (HP <= 0)HP = MaxHP;
 
 	//敵クリア
 	enemyPos.clear();

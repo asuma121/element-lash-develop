@@ -268,6 +268,11 @@ public://メンバ関数
 	/// </summary>
 	void ChangeState(EnemyState* newState);
 
+	/// <summary>
+	///敵呼び出しフラグを立てる
+	/// </summary>
+	void SetCallMiniEnemy();
+
 	//静的メンバ変数
 private:
 	//カメラ
@@ -422,6 +427,8 @@ public:	//メンバ関数
 	void SetHitPlayer(bool hitPlayerFlag) { EnemyState::hitPlayerFlag = hitPlayerFlag; };
 	//タイマーセット
 	void SetPhaseTimer(int phaseTimer) { EnemyState::phaseTimer = phaseTimer; }
+	//敵呼び出しフラグを呼び出す
+	void SetCallMiniEnemy() { nextCallMiniEnemy = true; }
 
 	//座標取得
 	XMFLOAT3 GetPosition() { return position; }

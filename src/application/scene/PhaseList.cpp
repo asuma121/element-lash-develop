@@ -234,6 +234,7 @@ void Phase2::UpdateObject()
 	//敵
 	enemy->SetPlayerPos(player->GetPosition());
 	enemy->SetPhaseTimer(phaseTimer);
+	if(tutorialEnemy->GetCallFlag() == true)enemy->SetCallMiniEnemy();
 	enemy->UpdateGame2();
 
 	//小さい敵
@@ -327,6 +328,18 @@ void Phase2::UpdateCollider()
 			tutorialEnemy->HitBullet1();
 			//自機にヒットフラグ送信
 			player->HitBullet1(i);
+		}
+	}
+
+	//小さい敵と時機の当たり判定
+	if (player->GetInvincibleFlag() == false)
+	{
+		if (ColliderManager::CheckCollider(player->GetColliderData(), tutorialEnemy->GetColliderData()))
+		{
+			//自機にヒットフラグ送信
+			player->HitEnemy();
+			//敵にヒットフラグ送信
+			tutorialEnemy->SetHitPlayer();
 		}
 	}
 

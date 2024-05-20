@@ -304,3 +304,22 @@ void TutorialEnemy::HitBullet1()
 	//”í’eƒtƒ‰ƒO‚ð—§‚Ä‚é
 	hitFlag1 = true;
 }
+
+void TutorialEnemy::SetHitPlayer()
+{
+	isDead1 = true;
+}
+
+bool TutorialEnemy::GetCallFlag()
+{
+	if (isDead2 == true)
+	{
+		callTimer++;
+		if (callTimer >= callTime)
+		{
+			callTimer = 0;
+			return true;
+		}
+	}
+	return false;
+}

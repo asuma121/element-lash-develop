@@ -264,16 +264,19 @@ void AttackOmen1::UpdateStateClear(Enemy* enemy)
 
 void AttackOmen1::UpdateAttack()
 {
-	//弾をセット
-	if (objectTimer == 1.0f && nextAttack01)
+	if (nextAttack01 == true)
 	{
-		//弾を出す位置を回転
-		bulletAddPos = position + rollRotation(bulletAddPos, rotation);
 		//弾をセット
-		for (int i = 0; i < bulletVol; i++)
+		if (objectTimer == 1.0f && nextAttack01)
 		{
-			bullet->SetBullet(bulletAddPos, bulletScale, bulletLastScale, 0.0f,
-				frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
+			//弾を出す位置を回転
+			bulletAddPos = position + rollRotation(bulletAddPos, rotation);
+			//弾をセット
+			for (int i = 0; i < bulletVol; i++)
+			{
+				bullet->SetBullet(bulletAddPos, bulletScale, bulletLastScale, 0.0f,
+					frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
+			}
 		}
 	}
 }
@@ -445,6 +448,12 @@ void CallMiniEnemy::Move()
 
 void CallMiniEnemy::UpdateState(Enemy* enemy)
 {
+	//アニメーションが終わったら
+	if (objectTimer >= frameCallMiniEnemy)
+	{
+		enemy->ChangeState(new AttackOmen1());
+		return;
+	}
 }
 
 void CallMiniEnemy::UpdateStateMovePhase(Enemy* enemy)
@@ -452,8 +461,57 @@ void CallMiniEnemy::UpdateStateMovePhase(Enemy* enemy)
 	//アニメーションが終わったら
 	if (objectTimer >= frameCallMiniEnemy)
 	{
+		//プレイヤーとの距離が近い場合もう一度弾
+		if (dashLength >= length(playerPos - position))
+		{
+			nextAttack01 = true;
+		}
+		//プレイヤーとの距離が遠い場合ダッシュ
+		else
+		{
+			nextDash = true;
+		}
 		enemy->ChangeState(new AttackOmen1());
 		return;
+	}
+}
+
+void CallMiniEnemy::UpdateAttack()
+{
+	//敵呼び出しフラグをもとに戻す
+	callEnemyFlag = false;
+	if (objectTimer == 1)
+	{
+		callEnemyPos = (playerPos - position) / 2;
+		callEnemyPos = position + callEnemyPos;
+	}
+	//敵呼び出し 2回呼び出す
+	if (objectTimer == frameCallMiniEnemy2)
+	{
+		//フラグを立てる
+		callEnemyFlag = true;
+		//敵を呼び出す場所
+		if (objectTimer == frameCallMiniEnemy2)callEnemyPos = callEnemyPos1;
+	}
+
+	//敵呼び出し 雷パーティクル
+	if (objectTimer == frameCallMiniEnemy2)
+	{
+		elecParticle->AddParticle(elecFrame, callEnemyPos1 + addElecPos1,
+			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60.0f, elecStrength);
+		explosionParticle1->Add(callEnemyPos1);
+	}
+	//敵呼び出し
+	if (objectTimer <= frameCallMiniEnemy2)
+	{
+		if ((int)objectTimer % elecInterval == 0)
+		{
+			for (int i = 0; i < elecVol; i++)
+			{
+				elecParticle->AddParticle(3.0f, callEnemyPos1 + addElecPos2,
+					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength);
+			}
+		}
 	}
 }
 

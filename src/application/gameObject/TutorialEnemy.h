@@ -215,6 +215,13 @@ public://メンバ関数
 	/// </summary>
 	bool GetIsDead() { return isDead2; }
 
+	/// <summary>
+	///プレイヤーとヒット時
+	/// </summary>
+	void SetHitPlayer();
+
+	bool GetCallFlag();
+
 	//静的メンバ変数
 private:
 	//カメラ
@@ -292,4 +299,9 @@ public:
 	//ダウンのアニメーション
 	int deadTime = 130;
 	int deadTimer = 0;
+
+	//呼び出しに入るか
+	float callTimer = 0.0f;
+	float callTime = 500.0f;
+	bool callFlag = false;
 };

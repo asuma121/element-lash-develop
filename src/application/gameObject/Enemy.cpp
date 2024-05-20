@@ -468,6 +468,11 @@ void Enemy::ChangeState(EnemyState* newState)
 	enemyState->Initialize();
 }
 
+void Enemy::SetCallMiniEnemy()
+{
+	enemyState->SetCallMiniEnemy();
+}
+
 void EnemyState::StaticInitialize()
 {
 	//立っているモデル
@@ -571,7 +576,7 @@ void EnemyState::StaticInitialize()
 	//行動を決めるフラグ
 	nextCallMiniEnemy = false;
 	nextDash = false;
-	nextAttack01 = true;
+	nextAttack01 = false;
 }
 
 void EnemyState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
@@ -760,6 +765,9 @@ void EnemyState::SetTutorial(Enemy* enemy)
 void EnemyState::SetGame(Enemy* enemy)
 {
 	//攻撃前兆にセット
+	nextCallMiniEnemy = false;
+	nextDash = false;
+	nextAttack01 = true;
 	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
