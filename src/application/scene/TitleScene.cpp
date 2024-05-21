@@ -115,7 +115,7 @@ void TitleScene::UpdateSprite()
 void TitleScene::UpdateMoveScene()
 {
 	//スペースかAボタン押されたら
-	if (keyManager->TriggerKey(KeyManager::PAD_A))
+	if (keyManager->TriggerKey(KeyManager::PAD_A) && sceneTimer >= 100)
 	{
 		//シーン遷移フラグオン
 		moveTutorialFlag2 = true;

@@ -61,9 +61,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	keyManager = new KeyManager();
 
 	//ImGuiManager
-	ImGuiManager* imGuiManager = nullptr;
+	/*ImGuiManager* imGuiManager = nullptr;
 	imGuiManager = new ImGuiManager();
-	imGuiManager->Initialize(winApp, dxCommon);
+	imGuiManager->Initialize(winApp, dxCommon);*/
 
 	//テクスチャマネージャー
 	TextureManager* textureManager = nullptr;
@@ -341,7 +341,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//キーマネージャー更新
 		keyManager->Update();
 
-		imGuiManager->Begin();
+		/*imGuiManager->Begin();*/
 
 		//shadowMap
 		shadowMap->SetAlpha(1.0f);
@@ -375,8 +375,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		keyManager->UpdateState();
 
 
-		imGuiManager->End();
-		imGuiManager->Draw();
+		/*imGuiManager->End();
+		imGuiManager->Draw();*/
 
 		//描画後処理
 		dxCommon->PostDraw();
@@ -385,10 +385,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	fps->FpsControlEnd();
 
-	imGuiManager->Finalize();
+	/*imGuiManager->Finalize();*/
 
 	delete shadowMap;
-	delete imGuiManager;
+	//delete imGuiManager;
 	delete scene;
 	delete player;
 	delete lockOn;

@@ -2,6 +2,7 @@
 #include "mathOriginal.h"
 #include "ColliderManager.h"
 #include "ClearScene.h"
+#include "TitleScene.h"
 #include "PhaseList.h"
 
 KeyManager* PhaseState::keyManager = nullptr;
@@ -17,7 +18,7 @@ UI* PhaseState::ui = nullptr;
 
 GameScene::GameScene()
 {
-	phaseState = new MovePhase();
+	phaseState = new Phase1();
 }
 
 GameScene::~GameScene()
@@ -36,6 +37,12 @@ void GameScene::NextScene(Scene* pScene)
 	{
 		pScene->ChangeScene(new ClearScene());
 		moveClearFlag = false;
+		return;
+	}
+	if (moveTitleFlag)
+	{
+		pScene->ChangeScene(new TitleScene());
+		moveTitleFlag = false;
 	}
 }
 

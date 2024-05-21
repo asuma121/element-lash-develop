@@ -192,14 +192,14 @@ void Enemy::UpdateDamage()
 	if (HitFlag1 == true)
 	{
 		//HPを減らす
-		HP -= 1.0f;
+		HP -= fireDamege;
 	}
 
 	//雷攻撃をくらった際
 	if (hitElec == true)
 	{
 		//HPを減らす
-		HP -= 7.0f;
+		HP -= elecDamege;
 	}
 
 	//死亡

@@ -71,7 +71,12 @@ public: //メンバ関数
 	/// <summary>
 	///セッター
 	/// </summary>
-	void SetMoveClearFlag(bool moveClearFlag) { this->moveClearFlag = true; };
+	void SetMoveClearFlag() { this->moveClearFlag = true; };
+
+	/// <summary>
+	///セッター
+	/// </summary>
+	void SetMoveTitleFlag() { this->moveTitleFlag = true; };
 
 private:
 	//フェーズ
@@ -79,6 +84,8 @@ private:
 
 	//クリアに移るフラグ
 	bool moveClearFlag = false;
+	//タイトルに移るフラグ
+	bool moveTitleFlag = false;
 
 	//デバッグ用
 	int debugNum[1] = { 0 };

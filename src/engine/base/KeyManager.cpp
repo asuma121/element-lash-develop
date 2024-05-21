@@ -110,6 +110,7 @@ bool KeyInput::PushKey(const KeyManager::Pad& pad)
 bool KeyInput::TriggerKey(const KeyManager::Pad& pad)
 {
     if (pad == KeyManager::PAD_A)return input->TriggerKey(DIK_SPACE);
+    if (pad == KeyManager::PAD_X)return input->TriggerKey(DIK_SPACE);
     if (pad == KeyManager::PAD_LEFT_SHOULDER)return input->TriggerKey(DIK_LSHIFT);
     if (pad == KeyManager::PAD_RIGHT_SHOULDER)return input->TriggerKey(DIK_SPACE);
     if (pad == KeyManager::PAD_START)return input->TriggerKey(DIK_ESCAPE);
@@ -215,6 +216,7 @@ float KeyInput::GetStickRot(const KeyManager::Stick& stick)
 bool KeyDXInput::PushKey(const KeyManager::Pad& pad)
 {
     if (pad == KeyManager::PAD_A)return dxInput->PushKey(DXInput::PAD_A);
+    if (pad == KeyManager::PAD_X)return dxInput->PushKey(DXInput::PAD_X);
     if (pad == KeyManager::PAD_LEFT_SHOULDER)return dxInput->PushKey(DXInput::PAD_LEFT_SHOULDER);
     if (pad == KeyManager::PAD_RIGHT_SHOULDER)return dxInput->PushKey(DXInput::PAD_RIGHT_SHOULDER);
     if (pad == KeyManager::PAD_START)return dxInput->PushKey(DXInput::PAD_START);
@@ -223,6 +225,7 @@ bool KeyDXInput::PushKey(const KeyManager::Pad& pad)
 bool KeyDXInput::TriggerKey(const KeyManager::Pad& pad)
 {
     if (pad == KeyManager::PAD_A)return dxInput->TriggerKey(DXInput::PAD_A);
+    if (pad == KeyManager::PAD_X)return dxInput->TriggerKey(DXInput::PAD_X);
     if (pad == KeyManager::PAD_LEFT_SHOULDER)return dxInput->TriggerKey(DXInput::PAD_LEFT_SHOULDER);
     if (pad == KeyManager::PAD_RIGHT_SHOULDER)return dxInput->TriggerKey(DXInput::PAD_RIGHT_SHOULDER);
     if (pad == KeyManager::PAD_START)return dxInput->TriggerKey(DXInput::PAD_START);

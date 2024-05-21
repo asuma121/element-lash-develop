@@ -288,6 +288,10 @@ private:
 	bool HitFlag1 = false;
 	bool hitElec = false;
 
+	//ダメージ
+	float fireDamege = 0.3f;
+	float elecDamege = 7.0f;
+
 	//挙動関連
 
 	//落下

@@ -18,6 +18,7 @@ void Wait::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true) 
 	{
 		player->ChangeState(new Down());
+		objectDown->PlayAnimation();
 		return;
 	} 
 
@@ -90,6 +91,7 @@ void Run::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
+		objectDown->PlayAnimation();
 		return;
 	}
 
@@ -209,6 +211,7 @@ void Attack1::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
+		objectDown->PlayAnimation();
 		return;
 	}
 
@@ -325,6 +328,7 @@ void Attack2::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
+		objectDown->PlayAnimation();
 		return;
 	}
 	//攻撃が終わって立ち止まっている場合
@@ -432,6 +436,7 @@ void Attack3::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
+		objectDown->PlayAnimation();
 		return;
 	}
 
@@ -519,6 +524,16 @@ void Down::Initialize()
 
 void Down::UpdateState(Player* player)
 {
+	//ゲームオーバー自
+	if (HP <= 0)
+	{
+		if (objectTimer == frameDown - 3)
+		{
+			objectDown->StopAnimation();
+		}
+		return;
+	}
+
 	//ヒットフラグが戻ったら
 	if (objectTimer >= frameDown)
 	{

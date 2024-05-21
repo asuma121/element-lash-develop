@@ -36,6 +36,27 @@ void Phase1::NextPhase(GameScene* gameScene)
 		//次のフェーズへ
 		gameScene->ChangePhase(new MovePhase());
 	}
+
+	//ゲームオーバー
+	if (ui->GetGameOverRetryFlag() == true && keyManager->TriggerKey(KeyManager::PAD_A))
+	{
+		//タイマーリセット
+		phaseTimer = 0;
+		//敵リセット
+		enemy->Reset();
+		//今のフェーズへ
+		gameScene->ChangePhase(new Phase1());
+	}
+	//タイトルシーンへ移る場合
+	if (ui->GetGameOverTitleFlag() == true && keyManager->TriggerKey(KeyManager::PAD_A))
+	{
+		//タイマーリセット
+		phaseTimer = 0;
+		//敵リセット
+		enemy->Reset();
+		//タイトルシーンへ
+		gameScene->SetMoveTitleFlag();
+	}
 }
 
 void Phase1::UpdateObject()
@@ -129,24 +150,6 @@ void Phase1::UpdateCollider()
 		enemy->HitElec();
 	}
 
-	//敵の弾と平面の判定
-	//for (std::unique_ptr<FbxObject3D>& object1 : object)
-	//{
-	//	if (object1->GetFileName() == "plane")
-	//	{
-	//		for (int i = 0; i < enemy->GetBulletNum(); i++)
-	//		{
-	//			if (ColliderManager::CheckCollider(object1->GetColliderData(), enemy->GetBulletColliderData(i)))
-	//			{
-	//				//当たったらパーティクル発生
-	//				sparkParticle2->Add(XMFLOAT3(enemy->GetBulletColliderData(i).center));
-	//				explosionParticle1->Add(XMFLOAT3(enemy->GetBulletColliderData(i).center));
-	//				explosionParticle2->Add(XMFLOAT3(enemy->GetBulletColliderData(i).center));
-	//			}
-	//		}
-	//	}
-	//}
-
 	//後処理
 	ColliderManager::PostUpdate();
 }
@@ -215,7 +218,28 @@ void Phase2::NextPhase(GameScene* gameScene)
 		//敵リセット
 		enemy->Reset();
 		//クリアシーンへ
-		gameScene->SetMoveClearFlag(true);
+		gameScene->SetMoveClearFlag();
+	}
+
+	//ゲームオーバー
+	if (ui->GetGameOverRetryFlag() == true && keyManager->TriggerKey(KeyManager::PAD_A))
+	{
+		//タイマーリセット
+		phaseTimer = 0;
+		//敵リセット
+		enemy->Reset();
+		//フェーズ移動へ
+		gameScene->ChangePhase(new MovePhase());
+	}
+	//タイトルシーンへ移る場合
+	if (ui->GetGameOverTitleFlag() == true && keyManager->TriggerKey(KeyManager::PAD_A))
+	{
+		//タイマーリセット
+		phaseTimer = 0;
+		//敵リセット
+		enemy->Reset();
+		//タイトルシーンへ
+		gameScene->SetMoveTitleFlag();
 	}
 }
 
@@ -334,12 +358,15 @@ void Phase2::UpdateCollider()
 	//小さい敵と時機の当たり判定
 	if (player->GetInvincibleFlag() == false)
 	{
-		if (ColliderManager::CheckCollider(player->GetColliderData(), tutorialEnemy->GetColliderData()))
+		if (tutorialEnemy->GetIsDead() == false)
 		{
-			//自機にヒットフラグ送信
-			player->HitEnemy();
-			//敵にヒットフラグ送信
-			tutorialEnemy->SetHitPlayer();
+			if (ColliderManager::CheckCollider(player->GetColliderData(), tutorialEnemy->GetColliderData()))
+			{
+				//自機にヒットフラグ送信
+				player->HitEnemy();
+				//敵にヒットフラグ送信
+				tutorialEnemy->SetHitPlayer();
+			}
 		}
 	}
 

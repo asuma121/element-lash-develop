@@ -86,6 +86,7 @@ void Player::UpdateGame()
 	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
+	playerState->SetHP(HP);
 	playerState->Update();
 
 
@@ -324,11 +325,13 @@ void Player::SetTitle()
 
 void Player::SetTutorial()
 {
+	form = Fire;
 	playerState->SetTutorial();
 }
 
 void Player::SetGameScene()
 {
+	HP = MaxHP;
 	playerState->SetGameScene();
 	tutorialFlag = 1;
 }

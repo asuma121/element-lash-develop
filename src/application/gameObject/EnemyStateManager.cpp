@@ -483,7 +483,6 @@ void CallMiniEnemy::UpdateAttack()
 	if (objectTimer == 1)
 	{
 		callEnemyPos = (playerPos - position) / 2;
-		callEnemyPos = position + callEnemyPos;
 	}
 	//“GŒÄ‚Ño‚µ 2‰ñŒÄ‚Ño‚·
 	if (objectTimer == frameCallMiniEnemy2)

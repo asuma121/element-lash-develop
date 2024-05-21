@@ -92,6 +92,11 @@ public:
 	void SetMovePhase();
 
 	/// <summary>
+	///チュートリアル用にUIセット
+	/// </summary>
+	void SetTutorial();
+
+	/// <summary>
 	///タイトルシーンのシーン遷移用タイマーセット
 	/// </summary>
 	void SetTitleTimer(int moveTutorialTimer, int moveTutorialTime);
@@ -123,6 +128,12 @@ public:
 	/// </summary>
 	void SetPlayerForm(int form, bool formChangeFlag);
 
+	/// <summary>
+	///ゲームオーバーの選択枝
+	/// </summary>
+	bool GetGameOverTitleFlag() { return gameOverTitleFlag; };
+	bool GetGameOverRetryFlag() { return gameOverRetryFlag; };
+
 	//静的メンバ変数
 private:
 	//キーマネージャー
@@ -144,6 +155,11 @@ private:
 	//プレイヤーのHP
 	float playerHP = 0;
 	float playerMaxHP = 0;
+	//ゲームオーバーフラグ
+	bool gameOverFlag = false;
+	//ゲームオーバー後の移動フラグ
+	bool gameOverTitleFlag = false;
+	bool gameOverRetryFlag = false;
 
 	//黒幕等に使用する黒いスプライト
 	std::unique_ptr<Sprite>blackSprite1;
@@ -455,6 +471,27 @@ private:
 	float hpFrameScale1 = 10.0f * 1.5f;	//外枠 左右
 	float hpFrameScale2 = 4.0f * 1.5f;	//内側の枠
 	float hpFrameScale3 = 6.0f * 1.5f;	//外枠 上下
+
+	//ゲームオーバー
+	std::unique_ptr<Sprite>gameOverSprite1;	//ゲームオーバー やり直す
+	std::unique_ptr<Sprite>gameOverSprite2;	//ゲームオーバー GameOver...
+	std::unique_ptr<Sprite>gameOverSprite3;	//ゲームオーバー タイトルへ
+	std::unique_ptr<Sprite>gameOverSprite4;	//ゲームオーバー 三角
+	std::unique_ptr<Sprite>gameOverSprite5;	//ゲームオーバー 黒幕
+	XMFLOAT2 gameOverSprite1Pos = { 450.0f,300.0f };	//ゲームオーバー やり直すの座標
+	XMFLOAT2 gameOverSprite1Scale = { 331.0f,81.0f };	//ゲームオーバー やり直すのスケール
+	XMFLOAT2 gameOverSprite2Pos = { 388.0f,180.0f };	//ゲームオーバー GameOver...の座標
+	XMFLOAT2 gameOverSprite2Scale = { 505.0f,64.0f };	//ゲームオーバー GameOver...のスケール
+	XMFLOAT2 gameOverSprite3Pos = { 420.0f,396.0f };	//ゲームオーバー タイトルへの座標
+	XMFLOAT2 gameOverSprite3Scale = { 422.0f,78.0f };	//ゲームオーバー タイトルへのスケール
+	XMFLOAT2 gameOverSprite4Pos1 = { 370.0f,324.0f };	//ゲームオーバー 三角の座標
+	XMFLOAT2 gameOverSprite4Pos2 = { 370.0f,420.0f };	//ゲームオーバー 三角の座標
+	XMFLOAT2 gameOverSprite4Scale = { 32.0f,32.0f };	//ゲームオーバー 三角のスケール
+	XMFLOAT2 gameOverSprite5Pos = { 0.0f,0.0f };	//ゲームオーバー 黒幕の座標
+	XMFLOAT2 gameOverSprite5Scale = { 1280.0f,720.0f };	//ゲームオーバー 黒幕のスケール
+	float gameOverAlpha = 0.5f;
+	float gameOverTimer = 0.0f;
+	float frameDown = 138.0f;
 
 	//デバッグ
 	float debugNum1[2] = { 0.0f,0.0f };

@@ -459,6 +459,7 @@ public:	//メンバ関数
 	void SetKeyManager(KeyManager* keyManager) { this->keyManager = keyManager; };
 	void SetPlayerForm(Player::Form form) { this->form = form; }
 	void HitEnemy();
+	void SetHP(int HP) { this->HP = HP; }
 
 protected:	//静的メンバ変数
 
@@ -502,6 +503,9 @@ protected:	//メンバ変数
 
 	//キーマネージャー
 	KeyManager* keyManager = nullptr;
+
+	//HP
+	int HP;
 
 	//オブジェクトごとのタイマー
 	int objectTimer = 0;

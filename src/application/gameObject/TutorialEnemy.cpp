@@ -13,16 +13,16 @@ void TutorialEnemy::Initialize()
 	//HPバーのスプライト
 	hpBar1 = new Sprite();
 	hpBar1->Initialize();
-	hpBar1->SetTextureNum(23);
+	hpBar1->SetTextureNum(58);
 	hpBar2 = new Sprite();
 	hpBar2->Initialize();
-	hpBar2->SetTextureNum(24);
+	hpBar2->SetTextureNum(59);
 	hpBar3 = new Sprite();
 	hpBar3->Initialize();
-	hpBar3->SetTextureNum(25);
+	hpBar3->SetTextureNum(60);
 	hpBar4 = new Sprite();
 	hpBar4->Initialize();
-	hpBar4->SetTextureNum(26);
+	hpBar4->SetTextureNum(61);
 
 	//モデル
 	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("enemyDash");
@@ -47,7 +47,7 @@ void TutorialEnemy::Initialize()
 
 void TutorialEnemy::UpdateTutorial()
 {
-	if (isDead2 == false)return;
+	if (isDead2 == true)return;
 
 	//コライダー更新
 	UpdateCollider();
@@ -186,6 +186,7 @@ void TutorialEnemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 
 void TutorialEnemy::DrawSprite(ID3D12GraphicsCommandList* cmdList)
 {
+	if (isDead3 == true)return;
 	hpBar2->Draw(cmdList);
 	hpBar1->Draw(cmdList);
 	hpBar3->Draw(cmdList);
@@ -245,9 +246,6 @@ void TutorialEnemy::SetStand()
 
 void TutorialEnemy::SetTutorial()
 {
-	isDead1 = false;
-	isDead2 = false;
-	isDead3 = false;
 	SetStand();
 }
 
@@ -258,6 +256,10 @@ void TutorialEnemy::SetGameScene()
 
 void TutorialEnemy::SetMovePhase()
 {
+	//敵消す
+	isDead1 = true;
+	isDead2 = true;
+	isDead3 = true;
 	SetStand();
 }
 
@@ -271,6 +273,14 @@ void TutorialEnemy::AddEnemy(XMFLOAT3 pos)
 	HP = maxHP;
 	//指定の座標に配置
 	position = pos;
+}
+
+void TutorialEnemy::AddEnemyTutorialScene(XMFLOAT3 pos)
+{
+	//まだ死んでない場合スルー
+	if (isDead2 == false)return;
+	SetStand();
+	AddEnemy(pos);
 }
 
 void TutorialEnemy::AddEnemyGameScene(XMFLOAT3 pos)

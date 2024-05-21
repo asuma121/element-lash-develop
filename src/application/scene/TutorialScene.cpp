@@ -35,6 +35,9 @@ void TutorialScene::Initialize()
 
 		//チュートリアルの敵をセット
 		tutorialEnemy->SetTutorial();
+
+		//UIをセット
+		ui->SetTutorial();
 	}
 }
 
@@ -91,15 +94,11 @@ void TutorialScene::UpdateObject()
 	enemy->UpdateTutorial(tutorial13Timer);
 
 	//チュートリアルの敵
-	if (tutorialSpriteFlag == 10)
+	tutorialEnemy->UpdateTutorial();
+	//敵を倒したら次へ
+	if (tutorialEnemy->GetIsDead() && tutorialSpriteFlag == 10)
 	{
-		tutorialEnemy->UpdateTutorial();
-		//敵を倒したら次へ
-		if (tutorialEnemy->GetIsDead())
-		{
-			tutorialSpriteFlag = 11;
-			tutorialEnemy->Reset();
-		}
+		tutorialSpriteFlag = 11;
 	}
 
 	//UI
@@ -238,11 +237,8 @@ void TutorialScene::UpdateSprite()
 		if (tutorialIikannjiTimer >= tutorialIikannjiMaxTime)
 		{
 			//カメラの向きのベクトル取得
-			XMFLOAT3 velo = camera->GetTarget() - camera->GetEye();
-			velo = normalize(velo);
-			velo = velo * 20.0f;
 			//カメラ方向に敵配置
-			tutorialEnemy->SetPosition({ velo.x,0.0f, velo.z });
+			tutorialEnemy->AddEnemyTutorialScene(XMFLOAT3(0.0f,0.0f,0.0f));
 			tutorialSpriteFlag = 10;
 		}
 	}
@@ -360,7 +356,7 @@ void TutorialScene::DrawFBX()
 	//オブジェクト描画
 	player->Draw(dxCommon->GetCommandList());
 	enemy->Draw(dxCommon->GetCommandList());
-	if (tutorialSpriteFlag == 10)tutorialEnemy->Draw(dxCommon->GetCommandList());
+	tutorialEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
 
@@ -387,14 +383,14 @@ void TutorialScene::DrawFBXLightView()
 {
 	player->DrawLightView(dxCommon->GetCommandList());
 	enemy->DrawLightView(dxCommon->GetCommandList());
-	if (tutorialSpriteFlag == 10)tutorialEnemy->DrawLightView(dxCommon->GetCommandList());
+	tutorialEnemy->DrawLightView(dxCommon->GetCommandList());
 }
 
 void TutorialScene::SetSRV(ID3D12DescriptorHeap* SRV)
 {
 	player->SetSRV(SRV);
 	enemy->SetSRV(SRV);
-	if (tutorialSpriteFlag == 10)tutorialEnemy->SetSRV(SRV);
+	tutorialEnemy->SetSRV(SRV);
 	plane->SetSRV(SRV);
 }
 

@@ -507,6 +507,38 @@ void UI::Initialize()
 	hpSprite3.reset(newHpSprite3);
 	hpSprite3->SetTextureNum(65);
 	hpSprite3->Update(hpSpritePos, hpSprite3Scale);
+
+	//ゲームオーバー やり直す
+	Sprite* newGameOverSprite1 = new Sprite();
+	newGameOverSprite1->Initialize();
+	gameOverSprite1.reset(newGameOverSprite1);
+	gameOverSprite1->SetTextureNum(46);
+	gameOverSprite1->Update(gameOverSprite1Pos, gameOverSprite1Scale);
+	//ゲームオーバー GameOver...
+	Sprite* newGameOverSprite2 = new Sprite();
+	newGameOverSprite2->Initialize();
+	gameOverSprite2.reset(newGameOverSprite2);
+	gameOverSprite2->SetTextureNum(47);
+	gameOverSprite2->Update(gameOverSprite2Pos, gameOverSprite2Scale);
+	//ゲームオーバー タイトルへ
+	Sprite* newGameOverSprite3 = new Sprite();
+	newGameOverSprite3->Initialize();
+	gameOverSprite3.reset(newGameOverSprite3);
+	gameOverSprite3->SetTextureNum(48);
+	gameOverSprite3->Update(gameOverSprite3Pos, gameOverSprite3Scale);
+	//ゲームオーバー 三角
+	Sprite* newGameOverSprite4 = new Sprite();
+	newGameOverSprite4->Initialize();
+	gameOverSprite4.reset(newGameOverSprite4);
+	gameOverSprite4->SetTextureNum(49);
+	gameOverSprite4->Update(gameOverSprite4Pos1, gameOverSprite4Scale);
+	//ゲームオーバー 黒幕
+	Sprite* newGameOverSprite5 = new Sprite();
+	newGameOverSprite5->Initialize();
+	gameOverSprite5.reset(newGameOverSprite5);
+	gameOverSprite5->SetTextureNum(83);
+	gameOverSprite5->SetAlpha(gameOverAlpha);
+	gameOverSprite5->Update(gameOverSprite5Pos, gameOverSprite5Scale);
 }
 
 void UI::UpdateGame1()
@@ -515,6 +547,11 @@ void UI::UpdateGame1()
 	//HPバーを現在のHPに
 	enemyHpBar2Scale.x = enemyHpBar2OriginalScale.x * (enemyHP / enemyMaxHP);
 	enemyHpBar3Pos.x = enemyHpBar3OriginalPos.x - (enemyHpBar2OriginalScale.x * ((enemyMaxHP - enemyHP) / enemyMaxHP));
+
+	//更新
+	enemyHpBar1->Update(enemyHpBar1Pos, enemyHpBar1Scale);
+	enemyHpBar2->Update(enemyHpBar2Pos, enemyHpBar2Scale);
+	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
 
 	//プレイヤーのHP
 	//緑のHP
@@ -526,10 +563,55 @@ void UI::UpdateGame1()
 		hpSprite1[i]->Update(hpSpritePos + addPos, hpSprite1Scale);
 	}
 
-	//更新
-	enemyHpBar1->Update(enemyHpBar1Pos, enemyHpBar1Scale);
-	enemyHpBar2->Update(enemyHpBar2Pos, enemyHpBar2Scale);
-	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
+	//ゲームオーバー
+	if (playerHP <= 0)
+	{
+		gameOverFlag = true;
+	}
+	//ゲームオーバー中
+	if (gameOverFlag)
+	{
+		//プレイヤーが倒れている間タイマー更新
+		if (gameOverTimer <= frameDown)
+		{
+			gameOverTimer++;
+
+			float addPos = gameOverTimer / frameDown;
+
+			XMFLOAT2 addPos1 = XMFLOAT2(gameOverSprite1Pos.x, gameOverSprite1Pos.y * addPos);
+			XMFLOAT2 addPos2 = XMFLOAT2(gameOverSprite2Pos.x, gameOverSprite2Pos.y * addPos);
+			XMFLOAT2 addPos3 = XMFLOAT2(gameOverSprite3Pos.x, gameOverSprite3Pos.y * addPos);
+			XMFLOAT2 addPos4 = XMFLOAT2(gameOverSprite4Pos1.x, gameOverSprite4Pos1.y * addPos);
+
+			gameOverSprite1->Update(addPos1, gameOverSprite1Scale);
+			gameOverSprite2->Update(addPos2, gameOverSprite2Scale);
+			gameOverSprite3->Update(addPos3, gameOverSprite3Scale);
+			gameOverSprite4->Update(addPos4, gameOverSprite4Scale);
+		}
+
+		//プレイヤーが倒れきったら
+		if (gameOverTimer == frameDown)
+		{
+			gameOverTitleFlag = true;
+		}
+
+		//プレイヤーが倒れたあと
+		if (gameOverTimer > frameDown)
+		{
+			if (keyManager->GetStick(KeyManager::LStickY) > 0.5f)
+			{
+				gameOverTitleFlag = false;
+				gameOverRetryFlag = true;
+			}
+			if (keyManager->GetStick(KeyManager::LStickY) < -0.5f)
+			{
+				gameOverRetryFlag = false;
+				gameOverTitleFlag = true;
+			}
+			if (gameOverRetryFlag)gameOverSprite4->Update(gameOverSprite4Pos1, gameOverSprite4Scale);
+			if (gameOverTitleFlag)gameOverSprite4->Update(gameOverSprite4Pos2, gameOverSprite4Scale);
+		}
+	}
 }
 
 void UI::UpdateGame2()
@@ -552,6 +634,56 @@ void UI::UpdateGame2()
 	//更新
 	enemyHpBar3->Update(enemyHpBar3Pos, enemyHpBar3Scale);
 	enemyHpBar5->Update(enemyHpBar5Pos, enemyHpBar5Scale);
+
+	//ゲームオーバー
+	if (playerHP <= 0)
+	{
+		gameOverFlag = true;
+	}
+	//ゲームオーバー中
+	if (gameOverFlag)
+	{
+		//プレイヤーが倒れている間タイマー更新
+		if (gameOverTimer <= frameDown)
+		{
+			gameOverTimer++;
+
+			float addPos = gameOverTimer / frameDown;
+
+			XMFLOAT2 addPos1 = XMFLOAT2(gameOverSprite1Pos.x, gameOverSprite1Pos.y * addPos);
+			XMFLOAT2 addPos2 = XMFLOAT2(gameOverSprite2Pos.x, gameOverSprite2Pos.y * addPos);
+			XMFLOAT2 addPos3 = XMFLOAT2(gameOverSprite3Pos.x, gameOverSprite3Pos.y * addPos);
+			XMFLOAT2 addPos4 = XMFLOAT2(gameOverSprite4Pos1.x, gameOverSprite4Pos1.y * addPos);
+
+			gameOverSprite1->Update(addPos1, gameOverSprite1Scale);
+			gameOverSprite2->Update(addPos2, gameOverSprite2Scale);
+			gameOverSprite3->Update(addPos3, gameOverSprite3Scale);
+			gameOverSprite4->Update(addPos4, gameOverSprite4Scale);
+		}
+
+		//プレイヤーが倒れきったら
+		if (gameOverTimer == frameDown)
+		{
+			gameOverTitleFlag = true;
+		}
+
+		//プレイヤーが倒れたあと
+		if (gameOverTimer > frameDown)
+		{
+			if (keyManager->GetStick(KeyManager::LStickY) > 0.5f)
+			{
+				gameOverTitleFlag = false;
+				gameOverRetryFlag = true;
+			}
+			if (keyManager->GetStick(KeyManager::LStickY) < -0.5f)
+			{
+				gameOverRetryFlag = false;
+				gameOverTitleFlag = true;
+			}
+			if (gameOverRetryFlag)gameOverSprite4->Update(gameOverSprite4Pos1, gameOverSprite4Scale);
+			if (gameOverTitleFlag)gameOverSprite4->Update(gameOverSprite4Pos2, gameOverSprite4Scale);
+		}
+	}
 }
 
 void UI::UpdateTutorial()
@@ -668,18 +800,6 @@ void UI::UpdateTutorial()
 		tutorial12Sprite->Update(tutorial12Pos1, tutorial12Scale);
 	if (keyManager->GetConnectFlag() == false && keyManager->GetOldConnectFlag() == true)
 		tutorial12Sprite->Update(tutorial12Pos2, tutorial12Scale);
-
-	/*shiftKeySprite1->SetPosition(XMFLOAT2(debugNum));
-	shiftKeySprite1->Update();*/
-	/*tutorial12Sprite->SetPosition(XMFLOAT2(debugNum1));
-	tutorial12Sprite->SetScale(XMFLOAT2(tutorial12Scale * debugNum2[0]));
-	escKeySprite->SetPosition(XMFLOAT2(debugNum3));
-	escKeySprite->SetScale(XMFLOAT2(escKeySpriteScale * debugNum4[0]));
-	startButtonSprite->SetPosition(XMFLOAT2(debugNum5));
-	startButtonSprite->SetScale(XMFLOAT2(startButtonSpriteScale * debugNum6[0]));
-	tutorial12Sprite->Update();
-	escKeySprite->Update();
-	startButtonSprite->Update();*/
 }
 
 void UI::UpdateTitle()
@@ -873,6 +993,15 @@ void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
 	}
 	//HPの枠
 	hpSprite3->Draw(cmdList);
+
+	//ゲームオーバーの場合
+	if (gameOverFlag == false)return;
+
+	gameOverSprite5->Draw(cmdList);
+	gameOverSprite1->Draw(cmdList);
+	gameOverSprite2->Draw(cmdList);
+	gameOverSprite3->Draw(cmdList);
+	gameOverSprite4->Draw(cmdList);
 }
 
 void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
@@ -982,6 +1111,15 @@ void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
 	}
 	//HPの枠
 	hpSprite3->Draw(cmdList);
+
+	//ゲームオーバーの場合
+	if (gameOverFlag == false)return;
+
+	gameOverSprite5->Draw(cmdList);
+	gameOverSprite1->Draw(cmdList);
+	gameOverSprite2->Draw(cmdList);
+	gameOverSprite3->Draw(cmdList);
+	gameOverSprite4->Draw(cmdList);
 }
 
 void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
@@ -1506,6 +1644,10 @@ void UI::SetGame()
 	LBButtonPushSprite1->Update(LBButtonSpritePos3, BButtonSpriteScale);
 	shiftKeySprite1->Update(shiftKeySpritePos3, keySpriteScale2);
 	shiftKeyPushSprite1->Update(shiftKeySpritePos3, keySpriteScale2);
+	gameOverFlag = false;
+	gameOverTitleFlag = false;
+	gameOverRetryFlag = false;
+	gameOverTimer = 0;
 }
 
 void UI::SetMovePhase()
@@ -1513,6 +1655,75 @@ void UI::SetMovePhase()
 	blackSpriteTimer = 0;
 	blackSprite3->SetAlpha(0.0f);
 	blackSprite3->Update();
+}
+
+void UI::SetTutorial()
+{
+	blackSpriteTimer = 0;
+	tutorial1Sprite->Update(tutorial1Pos, tutorial1Scale);
+	tutorial2Sprite->Update(tutorial2Pos, tutorial2Scale);
+	tutorial3Sprite->Update(tutorial3Pos, tutorial3Scale);
+	tutorial4Sprite->Update(tutorial4Pos, tutorial4Scale);
+	tutorial6Sprite->Update(tutorial6Pos, tutorial6Scale);
+	tutorial7Sprite->Update(tutorial6Pos, tutorial6Scale);
+	tutorial8Sprite->Update(tutorial8Pos, tutorial8Scale);
+	tutorial10Sprite->Update(tutorial10Pos, tutorial10Scale);
+	tutorial11Sprite->Update(tutorial11Pos, tutorial11Scale);
+	if (keyManager->GetConnectFlag() == true)
+		tutorial12Sprite->Update(tutorial12Pos1, tutorial12Scale);
+	if (keyManager->GetConnectFlag() == false)
+		tutorial12Sprite->Update(tutorial12Pos2, tutorial12Scale);
+	spaceKeySprite1->Update(spaceKeySpritePos1, spaceKeySpriteScale1);
+	spaceKeyPushSprite1->Update(spaceKeySpritePos1, spaceKeySpriteScale1);
+	RBButtonSprite1->Update(RBButtonSpritePos, BButtonSpriteScale);
+	RBButtonPushSprite1->Update(RBButtonSpritePos, BButtonSpriteScale);
+	attackElecSprite->Update(attackSpritePos, attackSpriteScale);
+	attackFireSprite->Update(attackSpritePos, attackSpriteScale);
+	shiftKeySprite1->Update(shiftKeySpritePos1, keySpriteScale2);
+	shiftKeyPushSprite1->Update(shiftKeySpritePos1, keySpriteScale2);
+	shiftKeySprite2->Update(shiftKeySpritePos2, keySpriteScale3);
+	changeElementSprite1->Update(changeElementSpritePos, changeElementspriteScale);
+	changeElementSprite2->Update(changeElementSpritePos, changeElementspriteScale);
+	changeElementSprite3->Update(changeElementSpritePos, changeElementspriteScale);
+	changeElementSprite4->Update(changeElementSpritePos, changeElementspriteScale);
+	LBButtonPushSprite1->Update(LBButtonSpritePos, BButtonSpriteScale);
+	LBButtonSprite1->Update(LBButtonSpritePos, BButtonSpriteScale);
+	startButtonSprite->Update(startButtonSpritePos, startButtonSpriteScale);
+	escKeySprite->Update(escKeySpritePos, escKeySpriteScale);
+	LStickSprite->Update(LStickSpritePos, stickSpriteScale);
+	RStickSprite->Update(RStickSpritePos, stickSpriteScale);
+	AKeySprite->Update(AKeySpritePos, keySpriteScale1);
+	AKeyPushSprite->Update(AKeySpritePos, keySpriteScale1);
+	DKeySprite->Update(DKeySpritePos, keySpriteScale1);
+	DKeyPushSprite->Update(DKeySpritePos, keySpriteScale1);
+	SKeySprite->Update(SKeySpritePos, keySpriteScale1);
+	SKeyPushSprite->Update(SKeySpritePos, keySpriteScale1);
+	WKeySprite->Update(WKeySpritePos, keySpriteScale1);
+	WKeyPushSprite->Update(WKeySpritePos, keySpriteScale1);
+	LeftKeySprite->Update(LeftKeySpritePos, keySpriteScale1);
+	LeftKeyPushSprite->Update(LeftKeySpritePos, keySpriteScale1);
+	RightKeySprite->Update(RightKeySpritePos, keySpriteScale1);
+	RightKeyPushSprite->Update(RightKeySpritePos, keySpriteScale1);
+	UpKeySprite->Update(UpKeySpritePos, keySpriteScale1);
+	UpKeyPushSprite->Update(UpKeySpritePos, keySpriteScale1);
+	DownKeySprite->Update(DownKeySpritePos, keySpriteScale1);
+	DownKeyPushSprite->Update(DownKeySpritePos, keySpriteScale1);
+	LStickSprite2->Update(LStickSpritePos2, stickSpriteScale);
+	RStickSprite2->Update(RStickSpritePos2, stickSpriteScale);
+	AKeySprite2->Update(AKeySpritePos2, keySpriteScale1);
+	DKeySprite2->Update(DKeySpritePos2, keySpriteScale1);
+	SKeySprite2->Update(SKeySpritePos2, keySpriteScale1);
+	WKeySprite2->Update(WKeySpritePos2, keySpriteScale1);
+	LeftKeySprite2->Update(LeftKeySpritePos2, keySpriteScale1);
+	RightKeySprite2->Update(RightKeySpritePos2, keySpriteScale1);
+	UpKeySprite2->Update(UpKeySpritePos2, keySpriteScale1);
+	DownKeySprite2->Update(DownKeySpritePos2, keySpriteScale1);
+	LBButtonSprite2->Update(LBButtonSpritePos2, BButtonSpriteScale);
+	RBButtonSprite2->Update(RBButtonSpritePos2, BButtonSpriteScale);
+	spaceKeySprite2->Update(SpaceKeySpritePos3, keySpriteScale2);
+	shiftKeySprite1->Update(shiftKeySpritePos1, keySpriteScale2);
+	shiftKeyPushSprite1->Update(shiftKeySpritePos1, keySpriteScale2);
+	shiftKeySprite2->Update(shiftKeySpritePos2, keySpriteScale3);
 }
 
 void UI::SetTitleTimer(int moveTutorialTimer, int moveTutorialTime)

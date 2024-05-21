@@ -52,21 +52,21 @@ void ClearScene::Initialize()
 	Sprite* newBlackSprite1 = new Sprite();
 	newBlackSprite1->Initialize();
 	blackSprite1.reset(newBlackSprite1);
-	blackSprite1->SetTextureNum(14);
+	blackSprite1->SetTextureNum(83);
 	blackSprite1->SetPosition(black1Pos);
 	blackSprite1->SetScale(black1Scale);
 	//黒いスプライト2
 	Sprite* newBlackSprite2 = new Sprite();
 	newBlackSprite2->Initialize();
 	blackSprite2.reset(newBlackSprite2);
-	blackSprite2->SetTextureNum(14);
+	blackSprite2->SetTextureNum(83);
 	blackSprite2->SetPosition(black2Pos);
 	blackSprite2->SetScale(black2Scale);
 	//クリアのスプライト1
 	Sprite* newClear1Sprite = new Sprite();
 	newClear1Sprite->Initialize();
 	clear1Sprite.reset(newClear1Sprite);
-	clear1Sprite->SetTextureNum(21);
+	clear1Sprite->SetTextureNum(29);
 	clear1Sprite->SetPosition(clear1Pos);
 	clear1Sprite->SetScale(clear1Scale);
 }
@@ -105,7 +105,7 @@ void ClearScene::NextScene(Scene* pScene)
 
 void ClearScene::UpdateObject()
 {
-	if (clearFromGameTimer >= clearFromGameTime && keyManager->TriggerKey(KeyManager::PAD_X))
+	if (clearFromGameTimer >= clearFromGameTime && keyManager->TriggerKey(KeyManager::PAD_X) == 1)
 	{
 		moveTitleFlag = true;
 	}

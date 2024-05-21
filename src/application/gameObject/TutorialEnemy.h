@@ -158,6 +158,11 @@ public://メンバ関数
 	/// <summary>
 	///指定した座標にセット
 	/// </summary>
+	void AddEnemyTutorialScene(XMFLOAT3 pos);
+
+	/// <summary>
+	///指定した座標にセット
+	/// </summary>
 	void AddEnemyGameScene(XMFLOAT3 pos);
 
 	/// <summary>
