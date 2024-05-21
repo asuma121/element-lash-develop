@@ -5,8 +5,9 @@
 void Stand::Initialize()
 {
 	//アニメーションの設定
-	objectStand->StopAnimation();
-	objectStand->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelStand);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -37,34 +38,12 @@ void Stand::UpdateStateTutorial(Enemy* enemy)
 	}
 }
 
-void Stand::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectStand->Draw(cmdList);
-}
-
-void Stand::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectStand->DrawLightView(cmdList);
-}
-
-void Stand::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectStand->SetSRV(SRV);
-}
-
-void Stand::UpdateObject()
-{
-	objectStand->SetPosition(position);
-	objectStand->SetRotation(rotation);
-	objectStand->SetScale(scale);
-	objectStand->Update();
-}
-
 void Walk::Initialize()
 {
 	//アニメーションの設定
-	objectWalk->StopAnimation();
-	objectWalk->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelWalk);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -86,34 +65,12 @@ void Walk::UpdateState(Enemy* enemy)
 {
 }
 
-void Walk::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectWalk->Draw(cmdList);
-}
-
-void Walk::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectWalk->DrawLightView(cmdList);
-}
-
-void Walk::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectWalk->SetSRV(SRV);
-}
-
-void Walk::UpdateObject()
-{
-	objectWalk->SetPosition(position);
-	objectWalk->SetRotation(rotation);
-	objectWalk->SetScale(scale);
-	objectWalk->Update();
-}
-
 void Attack01::Initialize()
 {
 	//アニメーションの設定
-	objectAttack1->StopAnimation();
-	objectAttack1->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelAttack1);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -144,34 +101,12 @@ void Attack01::UpdateState(Enemy* enemy)
 	}
 }
 
-void Attack01::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack1->Draw(cmdList);
-}
-
-void Attack01::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack1->DrawLightView(cmdList);
-}
-
-void Attack01::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectAttack1->SetSRV(SRV);
-}
-
-void Attack01::UpdateObject()
-{
-	objectAttack1->SetPosition(position);
-	objectAttack1->SetRotation(rotation);
-	objectAttack1->SetScale(scale);
-	objectAttack1->Update();
-}
-
 void AttackOmen1::Initialize()
 {
 	//アニメーションの設定
-	objectAttackOmen1->StopAnimation();
-	objectAttackOmen1->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelAttackOmen1);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -281,34 +216,12 @@ void AttackOmen1::UpdateAttack()
 	}
 }
 
-void AttackOmen1::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttackOmen1->Draw(cmdList);
-}
-
-void AttackOmen1::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttackOmen1->DrawLightView(cmdList);
-}
-
-void AttackOmen1::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectAttackOmen1->SetSRV(SRV);
-}
-
-void AttackOmen1::UpdateObject()
-{
-	objectAttackOmen1->SetPosition(position);
-	objectAttackOmen1->SetRotation(rotation);
-	objectAttackOmen1->SetScale(scale);
-	objectAttackOmen1->Update();
-}
-
 void Dash::Initialize()
 {
 	//アニメーションの設定
-	objectDash->StopAnimation();
-	objectDash->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelDash);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -342,6 +255,15 @@ void Dash::Move()
 		//プレイヤーに近づく
 		position = position + velo * dashSpeed;
 	}
+
+	if (hitPlayerFlag == true && dashFlag == false)
+	{
+		//プレイヤーと敵のベクトル取得
+		dashVec = playerPos - position;
+		dashVec = normalize(dashVec);
+
+		dashFlag = true;
+	}
 }
 
 void Dash::UpdateState(Enemy* enemy)
@@ -352,38 +274,6 @@ void Dash::UpdateState(Enemy* enemy)
 		enemy->ChangeState(new FallDown());
 		return;
 	}
-}
-
-void Dash::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectDash->Draw(cmdList);
-}
-
-void Dash::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectDash->DrawLightView(cmdList);
-}
-
-void Dash::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectDash->SetSRV(SRV);
-}
-
-void Dash::UpdateObject()
-{
-	if (hitPlayerFlag == true && dashFlag == false)
-	{
-		//プレイヤーと敵のベクトル取得
-		dashVec = playerPos - position;
-		dashVec = normalize(dashVec);
-
-		dashFlag = true;
-	}
-
-	objectDash->SetPosition(position);
-	objectDash->SetRotation(rotation);
-	objectDash->SetScale(scale);
-	objectDash->Update();
 }
 
 void Dash::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
@@ -434,8 +324,9 @@ void Dash::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
 void CallMiniEnemy::Initialize()
 {
 	//アニメーションの設定
-	objectCallMiniEnemy->StopAnimation();
-	objectCallMiniEnemy->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelAttack1);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -548,34 +439,12 @@ void CallMiniEnemy::UpdateAttackMovePhase()
 	}
 }
 
-void CallMiniEnemy::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectCallMiniEnemy->Draw(cmdList);
-}
-
-void CallMiniEnemy::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectCallMiniEnemy->DrawLightView(cmdList);
-}
-
-void CallMiniEnemy::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectCallMiniEnemy->SetSRV(SRV);
-}
-
-void CallMiniEnemy::UpdateObject()
-{
-	objectCallMiniEnemy->SetPosition(position);
-	objectCallMiniEnemy->SetRotation(rotation);
-	objectCallMiniEnemy->SetScale(scale);
-	objectCallMiniEnemy->Update();
-}
-
 void FallDown::Initialize()
 {
 	//アニメーションの設定
-	objectFallDown->StopAnimation();
-	objectFallDown->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelFallDown);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -606,34 +475,12 @@ void FallDown::UpdateStateMovePhase(Enemy* enemy)
 	}
 }
 
-void FallDown::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectFallDown->Draw(cmdList);
-}
-
-void FallDown::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectFallDown->DrawLightView(cmdList);
-}
-
-void FallDown::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectFallDown->SetSRV(SRV);
-}
-
-void FallDown::UpdateObject()
-{
-	objectFallDown->SetPosition(position);
-	objectFallDown->SetRotation(rotation);
-	objectFallDown->SetScale(scale);
-	objectFallDown->Update();
-}
-
 void GetUp::Initialize()
 {
 	//アニメーションの設定
-	objectGetUp->StopAnimation();
-	objectGetUp->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelGetUp);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -666,27 +513,4 @@ void GetUp::UpdateStateMovePhase(Enemy* enemy)
 		enemy->ChangeState(new CallMiniEnemy());
 		return;
 	}
-}
-
-void GetUp::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectGetUp->Draw(cmdList);
-}
-
-void GetUp::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectGetUp->DrawLightView(cmdList);
-}
-
-void GetUp::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectGetUp->SetSRV(SRV);
-}
-
-void GetUp::UpdateObject()
-{
-	objectGetUp->SetPosition(position);
-	objectGetUp->SetRotation(rotation);
-	objectGetUp->SetScale(scale);
-	objectGetUp->Update();
 }

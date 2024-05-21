@@ -8,14 +8,6 @@ public:
 	void Initialize();
 	//ステートの更新
 	void UpdateState(Player* player);
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//ライト目線描画
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-	//オブジェクト更新
-	void UpdateObject();
 };
 
 //走ってる状態
@@ -28,14 +20,6 @@ public:
 	void UpdateState(Player* player);
 	//タイトルのみの処理
 	void MoveTitle(float timer) override;
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//ライト目線描画
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-	//オブジェクト更新
-	void UpdateObject();
 };
 
 //攻撃1 雷
@@ -50,14 +34,6 @@ public:
 	void UpdateAttack() override;
 	//動き
 	void Move() override;
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//ライト目線描画
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-	//オブジェクト更新
-	void UpdateObject();
 
 private:
 
@@ -96,14 +72,6 @@ public:
 	void UpdateAttack()override;
 	//動き
 	void Move() override;
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//ライト目線描画
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-	//オブジェクト更新
-	void UpdateObject();
 
 private:
 	//オブジェクトごとのタイマー
@@ -141,14 +109,6 @@ public:
 	void UpdateAttack()override;
 	//動き
 	void Move() override;
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//ライト目線描画
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-	//オブジェクト更新
-	void UpdateObject();
 
 private:
 
@@ -178,12 +138,4 @@ public:
 	void UpdateState(Player* player);
 	//動き
 	void Move() override;
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//ライト目線描画
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-	//オブジェクト更新
-	void UpdateObject();
 };

@@ -4,8 +4,9 @@
 void Wait::Initialize()
 {
 	//アニメーションの設定
-	objectWait->StopAnimation();
-	objectWait->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelWait);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -18,7 +19,6 @@ void Wait::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true) 
 	{
 		player->ChangeState(new Down());
-		objectDown->PlayAnimation();
 		return;
 	} 
 
@@ -48,37 +48,12 @@ void Wait::UpdateState(Player* player)
 	}
 }
 
-void Wait::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectWait->Draw(cmdList);
-
-	hitElecFlag = false;
-}
-
-void Wait::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectWait->DrawLightView(cmdList);
-}
-
-void Wait::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectWait->SetSRV(SRV);
-}
-
-void Wait::UpdateObject()
-{
-	objectWait->SetPosition(position);
-	objectWait->SetRotation(rotation0 + rotation1);
-	objectWait->SetScale(scale);
-	objectWait->SetDrawShaderNum(form);
-	objectWait->Update();
-}
-
 void Run::Initialize()
 {
 	//アニメーションの設定
-	objectRun->StopAnimation();
-	objectRun->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelRun);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -91,7 +66,6 @@ void Run::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
-		objectDown->PlayAnimation();
 		return;
 	}
 
@@ -167,42 +141,16 @@ void Run::MoveTitle(float timer)
 	position = position + posVelocity;
 }
 
-void Run::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectRun->Draw(cmdList);
-
-	hitElecFlag = false;
-}
-
-void Run::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectRun->DrawLightView(cmdList);
-}
-
-void Run::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectRun->SetSRV(SRV);
-}
-
-void Run::UpdateObject()
-{
-	objectRun->SetPosition(position);
-	objectRun->SetRotation(rotation0 + rotation1);
-	objectRun->SetScale(scale);
-	objectRun->SetDrawShaderNum(form);
-	objectRun->Update();
-}
-
 void Attack1::Initialize()
 {
 	//アニメーションの設定
-	objectAttack1->StopAnimation();
-	objectAttack1->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelAttack1);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
-	objectTimeFlag = true;
-	objectTime = attack1Time;
+	objectTimeFlag = false;
 }
 
 void Attack1::UpdateState(Player* player)
@@ -211,7 +159,6 @@ void Attack1::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
-		objectDown->PlayAnimation();
 		return;
 	}
 
@@ -284,41 +231,16 @@ void Attack1::Move()
 	return;
 }
 
-void Attack1::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack1->Draw(cmdList);
-
-	hitElecFlag = false;
-}
-
-void Attack1::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack1->DrawLightView(cmdList);
-}
-
-void Attack1::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectAttack1->SetSRV(SRV);
-}
-
-void Attack1::UpdateObject()
-{
-	objectAttack1->SetPosition(position);
-	objectAttack1->SetRotation(rotation0 + rotation1);
-	objectAttack1->SetScale(scale);
-	objectAttack1->SetDrawShaderNum(form);
-	objectAttack1->Update();
-}
-
 void Attack2::Initialize()
 {
 	//アニメーションの設定
-	objectAttack2->StopAnimation();
-	objectAttack2->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelAttack2);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
-	objectTimeFlag = true;
+	objectTimeFlag = false;
 	objectTime = attack2Time;
 }
 
@@ -328,7 +250,6 @@ void Attack2::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
-		objectDown->PlayAnimation();
 		return;
 	}
 	//攻撃が終わって立ち止まっている場合
@@ -344,6 +265,7 @@ void Attack2::UpdateState(Player* player)
 		return;
 	}
 }
+
 
 void Attack2::UpdateAttack()
 {
@@ -393,37 +315,12 @@ void Attack2::Move()
 	return;
 }
 
-void Attack2::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack2->Draw(cmdList);
-
-	hitElecFlag = false;
-}
-
-void Attack2::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack2->DrawLightView(cmdList);
-}
-
-void Attack2::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectAttack2->SetSRV(SRV);
-}
-
-void Attack2::UpdateObject()
-{
-	objectAttack2->SetPosition(position);
-	objectAttack2->SetRotation(rotation0 + rotation1);
-	objectAttack2->SetScale(scale);
-	objectAttack2->SetDrawShaderNum(form);
-	objectAttack2->Update();
-}
-
 void Attack3::Initialize()
 {
 	//アニメーションの設定
-	objectAttack3->StopAnimation();
-	objectAttack3->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelAttack3);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -436,7 +333,6 @@ void Attack3::UpdateState(Player* player)
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
 		player->ChangeState(new Down());
-		objectDown->PlayAnimation();
 		return;
 	}
 
@@ -485,37 +381,12 @@ void Attack3::Move()
 	position = position + posVelocity;
 }
 
-void Attack3::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack3->Draw(cmdList);
-
-	hitElecFlag = false;
-}
-
-void Attack3::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectAttack3->DrawLightView(cmdList);
-}
-
-void Attack3::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectAttack3->SetSRV(SRV);
-}
-
-void Attack3::UpdateObject()
-{
-	objectAttack3->SetPosition(position);
-	objectAttack3->SetRotation(rotation0 + rotation1);
-	objectAttack3->SetScale(scale);
-	objectAttack3->SetDrawShaderNum(form);
-	objectAttack3->Update();
-}
-
 void Down::Initialize()
 {
 	//アニメーションの設定
-	objectDown->StopAnimation();
-	objectDown->PlayAnimation();
+	object->StopAnimation();
+	object->SetModel(modelDown);
+	object->PlayAnimation();
 
 	//タイマーの設定
 	objectTimer = 0;
@@ -529,7 +400,7 @@ void Down::UpdateState(Player* player)
 	{
 		if (objectTimer == frameDown - 3)
 		{
-			objectDown->StopAnimation();
+			object->StopAnimation();
 		}
 		return;
 	}
@@ -549,31 +420,4 @@ void Down::Move()
 	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
-}
-
-
-void Down::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-	objectDown->Draw(cmdList);
-
-	hitElecFlag = false;
-}
-
-void Down::DrawLightView(ID3D12GraphicsCommandList* cmdList)
-{
-	objectDown->DrawLightView(cmdList);
-}
-
-void Down::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	objectDown->SetSRV(SRV);
-}
-
-void Down::UpdateObject()
-{
-	objectDown->SetPosition(position);
-	objectDown->SetRotation(rotation0 + rotation1);
-	objectDown->SetScale(scale);
-	objectDown->SetDrawShaderNum(form);
-	objectDown->Update();
 }

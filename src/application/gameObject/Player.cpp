@@ -23,12 +23,7 @@ FbxModel* PlayerState::modelAttack1 = nullptr;
 FbxModel* PlayerState::modelAttack2 = nullptr;
 FbxModel* PlayerState::modelAttack3 = nullptr;
 FbxModel* PlayerState::modelDown = nullptr;
-FbxObject3D* PlayerState::objectWait = nullptr;
-FbxObject3D* PlayerState::objectRun = nullptr;
-FbxObject3D* PlayerState::objectAttack1 = nullptr;
-FbxObject3D* PlayerState::objectAttack2 = nullptr;
-FbxObject3D* PlayerState::objectAttack3 = nullptr;
-FbxObject3D* PlayerState::objectDown = nullptr;
+FbxObject3D* PlayerState::object = nullptr;
 //コライダーデータ
 JSONLoader::ColliderData PlayerState::colliderData;
 //シェーダのデータ
@@ -89,11 +84,6 @@ void Player::UpdateGame()
 	playerState->SetHP(HP);
 	playerState->Update();
 
-
-
-	//スプライト更新
-	UpdateSprite();
-
 	//1フレーム前のフォルムを代入
 	preForm = form;
 
@@ -138,11 +128,6 @@ void Player::UpdateTutorial()
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
 	playerState->UpdateTutorial(tutorialFlag);
 
-
-
-	//スプライト更新
-	UpdateSprite();
-
 	//1フレーム前のフォルムを代入
 	preForm = form;
 
@@ -153,9 +138,6 @@ void Player::UpdateTutorial()
 
 void Player::UpdateTitle(float timer)
 {
-	//フォルム更新
-	/*UpdateForm();*/
-
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
 	lockOn->SetPlayerPosition(playerState->GetPosition());
@@ -174,19 +156,12 @@ void Player::UpdateTitle(float timer)
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
 	playerState->UpdateTitle(timer);
 
-	//スプライト更新
-	UpdateSprite();
-
 	//1フレーム前のフォルムを代入
 	preForm = form;
 
 	//敵クリア
 	enemyPos.clear();
 	enemyAddPos.clear();
-}
-
-void Player::UpdateSprite()
-{
 }
 
 void Player::UpdateCollider()
@@ -407,6 +382,32 @@ void PlayerState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 	elecParticle2->Draw(cmdList);
 }
 
+void PlayerState::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	object->Draw(cmdList);
+
+	hitElecFlag = false;
+}
+
+void PlayerState::DrawLightView(ID3D12GraphicsCommandList* cmdList)
+{
+	object->DrawLightView(cmdList);
+}
+
+void PlayerState::SetSRV(ID3D12DescriptorHeap* SRV)
+{
+	object->SetSRV(SRV);
+}
+
+void PlayerState::UpdateObject()
+{
+	object->SetPosition(position);
+	object->SetRotation(rotation0 + rotation1);
+	object->SetScale(scale);
+	object->SetDrawShaderNum(form);
+	object->Update();
+}
+
 void PlayerState::Update()
 {
 	//タイマー更新
@@ -618,29 +619,9 @@ void PlayerState::StaticInitialize()
 	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("playerDown");
 
 	//オブジェクト
-	objectWait = new FbxObject3D;
-	objectWait->Initialize(modelWait, textureData);
-	objectWait->PlayAnimation();
-
-	objectRun = new FbxObject3D;
-	objectRun->Initialize(modelRun, textureData);
-	objectRun->PlayAnimation();
-
-	objectAttack1 = new FbxObject3D;
-	objectAttack1->Initialize(modelAttack1, textureData);
-	objectAttack1->PlayAnimation();
-
-	objectAttack2 = new FbxObject3D;
-	objectAttack2->Initialize(modelAttack2, textureData);
-	objectAttack2->PlayAnimation();
-
-	objectAttack3 = new FbxObject3D;
-	objectAttack3->Initialize(modelAttack3, textureData);
-	objectAttack3->PlayAnimation();
-
-	objectDown = new FbxObject3D;
-	objectDown->Initialize(modelDown, textureData);
-	objectDown->PlayAnimation();
+	object = new FbxObject3D;
+	object->Initialize(modelWait, textureData);
+	object->PlayAnimation();
 
 	//弾
 	bullet = new PlayerBullet;

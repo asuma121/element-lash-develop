@@ -15,34 +15,20 @@
 #define GAcceleration 9.80665 * 1/10	//重力加速度
 
 Camera* Enemy::camera = nullptr;
-//立っている状態のオブジェクト
-FbxObject3D* EnemyState::objectStand = nullptr;
+//オブジェクト
+FbxObject3D* EnemyState::object = nullptr;
 //立っている状態のモデル
 FbxModel* EnemyState::modelStand = nullptr;
-//歩いている状態のオブジェクト
-FbxObject3D* EnemyState::objectWalk = nullptr;
 //歩いている状態のモデル
 FbxModel* EnemyState::modelWalk = nullptr;
-//攻撃1状態のオブジェクト
-FbxObject3D* EnemyState::objectAttack1 = nullptr;
 //攻撃1状態のモデル
 FbxModel* EnemyState::modelAttack1 = nullptr;
-//攻撃1前兆のオブジェクト
-FbxObject3D* EnemyState::objectAttackOmen1 = nullptr;
 //攻撃1前兆のモデル
 FbxModel* EnemyState::modelAttackOmen1 = nullptr;
-//ダッシュのオブジェクト
-FbxObject3D* EnemyState::objectDash = nullptr;
 //ダッシュのモデル
 FbxModel* EnemyState::modelDash = nullptr;
-//敵呼び出しのオブジェクト
-FbxObject3D* EnemyState::objectCallMiniEnemy = nullptr;
-//転ぶオブジェクト
-FbxObject3D* EnemyState::objectFallDown = nullptr;
 //転ぶモデル
 FbxModel* EnemyState::modelFallDown = nullptr;
-//立ち上がるオブジェクト
-FbxObject3D* EnemyState::objectGetUp = nullptr;
 //立ち上がるモデル
 FbxModel* EnemyState::modelGetUp = nullptr;
 //平行移動
@@ -218,144 +204,6 @@ void Enemy::UpdateCollider()
 	enemyState->UpdateCollider();
 }
 
-//void Enemy::StatusManagerGame2()
-//{
-//	//デバッグ用
-//	//if (status == AttackOmen1)//タイマー更新
-//	//{
-//	//	statusTimer += 1.0f;
-//	//	if (statusTimer >= frameAttackOmen1)
-//	//	{
-//	//		statusTimer = 0.0f;
-//	//		status = AttackOmen1;
-//	//		return;
-//	//	}
-//	//	return;
-//	//}
-//	
-//
-//
-//	//攻撃前兆の場合
-//	if (status == AttackOmen1)
-//	{
-//		//タイマー更新
-//		statusTimer += 1.0f;
-//		//次の行動が敵呼び出しの時
-//		if (phase2CallEnemyFlag == true)
-//		{
-//			if (statusTimer >= frameAttackOmen1)
-//			{
-//				statusTimer = 0.0f;
-//				status = CallMiniEnemy;
-//				phase2CallEnemyFlag = false;
-//				phase2Attack1Flag = true;
-//				return;
-//			}
-//		}
-//		//次の行動が攻撃1の時
-//		if (phase2Attack1Flag == true)
-//		{
-//			if (statusTimer >= frameAttackOmen1)
-//			{
-//				statusTimer = 0.0f;
-//				status = Attack1;
-//				phase2CallEnemyFlag = true;
-//				phase2Attack1Flag = false;
-//				return;
-//			}
-//		}
-//	}
-//
-//	//敵呼び出しの場合
-//	if (status == CallMiniEnemy)
-//	{
-//		//タイマー更新
-//		statusTimer += 1.0f;
-//		callEnemyFlag = false;
-//		//敵呼び出し
-//		if (statusTimer == frameCallMiniEnemy2)
-//		{
-//			//フラグを立てる
-//			callEnemyFlag = true;
-//			//ベクトル取得
-//			XMFLOAT3 velo = playerPos - position;
-//			callEnemyPos = velo / 2;
-//		}
-//		//ダッシュへ移動
-//		if (statusTimer >= frameCallMiniEnemy)
-//		{
-//			//敵→プレイヤーのベクトル取得
-//			dashVector = XMFLOAT3(playerPos.x - position.x, 0.0f, playerPos.z - position.z);
-//			dashVector = normalize(dashVector);
-//			dashVector = dashVector * dashSpeed;
-//			statusTimer = 0.0f;
-//			status = Dash;
-//			return;
-//		}
-//	}
-//
-//	//ダッシュ呼び出しの場合
-//	if (status == Dash)
-//	{
-//		//タイマー更新
-//		statusTimer += 1.0f;
-//		//攻撃前兆へ移動
-//		if (statusTimer >= frameDash)
-//		{
-//			statusTimer = 0.0f;
-//			status = AttackOmen1;
-//			return;
-//		}
-//	}
-//
-//	//攻撃1の場合
-//	if (status == Attack1)
-//	{
-//		//弾をセット
-//		if (statusTimer == 0.0f)
-//		{
-//			XMFLOAT3 addPos(-20, 40, 50);
-//			addPos = position + rollRotation(addPos, rotation);
-//			for (int i = 0; i < bulletVol; i++)
-//			{
-//				bullet->SetBullet(addPos, bulletScale, bulletLastScale, 0.0f,
-//					frameAttackOmen1 + bulletTimeLag * i, frameAttack1);
-//			}
-//		}
-//		//タイマー更新
-//		statusTimer += 1.0f;
-//		//攻撃前兆へ移動
-//		if (statusTimer >= frameAttack1)
-//		{
-//			statusTimer = 0.0f;
-//			status = AttackOmen1;
-//			return;
-//		}
-//	}
-//}
-
-void Enemy::StatusManagerTutorial(int tutorialTimer)
-{
-	////しばらく立ってる
-	//if (tutorialTimer < 180)
-	//{
-	//	status = Stand;
-	//	return;
-	//}
-	////攻撃前兆モーション
-	//if (tutorialTimer < 180 + frameAttackOmen1)
-	//{
-	//	status = AttackOmen1;
-	//	return;
-	//}
-	////しばらく立ってる
-	//else
-	//{
-	//	status = Stand;
-	//	return;
-	//}
-}
-
 void Enemy::SetSRV(ID3D12DescriptorHeap* SRV)
 {
 	enemyState->SetSRV(SRV);
@@ -475,73 +323,25 @@ void EnemyState::StaticInitialize()
 {
 	//立っているモデル
 	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
-	//立っているオブジェクト
-	objectStand = new FbxObject3D;
-	objectStand->Initialize();
-	objectStand->SetModel(modelStand);
-	objectStand->SetTextureNum(0);
-	objectStand->PlayAnimation();
-
 	//歩いているモデル
 	modelWalk = FbxLoader::GetInstance()->LoadModelFromFile("enemyWalk");
-	//歩いているオブジェクト
-	objectWalk = new FbxObject3D;
-	objectWalk->Initialize();
-	objectWalk->SetModel(modelWalk);
-	objectWalk->SetTextureNum(0);
-	objectWalk->StopAnimation();
-
 	//攻撃1のモデル
 	modelAttack1 = FbxLoader::GetInstance()->LoadModelFromFile("enemyAttack1");
-	//攻撃1のオブジェクト
-	objectAttack1 = new FbxObject3D;
-	objectAttack1->Initialize();
-	objectAttack1->SetModel(modelAttack1);
-	objectAttack1->SetTextureNum(0);
-	objectAttack1->StopAnimation();
-
 	//攻撃前兆のモデル
 	modelAttackOmen1 = FbxLoader::GetInstance()->LoadModelFromFile("enemyAttack1Omen");
-	//攻撃前兆のオブジェクト
-	objectAttackOmen1 = new FbxObject3D;
-	objectAttackOmen1->Initialize();
-	objectAttackOmen1->SetModel(modelAttackOmen1);
-	objectAttackOmen1->SetTextureNum(0);
-	objectAttackOmen1->StopAnimation();
-
 	//ダッシュのモデル
 	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("enemyDash");
-	//ダッシュのオブジェクト
-	objectDash = new FbxObject3D;
-	objectDash->Initialize();
-	objectDash->SetModel(modelDash);
-	objectDash->SetTextureNum(0);
-	objectDash->StopAnimation();
-
-	//敵呼び出しのオブジェクト
-	objectCallMiniEnemy = new FbxObject3D;
-	objectCallMiniEnemy->Initialize();
-	objectCallMiniEnemy->SetModel(modelAttack1);
-	objectCallMiniEnemy->SetTextureNum(0);
-	objectCallMiniEnemy->StopAnimation();
-
 	//転ぶモデル
 	modelFallDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyFallDown");
-	//転ぶオブジェクト
-	objectFallDown = new FbxObject3D;
-	objectFallDown->Initialize();
-	objectFallDown->SetModel(modelFallDown);
-	objectFallDown->SetTextureNum(0);
-	objectFallDown->StopAnimation();
-
 	//立ち上がるモデル
 	modelGetUp = FbxLoader::GetInstance()->LoadModelFromFile("enemyGetUp");
-	//立ち上がるオブジェクト
-	objectGetUp = new FbxObject3D;
-	objectGetUp->Initialize();
-	objectGetUp->SetModel(modelGetUp);
-	objectGetUp->SetTextureNum(0);
-	objectGetUp->StopAnimation();
+
+	//オブジェクト
+	object = new FbxObject3D;
+	object->Initialize();
+	object->SetModel(modelStand);
+	object->SetTextureNum(0);
+	object->PlayAnimation();
 
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため
@@ -575,6 +375,29 @@ void EnemyState::StaticInitialize()
 	nextCallMiniEnemy = false;
 	nextDash = false;
 	nextAttack01 = false;
+}
+
+void EnemyState::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	object->Draw(cmdList);
+}
+
+void EnemyState::DrawLightView(ID3D12GraphicsCommandList* cmdList)
+{
+	object->DrawLightView(cmdList);
+}
+
+void EnemyState::SetSRV(ID3D12DescriptorHeap* SRV)
+{
+	object->SetSRV(SRV);
+}
+
+void EnemyState::UpdateObject()
+{
+	object->SetPosition(position);
+	object->SetRotation(rotation);
+	object->SetScale(scale);
+	object->Update();
 }
 
 void EnemyState::DrawParticle(ID3D12GraphicsCommandList* cmdList)

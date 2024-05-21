@@ -124,11 +124,6 @@ public://メンバ関数
 	void UpdateCollider();
 
 	/// <summary>
-	///ステータスマネージャー
-	/// </summary>
-	void StatusManagerTutorial(int tutorialTimer);
-
-	/// <summary>
 	///srvセット
 	/// </summary>
 	void SetSRV(ID3D12DescriptorHeap* SRV);
@@ -376,20 +371,20 @@ public:	//メンバ関数
 	virtual void UpdateStateClear(Enemy* enemy) {};
 	//クリア専用更新
 	virtual void UpdateParticleClear() {};
-	//描画
-	virtual void Draw(ID3D12GraphicsCommandList* cmdList) = 0;
-	//ライト目線描画
-	virtual void DrawLightView(ID3D12GraphicsCommandList* cmdList) = 0;
-	//SRVセット
-	virtual void SetSRV(ID3D12DescriptorHeap* SRV) = 0;
-	//オブジェクトの更新
-	virtual void UpdateObject() = 0;
 	//壁との当たり判定処理 歩き、ダッシュのみ 
 	virtual void UpdateHitWall(JSONLoader::ColliderData objectColliderData) {};
 	//柱との当たり判定処理 歩き、ダッシュのみ
 	virtual void UpdateHitPiller(JSONLoader::ColliderData objectColliderData){};
 
 	//通常関数
+	//描画
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+	//ライト目線描画
+	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
+	//SRVセット
+	void SetSRV(ID3D12DescriptorHeap* SRV);
+	//オブジェクトの更新
+	void UpdateObject();
 	//パーティクル描画
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
@@ -442,41 +437,21 @@ public:	//メンバ関数
 
 protected:	//静的メンバ変数
 
-	//立っている状態のオブジェクト
-	static FbxObject3D* objectStand;
+	//オブジェクト
+	static FbxObject3D* object;
+
 	//立っている状態のモデル
 	static FbxModel* modelStand;
-
-	//歩いている状態のオブジェクト
-	static FbxObject3D* objectWalk;
 	//歩いている状態のモデル
 	static FbxModel* modelWalk;
-
-	//攻撃1状態のオブジェクト
-	static FbxObject3D* objectAttack1;
 	//攻撃1状態のモデル
 	static FbxModel* modelAttack1;
-
-	//攻撃1前兆のオブジェクト
-	static FbxObject3D* objectAttackOmen1;
 	//攻撃1前兆のモデル
 	static FbxModel* modelAttackOmen1;
-
-	//ダッシュのオブジェクト
-	static FbxObject3D* objectDash;
 	//ダッシュのモデル
 	static FbxModel* modelDash;
-
-	//敵呼び出しのオブジェクト
-	static FbxObject3D* objectCallMiniEnemy;
-
-	//転ぶオブジェクト
-	static FbxObject3D* objectFallDown;
 	//転ぶモデル
 	static FbxModel* modelFallDown;
-
-	//立ち上がるオブジェクト
-	static FbxObject3D* objectGetUp;
 	//立ち上がるモデル
 	static FbxModel* modelGetUp;
 

@@ -293,44 +293,6 @@ private:
 	//チュートリアルのフェーズ
 	int tutorialFlag = 0;
 
-	////HP用スプライト
-	//Sprite* hpSprite1[5];	//緑のHP
-	//Sprite* hpSprite2 = nullptr;	//赤いHP
-	//Sprite* hpSprite3 = nullptr;	//HPの枠
-	////HP用スプライトの大きさ、座標
-	//XMFLOAT2 hpSpritePos = { 490.0f,660.0f };
-	//XMFLOAT2 hpSprite1Scale = { 32.0f * 1.5f,16.0f * 1.5f };
-	//XMFLOAT2 hpSprite2Scale = { 32.0f * 1.5f,16.0f * 1.5f };
-	//XMFLOAT2 hpSprite3Scale = { 196.0f * 1.5,28.0f * 1.5 };
-	////HP枠の大きさ
-	//float hpFrameScale1 = 10.0f * 1.5f;	//外枠 左右
-	//float hpFrameScale2 = 4.0f * 1.5f;	//内側の枠
-	//float hpFrameScale3 = 6.0f * 1.5f;	//外枠 上下
-
-	//属性変化のUIスプライト
-	Sprite* changeElementSprite1 = nullptr;	//電気
-	Sprite* changeElementSprite2 = nullptr;	//炎
-	Sprite* changeElementSprite3 = nullptr;	//チェンジ
-	Sprite* changeElementSprite4 = nullptr;	//罰マーク
-	XMFLOAT2 changeElementSpritePos = { 1200.0f,50.0f };
-	XMFLOAT2 changeElementspriteScale = { 64.0f,64.0f };
-
-	//攻撃のUIスプライト
-	Sprite* attackElecSprite = nullptr;
-	Sprite* attackFireSprite = nullptr;
-	XMFLOAT2 attackSpritePos = { 1200.0f,124.0f };
-	XMFLOAT2 attackSpriteScale = { 64.0f,64.0f };
-
-	//RBボタン LBボタンのスプライト
-	Sprite*LBButtonSprite = nullptr;
-	Sprite*LBButtonPushSprite = nullptr;
-	Sprite*RBButtonSprite = nullptr;
-	Sprite*RBButtonPushSprite = nullptr;
-	//RBボタン LBボタン 座標 スケール
-	XMFLOAT2 LBButtonSpritePos = { 1126.0f,50.0f };
-	XMFLOAT2 RBButtonSpritePos = { 1126.0f,124.0f };
-	XMFLOAT2 BButtonSpriteScale = { 64.0f,64.0f };
-
 	float debugPos[2] = {320.0f,120.0f};
 
 	//ステータス関連
@@ -388,16 +350,17 @@ public:	//メンバ関数
 	virtual void MoveTitle(float timer) {};
 	//ステートの変更
 	virtual void UpdateState(Player* player) = 0;
-	//描画
-	virtual void Draw(ID3D12GraphicsCommandList* cmdList) = 0;
-	//ライト目線描画
-	virtual void DrawLightView(ID3D12GraphicsCommandList* cmdList) = 0;
-	//SRVセット
-	virtual void SetSRV(ID3D12DescriptorHeap* SRV) = 0;
-	//オブジェクトの更新
-	virtual void UpdateObject() = 0;
+
 
 	//通常関数
+	//描画
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+	//ライト目線描画
+	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
+	//SRVセット
+	void SetSRV(ID3D12DescriptorHeap* SRV);
+	//オブジェクトの更新
+	void UpdateObject();
 	//パーティクル描画
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
@@ -471,12 +434,7 @@ protected:	//静的メンバ変数
 	static FbxModel* modelAttack3;
 	static FbxModel* modelDown;
 	//オブジェクト
-	static FbxObject3D* objectWait;
-	static FbxObject3D* objectRun;
-	static FbxObject3D* objectAttack1;
-	static FbxObject3D* objectAttack2;
-	static FbxObject3D* objectAttack3;
-	static FbxObject3D* objectDown;
+	static FbxObject3D* object;
 	//コライダーデータ
 	static JSONLoader::ColliderData colliderData;
 	//シェーダのデータ
