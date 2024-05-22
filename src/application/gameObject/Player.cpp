@@ -524,7 +524,7 @@ void PlayerState::UpdateCollider()
 	for (int i = 0; i < objectColliderData.size(); i++)
 	{
 		//壁との当たり判定処理
-		if (objectColliderData[i].objectName.substr(0, 4) == "wall")
+		if (objectColliderData[i].objectName.substr(0, 11) == "wall_player")
 		{
 			UpdateHitWall(objectColliderData[i]);
 		}
@@ -561,13 +561,13 @@ void PlayerState::UpdateDown()
 
 void PlayerState::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
 {
+	//プレイヤーから原点のベクトル
+	XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - position;
+	//プレイヤーから原点のベクトルを正規化
+	vec = normalize(vec);
 	//壁の外にいる時のみ
 	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == false)
 	{
-		//プレイヤーから原点のベクトル
-		XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - position;
-		//プレイヤーから原点のベクトルを正規化
-		vec = normalize(vec);
 		//壁の中に戻るまで加算
 		position = position + (vec * knockBackSpeed);
 		//コライダーデータの座標更新
@@ -705,22 +705,30 @@ void PlayerState::SetTitle(Player* player)
 void PlayerState::SetTutorial()
 {
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	rotation0 = { 0.0f,0.0f,0.0f };
+	rotation1 = { 0.0f,0.0f,0.0f };
 }
 
 void PlayerState::SetGameScene()
 {
 	position = gameScenePos;
+	rotation0 = { 0.0f,0.0f,0.0f };
+	rotation1 = { 0.0f,0.0f,0.0f };
 }
 
 void PlayerState::SetMovePhase(Player* player)
 {
 	position = movePhasePos;
+	rotation0 = { 0.0f,0.0f,0.0f };
+	rotation1 = { 0.0f,0.0f,0.0f };
 	player->ChangeState(new Wait());
 }
 
 void PlayerState::SetClear(Player* player)
 {
 	position = clearPos;
+	rotation0 = { 0.0f,0.0f,0.0f };
+	rotation1 = { 0.0f,0.0f,0.0f };
 	player->ChangeState(new Wait());
 }
 

@@ -173,7 +173,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Camera::SetKeyManager(keyManager);
 	Camera* camera = nullptr;
 	camera = new Camera();
-	camera->Initialize();
 
 	//ビルボードのスプライト
 	BillboardSpriteModel::SetDevice(dxCommon->GetDevice());
@@ -213,6 +212,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//コライダーのキューブ
 	ColliderCubeObject::SetDevice(dxCommon->GetDevice());
 	ColliderCubeObject::SetCamera(camera);
+
+	camera->Initialize();
 
 	//コライダーマネージャー
 	ColliderManager::StaticInitialize(dxCommon->GetDevice());

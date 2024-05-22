@@ -592,7 +592,7 @@ void UI::UpdateGame1()
 		//プレイヤーが倒れきったら
 		if (gameOverTimer == frameDown)
 		{
-			gameOverTitleFlag = true;
+			gameOverRetryFlag = true;
 		}
 
 		//プレイヤーが倒れたあと
@@ -664,7 +664,7 @@ void UI::UpdateGame2()
 		//プレイヤーが倒れきったら
 		if (gameOverTimer == frameDown)
 		{
-			gameOverTitleFlag = true;
+			gameOverRetryFlag = true;
 		}
 
 		//プレイヤーが倒れたあと

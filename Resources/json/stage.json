@@ -6,8 +6,8 @@
             "name": "Camera",
             "transform": {
                 "translation": [
-                    -171.76165771484375,
-                    161.5657958984375,
+                    -221.76165771484375,
+                    211.5657958984375,
                     -42.91595458984375
                 ],
                 "rotation": [
@@ -100,7 +100,7 @@
         },
         {
             "type": "MESH",
-            "name": "wall",
+            "name": "wall_camera",
             "transform": {
                 "translation": [
                     0.0,
@@ -257,6 +257,247 @@
                 "translation": [
                     0.0,
                     -250.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    16.0,
+                    16.0,
+                    16.0
+                ]
+            },
+            "collider": {
+                "type": "Box",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "wall_player",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    408.16998291015625,
+                    408.16998291015625,
+                    408.16998291015625
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_obj_5",
+            "transform": {
+                "translation": [
+                    -175.0,
+                    175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_obj_7",
+            "transform": {
+                "translation": [
+                    175.0,
+                    -175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_obj_6",
+            "transform": {
+                "translation": [
+                    175.0,
+                    175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_obj_8",
+            "transform": {
+                "translation": [
+                    -175.0,
+                    -175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_coll_4.001",
+            "transform": {
+                "translation": [
+                    175.0,
+                    175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    16.0,
+                    16.0,
+                    16.0
+                ]
+            },
+            "collider": {
+                "type": "Box",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_coll_4.002",
+            "transform": {
+                "translation": [
+                    175.0,
+                    -175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    16.0,
+                    16.0,
+                    16.0
+                ]
+            },
+            "collider": {
+                "type": "Box",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_coll_4.003",
+            "transform": {
+                "translation": [
+                    -175.0,
+                    -175.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scale": [
+                    16.0,
+                    16.0,
+                    16.0
+                ]
+            },
+            "collider": {
+                "type": "Box",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "piller_coll_4.004",
+            "transform": {
+                "translation": [
+                    -175.0,
+                    175.0,
                     0.0
                 ],
                 "rotation": [

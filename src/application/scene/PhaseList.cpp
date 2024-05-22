@@ -61,10 +61,6 @@ void Phase1::NextPhase(GameScene* gameScene)
 
 void Phase1::UpdateObject()
 {
-	//カメラ更新
-	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
-	camera->Update();
-
 	//ライト更新
 	light->SetEye(XMFLOAT3(lightPos));
 	light->SetTarget(XMFLOAT3(lightTarget));
@@ -97,6 +93,9 @@ void Phase1::UpdateCollider()
 {
 	//事前処理
 	ColliderManager::PreUpdate();
+
+	//カメラ当たり判定更新
+	camera->SetObjectCollider(terrain->GetColliderData());
 
 	//プレイヤー当たり判定更新
 	player->SetObjectCollider(terrain->GetColliderData());
@@ -152,6 +151,10 @@ void Phase1::UpdateCollider()
 
 	//後処理
 	ColliderManager::PostUpdate();
+
+	//カメラ更新
+	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
+	camera->Update();
 }
 
 void Phase1::DrawFBX()
@@ -245,10 +248,6 @@ void Phase2::NextPhase(GameScene* gameScene)
 
 void Phase2::UpdateObject()
 {
-	//カメラ更新
-	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
-	camera->Update();
-
 	//ライト更新
 	light->SetEye(XMFLOAT3(lightPos) + player->GetPosition());
 	light->SetTarget(XMFLOAT3(lightTarget) + player->GetPosition());
@@ -290,6 +289,9 @@ void Phase2::UpdateCollider()
 {
 	//事前処理
 	ColliderManager::PreUpdate();
+
+	//カメラ当たり判定更新
+	camera->SetObjectCollider(terrain->GetColliderData());
 
 	//プレイヤー当たり判定更新
 	player->SetObjectCollider(terrain->GetColliderData());
@@ -379,6 +381,10 @@ void Phase2::UpdateCollider()
 
 	//後処理
 	ColliderManager::PostUpdate();
+
+	//カメラ更新
+	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
+	camera->Update();
 }
 
 void Phase2::DrawFBX()
@@ -454,10 +460,6 @@ void MovePhase::NextPhase(GameScene* gameScene)
 
 void MovePhase::UpdateObject()
 {
-	//カメラ更新
-	camera->UpdateMovePhase();
-	camera->Update();
-
 	//ライト更新
 	light->SetEye(XMFLOAT3(lightPos) + player->GetPosition());
 	light->SetTarget(XMFLOAT3(lightTarget) + player->GetPosition());
@@ -491,6 +493,10 @@ void MovePhase::UpdateObject()
 
 	//地形
 	terrain->Update();
+
+	//カメラ更新
+	camera->UpdateMovePhase();
+	camera->Update();
 
 	if (phaseTimer > movePhaseTime)
 	{

@@ -282,6 +282,9 @@
     <ClCompile Include="src\engine\base\KeyManager.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\application\particle\ParticleManager.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\base\WinApp.h">
@@ -457,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="src\engine\base\KeyManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\particle\ParticleManager.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

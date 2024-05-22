@@ -325,7 +325,7 @@ private:
 	//チュートリアルシーン 次は「」で攻撃してみよう
 	std::unique_ptr<Sprite>tutorial4Sprite;	
 	XMFLOAT2 tutorial4Pos = { 198.0f, 570.0f };
-	XMFLOAT2 tutorial4Scale = { 523.0f * 1.5f, 41.0f * 1.5f };
+	XMFLOAT2 tutorial4Scale = { 650.0f * 1.5f, 41.0f * 1.5f };
 	//チュートリアルシーン 次は「」を押してみよう
 	std::unique_ptr<Sprite>tutorial6Sprite;
 	XMFLOAT2 tutorial6Pos = { 198.0f, 570.0f };

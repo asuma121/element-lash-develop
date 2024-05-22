@@ -284,7 +284,7 @@ private:
 	bool hitElec = false;
 
 	//ダメージ
-	float fireDamege = 0.3f;
+	float fireDamege = 0.45f;
 	float elecDamege = 7.0f;
 
 	//挙動関連
@@ -546,7 +546,7 @@ protected:	//メンバ変数
 	//歩くスピード
 	float walkSpeed = 1.0f;
 	//ダッシュのスピード
-	float dashSpeed = 1.2f;
+	float dashSpeed = 1.1f;
 	//ダッシュ攻撃に移らない範囲
 	float dashLength = 50.0f;
 

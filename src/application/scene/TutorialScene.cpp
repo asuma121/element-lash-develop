@@ -49,17 +49,29 @@ void TutorialScene::Update()
 	}
 	gameTimer += 1.0f;
 
-	//オブジェクト更新
-	UpdateObject();
-
 	//スプライト更新
 	UpdateSprite();
+
+	//パーティクル更新
+	UpdateParticle();
+
+	//オブジェクト更新
+	UpdateObject();
 
 	//コライダー更新
 	UpdateCollider();
 
-	//パーティクル更新
-	UpdateParticle();
+	//カメラ更新
+	if (tutorialSpriteFlag == 13)
+	{
+		camera->UpdateTutorial(tutorial13Timer);
+	}
+	else
+	{
+		camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
+	}
+	/*camera_->DebugUpdate();*/
+	camera->Update();
 }
 
 void TutorialScene::NextScene(Scene* pScene)
@@ -72,18 +84,6 @@ void TutorialScene::NextScene(Scene* pScene)
 
 void TutorialScene::UpdateObject()
 {
-	//カメラ更新
-	if (tutorialSpriteFlag == 13)
-	{
-		camera->UpdateTutorial(tutorial13Timer);
-	}
-	else
-	{
-		camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
-	}
-	/*camera_->DebugUpdate();*/
-	camera->Update();
-
 	//ライト
 	light->SetEye(XMFLOAT3(lightPos) + player->GetPosition());
 	light->SetTarget(XMFLOAT3(lightTarget) + player->GetPosition());
@@ -120,6 +120,18 @@ void TutorialScene::UpdateObject()
 
 	//地形
 	terrain->Update();
+
+	////カメラ更新
+	//if (tutorialSpriteFlag == 13)
+	//{
+	//	camera->UpdateTutorial(tutorial13Timer);
+	//}
+	//else
+	//{
+	//	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
+	//}
+	///*camera_->DebugUpdate();*/
+	//camera->Update();
 }
 
 void TutorialScene::UpdateSprite()
@@ -290,6 +302,9 @@ void TutorialScene::UpdateCollider()
 {
 	//事前処理
 	ColliderManager::PreUpdate();
+
+	//カメラ当たり判定更新
+	camera->SetObjectCollider(terrain->GetColliderData());
 
 	//プレイヤー当たり判定更新
 	player->SetObjectCollider(terrain->GetColliderData());

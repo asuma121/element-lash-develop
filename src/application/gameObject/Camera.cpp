@@ -9,6 +9,7 @@
 #include "Math.h"
 #include "mathOriginal.h"
 #include "imgui.h"
+#include "ColliderManager.h"
 #define PI 3.14159265359
 
 KeyManager* Camera::keyManager = nullptr;
@@ -38,36 +39,43 @@ void Camera::Initialize()
 
 	//行列計算
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
+
+	//コライダーデータ
+	colliderData.type = "Sphere";	//判定を球体で取るため
+	colliderData.objectName = "camera";
+	colliderData.scale = colliderScale;
+	colliderData.rotation = colliderRotation;
+	colliderData.center = eye_;
+	//コライダーマネージャーにセット
+	ColliderManager::SetCollider(colliderData);
 }
 
 
 void Camera::Update()
 {
+	//コライダーデータの更新
+	colliderData.center = eye_;
+
+	for (int i = 0; i < objectColliderData.size(); i++)
+	{
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 11) == "wall_camera")
+		{
+			UpdateHitWall(objectColliderData[i]);
+		}
+	}
+
+	//ビルボード行列の更新
 	BillboardUpdate();
 
 	//角度更新
 	//視点から注視点のベクトル取得
 	XMFLOAT3 vec = target_ - eye_;
 
-	//XMFLOAT3 rot(0.0f, 0.0f, 0.0f);
-	////正面向いてる時の角度
-	//XMFLOAT3 oriRot = { 1.0f,0.0f,1.0f };
-	/*rot.y = vec.x * PI / 2;*/
-	/*rot.y = (vec.x * oriRot.x) + (vec.z * oriRot.z) / 
-		(length(XMFLOAT2(vec.x, vec.z)) * length(XMFLOAT2(oriRot.x, oriRot.z))) * (PI / 2);
-	rot.y *= (float(PI) / 90.0f);*/
 	rotation = getVectorRotation(vec);
 
-	//デバッグでないとき普通の射影変換
-	if (debugFlag == false)
-	{
-		matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
-	}
-	//デバッグのときの射影変換
-	if (debugFlag == true)
-	{
-		matView_ = XMMatrixLookAtLH(XMLoadFloat3(&debugEye_), XMLoadFloat3(&debugTarget_), XMLoadFloat3(&debugUp_));
-	}
+	//射影変換
+	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
 }
 
 void Camera::TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer)
@@ -139,7 +147,7 @@ void Camera::BillboardUpdate()
 
 void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
 {
-	target_ = { playerPos.x,5.0f,playerPos.z };
+	target_ = { playerPos.x,10.0f,playerPos.z };
 
 	/*eye_.x = sin(playerChangeRot) * playerTargetDistance + target_.x;
 	eye_.y = sin(playerChangeRot2) * playerTargetDistance;
@@ -242,4 +250,20 @@ void Camera::SetTarget(XMFLOAT3 pos)
 void Camera::SetEye(XMFLOAT3 pos)
 {
 	eye_ = pos;
+}
+
+void Camera::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
+{
+	//プレイヤーから原点のベクトル
+	XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - eye_;
+	//壁の外にいる時のみ
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == false)
+	{
+		//プレイヤーから原点のベクトルを正規化
+		vec = normalize(vec);
+		//壁の中に戻るまで加算
+		eye_ = eye_ + (vec * knockBackSpeed);
+		//コライダーデータの座標更新
+		colliderData.center = eye_;
+	}
 }

@@ -8,6 +8,7 @@
 #pragma once
 #include "DirectXMath.h"
 #include "KeyManager.h"
+#include "JSONLoader.h"
 #include "WinApp.h"
 //#include "Player.h"
 #define PI 3.14159265359
@@ -134,6 +135,16 @@ public:
 	/// </summary>
 	void SetPhaseTimer(int timer) { phaseTimer = timer; }
 
+	/// <summary>
+	///壁との当たり判定更新
+	/// </summary>
+	void UpdateHitWall(JSONLoader::ColliderData objectColliderData);
+
+	/// <summary>
+	///オブジェクトの当たり判定セット
+	/// /// </summary>
+	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData) { objectColliderData = colliderData; };
+
 private:
 	//入力
 	//キーボード
@@ -161,6 +172,15 @@ private:
 	float maxDebugChangeRot2 = PI * (19.0f / 40.0f);
 	float minDebugChangeRot2 = PI * (8.0f / 40.0f);
 	float DebugChangeDistance = 0.0f;
+
+	//コライダーデータ
+	JSONLoader::ColliderData colliderData;
+	XMFLOAT3 colliderScale = { 0.00001f,0.00001f,0.00001f };
+	XMFLOAT3 colliderRotation = { 0.0f,0.0f,0.0f };
+	//オブジェクトのコライダーデータ
+	std::vector<JSONLoader::ColliderData> objectColliderData;
+	//オブジェクト衝突時の押し戻し
+	float knockBackSpeed = 0.01f;
 
 	//プレイヤー
 	//ターゲットまでの距離

@@ -143,7 +143,7 @@ protected:	//メンバ変数
     //コントローラー
     static DXInput* dxInput;
 };
-
+//キーボードによる入力
 class KeyInput : public KeyState
 {
 public:
@@ -160,7 +160,7 @@ public:
     //スティックを真上から見た際の角度取得(ラジアン)
     float GetStickRot(const KeyManager::Stick& stick);
 };
-
+//コントローラーによる入力
 class KeyDXInput : public KeyState
 {
 public:

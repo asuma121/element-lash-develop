@@ -14,6 +14,7 @@ public:
 	void UpdateStateTutorial(Enemy* enemy)override;
 };
 
+//•à‚«
 class Walk : public EnemyState
 {
 public:
@@ -25,6 +26,7 @@ public:
 	void UpdateState(Enemy* enemy);
 };
 
+//UŒ‚1
 class Attack01 : public EnemyState
 {
 public:
@@ -36,6 +38,7 @@ public:
 	void UpdateState(Enemy* enemy);
 };
 
+//UŒ‚‘O’›
 class AttackOmen1 : public EnemyState
 {
 public:
@@ -57,6 +60,7 @@ public:
 	void UpdateAttack()override;
 };
 
+//ƒ_ƒbƒVƒ…
 class Dash : public EnemyState
 {
 public:
@@ -83,6 +87,7 @@ public:	//ƒƒ“ƒo•Ï”
 	bool dashFlag = false;
 };
 
+//“GŒÄ‚Ño‚µ
 class CallMiniEnemy : public EnemyState
 {
 	public:
@@ -100,6 +105,7 @@ class CallMiniEnemy : public EnemyState
 		void UpdateAttackMovePhase()override;
 };
 
+//“]‚Ô
 class FallDown : public EnemyState
 {
 public:
@@ -113,6 +119,7 @@ public:
 	void UpdateStateMovePhase(Enemy* enemy)override;
 };
 
+//‹N‚«ã‚ª‚è
 class GetUp : public EnemyState
 {
 public:
