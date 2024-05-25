@@ -62,7 +62,7 @@ void TutorialScene::Update()
 	UpdateCollider();
 
 	//カメラ更新
-	if (tutorialSpriteFlag == 13)
+	if (tutorialSpriteFlag == 15)
 	{
 		camera->UpdateTutorial(tutorial13Timer);
 	}
@@ -94,6 +94,8 @@ void TutorialScene::UpdateObject()
 	enemy->UpdateTutorial(tutorial13Timer);
 
 	//チュートリアルの敵
+	tutorialEnemy->SetPlayerPos(player->GetPosition());
+	tutorialEnemy->SetTutorialFlag(tutorialSpriteFlag);
 	tutorialEnemy->UpdateTutorial();
 	//敵を倒したら次へ
 	if (tutorialEnemy->GetIsDead() && tutorialSpriteFlag == 10)
@@ -250,32 +252,65 @@ void TutorialScene::UpdateSprite()
 		{
 			//カメラの向きのベクトル取得
 			//カメラ方向に敵配置
+			tutorialIikannjiTimer = 0;
 			tutorialEnemy->AddEnemyTutorialScene(XMFLOAT3(0.0f,0.0f,0.0f));
 			tutorialSpriteFlag = 10;
 		}
 	}
-	//いい感じチュートリアル
+	//敵が登場した
+	if (tutorialSpriteFlag == 10)
+	{
+		tutorial10Timer++;
+		//時間経過で攻撃チュートリアルへ
+		if (tutorial10Timer >= tutorial10MaxTime)
+		{
+			tutorialSpriteFlag = 11;
+			tutorial10Timer = 0;
+			//ダッシュフラグをセットする
+			tutorialEnemy->SetTutorialDashFlag();
+		}
+	}
+	//走ってくる
 	if (tutorialSpriteFlag == 11)
+	{
+		//柱にぶつけて倒したら次へ
+		if (tutorialEnemy->GetTutorialDownFlag())
+		{
+			tutorialSpriteFlag = 12;
+		}
+	}
+	//敵が倒れているうちに攻撃
+	if (tutorialSpriteFlag == 12)
+	{
+		//敵を倒したら次へ移動
+		if (tutorialEnemy->GetIsDead() == true)
+		{
+			tutorialSpriteFlag = 13;
+		}
+	}
+	//敵を倒した！
+	if (tutorialSpriteFlag == 13)
 	{
 		tutorialIikannjiTimer++;
 		//時間経過でチュートリアル終了
 		if (tutorialIikannjiTimer >= tutorialIikannjiMaxTime)
 		{
-			tutorialSpriteFlag = 12;
+			tutorialSpriteFlag = 14;
 			tutorialIikannjiTimer = 0;
 		}
 	}
-	//敵登場までの間
-	if (tutorialSpriteFlag == 12)
+	//ボス登場までの間 
+	if (tutorialSpriteFlag == 14)
 	{
 		tutorial12Timer++;
 		//時間経過でチュートリアル終了
 		if (tutorial12Timer >= tutorial12MaxTime)
 		{
-			tutorialSpriteFlag = 13;
+			tutorialSpriteFlag = 15;
 		}
 	}
-	if (tutorialSpriteFlag == 13)
+	//ボス登場
+	if (tutorialSpriteFlag == 15)
 	{
 		tutorial13Timer++;
 		//黒幕
@@ -296,6 +331,48 @@ void TutorialScene::UpdateSprite()
 			moveGameFlag = true;
 		}
 	}
+	////いい感じチュートリアル
+	//if (tutorialSpriteFlag == 11)
+	//{
+	//	tutorialIikannjiTimer++;
+	//	//時間経過でチュートリアル終了
+	//	if (tutorialIikannjiTimer >= tutorialIikannjiMaxTime)
+	//	{
+	//		tutorialSpriteFlag = 12;
+	//		tutorialIikannjiTimer = 0;
+	//	}
+	//}
+	////敵登場までの間
+	//if (tutorialSpriteFlag == 12)
+	//{
+	//	tutorial12Timer++;
+	//	//時間経過でチュートリアル終了
+	//	if (tutorial12Timer >= tutorial12MaxTime)
+	//	{
+	//		tutorialSpriteFlag = 13;
+	//	}
+	//}
+	//if (tutorialSpriteFlag == 13)
+	//{
+	//	tutorial13Timer++;
+	//	//黒幕
+	//	if (tutorial13Timer >= tutorial13MaxTime)
+	//	{
+	//		blackSpriteTimer++;
+	//	}
+	//	//時間経過でチュートリアル終了
+	//	if (tutorial13Timer >= tutorial13MaxTime + blackSpriteMaxTime)
+	//	{
+	//		//リセット
+	//		Reset();
+	//		//プレイヤーをゲームにセット
+	//		player->SetGameScene();
+	//		//敵をゲームにセット
+	//		enemy->SetGameScene();
+	//		//ゲームに移る
+	//		moveGameFlag = true;
+	//	}
+	//}
 }
 
 void TutorialScene::UpdateCollider()
@@ -305,6 +382,10 @@ void TutorialScene::UpdateCollider()
 
 	//カメラ当たり判定更新
 	camera->SetObjectCollider(terrain->GetColliderData());
+
+	//敵の当たり判定更新
+	tutorialEnemy->SetObjectCollider(terrain->GetColliderData());
+	tutorialEnemy->UpdateObjectCollider();
 
 	//プレイヤー当たり判定更新
 	player->SetObjectCollider(terrain->GetColliderData());
@@ -385,7 +466,7 @@ void TutorialScene::DrawSprite()
 	//UI描画
 	ui->DrawTutorial(dxCommon->GetCommandList());
 	player->DrawSpriteTutorial(dxCommon->GetCommandList());
-	if(tutorialSpriteFlag == 10)tutorialEnemy->DrawSprite(dxCommon->GetCommandList());
+	if(tutorialSpriteFlag == 10 || tutorialSpriteFlag == 11 || tutorialSpriteFlag == 12)tutorialEnemy->DrawSprite(dxCommon->GetCommandList());
 }
 
 void TutorialScene::DrawParticle()

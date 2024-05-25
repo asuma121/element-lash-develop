@@ -497,7 +497,7 @@ void PlayerState::UpdateTutorial(int tutorialFlag)
 	elecParticle1->Update();
 	elecParticle2->Update();
 
-	if (tutorialFlag > 12)
+	if (tutorialFlag > 14)
 	{
 		position = XMFLOAT3(0.0f, 0.0f, 100.0f);
 		return;

@@ -379,6 +379,22 @@ private:
 	//チュートリアルシーン ゲージ2
 	std::unique_ptr<Sprite>gaugeSprite2;
 	XMFLOAT2 gaugeSprite2Pos = { 140.0f,198.0f };
+	//チュートリアルシーン 敵が真ん中に現れた
+	std::unique_ptr<Sprite>tutorial10Sprite2;
+	XMFLOAT2 tutorial10Pos2 = { 200.0f, 570.0f };
+	XMFLOAT2 tutorial10Scale2 = { 1237.0f * 0.7f, 82.0f * 0.7f };
+	//チュートリアルシーン 敵が走ってきた
+	std::unique_ptr<Sprite>tutorial11Sprite2;
+	XMFLOAT2 tutorial11Pos2 = { 220.0f, 550.0f };
+	XMFLOAT2 tutorial11Scale2 = { 1201.0f * 0.55, 205.0f * 0.55 };
+	//チュートリアルシーン 敵が倒れた！攻撃
+	std::unique_ptr<Sprite>tutorial12Sprite2;
+	XMFLOAT2 tutorial12Pos3 = { 230.0f, 590.0f };
+	XMFLOAT2 tutorial12Scale2 = { 1415.0f * 0.55, 82.0f * 0.55 };
+	//チュートリアルシーン 敵を倒した！
+	std::unique_ptr<Sprite>tutorial13Sprite2;
+	XMFLOAT2 tutorial13Pos3 = { 230.0f, 590.0f };
+	XMFLOAT2 tutorial13Scale2 = { 476.0f * 0.55, 81.0f * 0.55 };
 	//チュートリアルシーンのフラグ
 	int tutorialFlag = 0;
 	//チュートリアルシーン Lスティックのタイマー

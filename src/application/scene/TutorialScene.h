@@ -148,7 +148,7 @@ private:	//メンバ変数
 	//スプライト用タイマー
 	float blackSpriteTimer = 0.0f;
 	float blackSpriteMaxTime = 120.0f;
-	int tutorialSpriteFlag = 1;	//その番号のスプライト描画
+	int tutorialSpriteFlag = 9;	//その番号のスプライト描画
 	int tutorialLStickTimer = 0.0f;
 	int tutorialLStickMaxTime = 240.0f;
 	int tutorialRStickTimer = 0.0f;
@@ -163,6 +163,9 @@ private:	//メンバ変数
 	int tutorial12MaxTime = 120.0f;
 	int tutorial13Timer = 0.0f;
 	int tutorial13MaxTime = 320.0f;
+	//敵が真ん中に現れた
+	int tutorial10Timer = 0.0f;
+	int tutorial10MaxTime = 150.0f;
 
 	//タイマー
 	float gameTimer = 0.0f;

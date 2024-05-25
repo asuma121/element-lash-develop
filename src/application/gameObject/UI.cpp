@@ -539,6 +539,31 @@ void UI::Initialize()
 	gameOverSprite5->SetTextureNum(83);
 	gameOverSprite5->SetAlpha(gameOverAlpha);
 	gameOverSprite5->Update(gameOverSprite5Pos, gameOverSprite5Scale);
+
+	//チュートリアルのスプライト10
+	Sprite* newTutorial10Sprite2 = new Sprite();
+	newTutorial10Sprite2->Initialize();
+	tutorial10Sprite2.reset(newTutorial10Sprite2);
+	tutorial10Sprite2->SetTextureNum(85);
+	tutorial10Sprite2->Update(tutorial10Pos2, tutorial10Scale2);
+	//チュートリアルのスプライト11
+	Sprite* newTutorial11Sprite2 = new Sprite();
+	newTutorial11Sprite2->Initialize();
+	tutorial11Sprite2.reset(newTutorial11Sprite2);
+	tutorial11Sprite2->SetTextureNum(84);
+	tutorial11Sprite2->Update(tutorial11Pos2, tutorial11Scale2);
+	//チュートリアルのスプライト12
+	Sprite* newTutorial12Sprite2 = new Sprite();
+	newTutorial12Sprite2->Initialize();
+	tutorial12Sprite2.reset(newTutorial12Sprite2);
+	tutorial12Sprite2->SetTextureNum(86);
+	tutorial12Sprite2->Update(tutorial12Pos3, tutorial12Scale2);
+	//チュートリアルのスプライト13
+	Sprite* newTutorial13Sprite2 = new Sprite();
+	newTutorial13Sprite2->Initialize();
+	tutorial13Sprite2.reset(newTutorial13Sprite2);
+	tutorial13Sprite2->SetTextureNum(87);
+	tutorial13Sprite2->Update(tutorial13Pos3, tutorial13Scale2);
 }
 
 void UI::UpdateGame1()
@@ -772,8 +797,8 @@ void UI::UpdateTutorial()
 		spaceKeyPushSprite1->Update(SpaceKeySpritePos4, keySpriteScale2);
 	}
 
-	//敵が登場するまでの間
-	if (tutorialFlag == 12)
+	//ボスが登場するまでの間
+	if (tutorialFlag == 14)
 	{
 		tutorial1Sprite->SetPosition(tutorial1Pos + XMFLOAT2(0.0f, tutorial12Timer * 2.5f));
 		if (tutorial12Timer >= tutorial12Time)
@@ -784,7 +809,7 @@ void UI::UpdateTutorial()
 		tutorial1Sprite->Update();
 	}
 	//黒幕と上下の黒いバー
-	if (tutorialFlag == 13)
+	if (tutorialFlag == 15)
 	{
 		//黒幕
 		if (tutorial13Timer >= tutorial13MaxTime)
@@ -1125,15 +1150,15 @@ void UI::DrawGame2(ID3D12GraphicsCommandList* cmdList)
 void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 {
 	//ボス登場時以外枠とスキップ描画
-	if (tutorialFlag < 13)tutorial1Sprite->Draw(cmdList);
+	if (tutorialFlag < 15)tutorial1Sprite->Draw(cmdList);
 
 	//黒幕
-	if (tutorialFlag == 13)
+	if (tutorialFlag == 15)
 	{
 		blackSprite1->Draw(cmdList);
 		blackSprite2->Draw(cmdList);
 	}
-	if (tutorialFlag == 1 || tutorialFlag == 13)
+	if (tutorialFlag == 1 || tutorialFlag == 15)
 	{
 		blackSprite3->Draw(cmdList);
 	}
@@ -1490,9 +1515,24 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 		checkSprite1->Draw(cmdList);
 		checkFrameSprite1->Draw(cmdList);
 	}
-
+	if (tutorialFlag == 10)
+	{
+		tutorial10Sprite2->Draw(cmdList);
+	}
+	if (tutorialFlag == 11)
+	{
+		tutorial11Sprite2->Draw(cmdList);
+	}
+	if (tutorialFlag == 12)
+	{
+		tutorial12Sprite2->Draw(cmdList);
+	}
+	if (tutorialFlag == 13)
+	{
+		tutorial13Sprite2->Draw(cmdList);
+	}
 	//属性変化UIの描画
-	if (tutorialFlag > 7 && tutorialFlag < 12)
+	if (tutorialFlag > 7 && tutorialFlag < 15)
 	{
 		//属性チェンジUI 炎
 		if (playerForm == Fire)
@@ -1545,7 +1585,7 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	}
 
 	//攻撃UIの描画
-	if (tutorialFlag > 9 && tutorialFlag < 12)
+	if (tutorialFlag > 9 && tutorialFlag < 15)
 	{
 		if (playerForm == Fire)
 		{
@@ -1585,8 +1625,16 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-	if (tutorialFlag == 10)tutorial10Sprite->Draw(cmdList);
-	if (tutorialFlag == 11)tutorial11Sprite->Draw(cmdList);
+	/*if (tutorialFlag == 10)tutorial10Sprite->Draw(cmdList);
+	if (tutorialFlag == 11)tutorial11Sprite->Draw(cmdList);*/
+
+	//ImGui
+	/*ImGui::Begin("UI");
+	ImGui::SetWindowPos(ImVec2(500, 0));
+	ImGui::SetWindowSize(ImVec2(500, 150));
+	ImGui::InputFloat2("debugPos", debugNum1);
+	ImGui::InputFloat("debugScale", debugNum2);
+	ImGui::End();*/
 }
 
 void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)

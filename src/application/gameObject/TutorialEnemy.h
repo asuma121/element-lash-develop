@@ -56,6 +56,11 @@ public://メンバ関数
 	void UpdateMovePhase();
 
 	/// <summary>
+	///チュートリアル専用のステート更新
+	/// </summary>
+	void UpdateStateTutorial();
+
+	/// <summary>
 	///オブジェクト更新
 	/// </summary>
 	void UpdateObject();
@@ -71,9 +76,19 @@ public://メンバ関数
 	void UpdateCollider();
 
 	/// <summary>
+	///コライダー
+	/// </summary>
+	void UpdateObjectCollider();
+
+	/// <summary>
 	///ダメージ系全般
 	/// </summary>
 	void UpdateDamage();
+
+	/// <summary>
+	///ダメージ系全般
+	/// </summary>
+	void UpdateDamageTutorial();
 
 	/// <summary>
 	///描画
@@ -211,6 +226,11 @@ public://メンバ関数
 	JSONLoader::ColliderData GetColliderData() { return colliderData; }
 
 	/// <summary>
+	/// チュートリアルのフラグをセットする
+	/// </summary>
+	void SetTutorialFlag(int tutorialFlag) { this->tutorialFlag = tutorialFlag; };
+
+	/// <summary>
 	///死亡フラグ取得
 	/// </summary>
 	bool GetIsDead() { return isDead2; }
@@ -222,6 +242,40 @@ public://メンバ関数
 
 	bool GetCallFlag();
 
+	/// <summary>
+	///チュートリアルシーン倒れた時のフラグ
+	/// </summary>
+	bool GetTutorialDownFlag() { return downFlag; };
+
+	/// <summary>
+	///チュートリアルシーンダッシュをセットするフラグ
+	/// </summary>
+	void SetTutorialDashFlag() { this->tutorialDashFlag = true; };
+
+	/// <summary>
+	///オブジェクトの当たり判定セット
+	/// </summary>
+	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData) {
+		this->objectColliderData = colliderData;};
+
+	/// <summary>
+	//壁との当たり判定処理
+	/// <summary>
+	void UpdateHitWall(JSONLoader::ColliderData objectColliderData);
+
+	/// <summary>
+	//柱との当たり判定処理
+	/// <summary>
+	void UpdateHitPiller(JSONLoader::ColliderData objectColliderData);
+
+	/// <summary>
+	//柱との当たり判定処理
+	/// <summary>
+	void UpdateHitObject();
+
+	//チュートリアル12用の更新
+	void UpdateTutorial12();
+
 	//静的メンバ変数
 private:
 	//カメラ
@@ -232,6 +286,9 @@ public:
 
 	//コライダーデータ
 	JSONLoader::ColliderData colliderData;
+
+	//オブジェクトのコライダーデータ
+	std::vector<JSONLoader::ColliderData> objectColliderData;
 
 	//オブジェクト
 	FbxObject3D* object = nullptr;
@@ -245,6 +302,13 @@ public:
 	Sprite* hpBar2 = nullptr;	//HPバー
 	Sprite* hpBar3 = nullptr;	//現在のHPのとこにつけるやつ
 	Sprite* hpBar4 = nullptr;	//BOSS HPのテキスト
+
+	//チュートリアルのフラグ
+	int tutorialFlag = 0;
+	//チュートリアルのダッシュのフラグ
+	bool tutorialDashFlag = false;
+	//チュートリアルの転んだフラグ
+	bool downFlag = false;
 
 	//変形行列
 	//平行移動
@@ -292,7 +356,7 @@ public:
 	//プレイヤーの座標
 	XMFLOAT3 playerPos = { 0.0f,0.0f,0.0f };
 	//移動攻撃のスピード
-	float speed = 0.5f;
+	float speed = 0.7f;
 
 	//ダウンのアニメーション
 	int deadTime = 130;
@@ -302,4 +366,14 @@ public:
 	float callTimer = 0.0f;
 	float callTime = 500.0f;
 	bool callFlag = false;
+
+	//オブジェクトと衝突フラグ
+	bool hitObjectFlag = false;
+
+	//オブジェクト衝突時の押し戻し
+	float knockBackSpeed = 0.001f;
+
+	//転ぶ状態のアニメーションのフレーム
+	float frameFallDownEnemy = 125.0f - 10.0f;
+	int tutorial12Timer = 0;
 };

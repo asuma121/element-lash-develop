@@ -49,14 +49,32 @@ void TutorialEnemy::UpdateTutorial()
 {
 	if (isDead2 == true)return;
 
+	//ステート更新
+	UpdateStateTutorial();
+
 	//コライダー更新
 	UpdateCollider();
 
 	//スプライト更新
 	UpdateSprite();
 
-	//ダメージ更新
-	UpdateDamage();
+	//ダッシュ中
+	if (tutorialFlag == 11)
+	{
+		//プレイヤーに向かって走る
+		MoveGame();
+		//オブジェクトとの当たり判定をとる
+		UpdateHitObject();
+	}
+
+	//転んでいる最中
+	if (tutorialFlag == 12)
+	{
+		//チュートリアル12用の更新
+		UpdateTutorial12();
+		//チュートリアル12用ダメージ更新
+		UpdateDamageTutorial();
+	}
 
 	//オブジェクト更新
 	UpdateObject();
@@ -95,6 +113,16 @@ void TutorialEnemy::UpdateMovePhase()
 	UpdateObject();
 }
 
+void TutorialEnemy::UpdateStateTutorial()
+{
+	//ダッシュシーンに移ったら
+	if (tutorialDashFlag == true)
+	{
+		tutorialDashFlag = false;
+		SetDash();
+	}
+}
+
 void TutorialEnemy::UpdateObject()
 {
 	object->SetPosition(position);
@@ -119,9 +147,27 @@ void TutorialEnemy::UpdateSprite()
 
 void TutorialEnemy::UpdateCollider()
 {
+	//コライダーデータ更新
 	colliderData.scale = colliderScale;
 	colliderData.rotation = rotation;
-	colliderData.center = position + XMFLOAT3(0.0f, 5.0f, 0.0f);
+	colliderData.center = position;
+}
+
+void TutorialEnemy::UpdateObjectCollider()
+{
+	for (int i = 0; i < objectColliderData.size(); i++)
+	{
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 4) == "wall")
+		{
+			UpdateHitWall(objectColliderData[i]);
+		}
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 6) == "piller")
+		{
+			UpdateHitPiller(objectColliderData[i]);
+		}
+	}
 }
 
 void TutorialEnemy::UpdateDamage()
@@ -150,6 +196,49 @@ void TutorialEnemy::UpdateDamage()
 	if (isDead1 == true && isDead3 == false)
 	{
 		SetDown();
+		isDead3 = true;
+	}
+
+	//死亡したら
+	if (isDead3 == true)
+	{
+		deadTimer++;
+		if (deadTimer >= deadTime)
+		{
+			isDead2 = true;
+		}
+	}
+
+	//フラグをもとに戻す
+	hitFlag1 = false;
+	hitElec = false;
+}
+
+void TutorialEnemy::UpdateDamageTutorial()
+{
+	//炎攻撃をくらった際
+	if (hitFlag1 == true)
+	{
+		//HPを減らす
+		HP -= 1.0f;
+	}
+
+	//雷攻撃をくらった際
+	if (hitElec == true)
+	{
+		//HPを減らす
+		HP -= 5.0f;
+	}
+
+	//死亡
+	if (HP <= 0)
+	{
+		isDead1 = true;
+	}
+
+	//死亡したフレームの処理
+	if (isDead1 == true && isDead3 == false)
+	{
 		isDead3 = true;
 	}
 
@@ -246,6 +335,11 @@ void TutorialEnemy::SetStand()
 
 void TutorialEnemy::SetTutorial()
 {
+	hitFlag1 = false;
+	hitElec = false;
+	hitObjectFlag = false;
+	downFlag = false;
+	tutorial12Timer = 0;
 	SetStand();
 }
 
@@ -279,6 +373,8 @@ void TutorialEnemy::AddEnemyTutorialScene(XMFLOAT3 pos)
 {
 	//まだ死んでない場合スルー
 	if (isDead2 == false)return;
+	downFlag = false;
+	tutorialDashFlag = false;
 	SetStand();
 	AddEnemy(pos);
 }
@@ -331,4 +427,72 @@ bool TutorialEnemy::GetCallFlag()
 		}
 	}
 	return false;
+}
+
+void TutorialEnemy::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
+{
+	//壁の中にいたら処理終了
+	if (ColliderManager::CheckCollider(colliderData, objectColliderData, true) == true)return;
+
+	//壁の外にいる時のみ
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData, true) == false)
+	{
+		//プレイヤーから原点のベクトル
+		XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - position;
+		//プレイヤーから原点のベクトルを正規化
+		vec = normalize(vec);
+		//壁の中に戻るまで加算
+		position = position + (vec * knockBackSpeed);
+		//コライダーデータの座標更新
+		colliderData.center = position;
+	}
+	//フラグを立てる
+	hitObjectFlag = true;
+}
+
+void TutorialEnemy::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
+{
+	//柱に衝突してなかったら処理終了
+	if (ColliderManager::CheckCollider(colliderData, objectColliderData) == false)return;
+
+	//柱にめり込んでいる間
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == true)
+	{
+		//柱からプレイヤーのベクトル
+		XMFLOAT3 vec = objectColliderData.center - colliderData.center;
+		//プレイヤーから原点のベクトルを正規化
+		vec = normalize(vec);
+		//壁の中に戻るまで加算
+		position = position - (vec * knockBackSpeed);
+		//コライダーデータの座標更新
+		colliderData.center = position;
+	}
+	//フラグを立てる
+	hitObjectFlag = true;
+}
+
+void TutorialEnemy::UpdateHitObject()
+{
+	//オブジェクトに当たってなかったらスキップ
+	if (hitObjectFlag != true)return;
+
+	//ダウンモデルをセット
+	SetDown();
+
+	//チュートリアルシーンに送る用
+	downFlag = true;
+
+	hitObjectFlag = false;
+}
+
+void TutorialEnemy::UpdateTutorial12()
+{
+	//タイマー更新
+	tutorial12Timer++;
+
+	//倒れているときにアニメーションを止める
+	if (tutorial12Timer >= frameFallDownEnemy)
+	{
+		object->StopAnimation();
+	}
 }
