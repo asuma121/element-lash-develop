@@ -44,7 +44,7 @@ void ElecParticle::CreateGraphicsPipeline()
 		exit(1);
 	}
 
-	// 頂点シェーダの読み込みとコンパイル
+	// ジオメトリシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
 		L"Resources/Shaders/ElecParticle/ElecParticleGeometryShader.hlsl",     // シェーダファイル名
 		nullptr,

@@ -89,7 +89,7 @@ public://メンバ関数
 	/// <summary>
 	///初期化
 	/// </summary>
-	void Initialize(FbxModel* model,const JSONLoader::TextureData& textureData);
+	void Initialize(FbxModel* model,const JSONLoader::TextureData& textureDatazzz);
 
 	/// <summary>
 	///更新
