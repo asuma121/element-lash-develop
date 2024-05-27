@@ -49,9 +49,6 @@ void TutorialEnemy::UpdateTutorial()
 {
 	if (isDead2 == true)return;
 
-	//ステート更新
-	UpdateStateTutorial();
-
 	//コライダー更新
 	UpdateCollider();
 
@@ -61,8 +58,10 @@ void TutorialEnemy::UpdateTutorial()
 	//ダッシュ中
 	if (tutorialFlag == 11)
 	{
+		//ステート更新
+		UpdateStateTutorial();
 		//プレイヤーに向かって走る
-		MoveGame();
+		if(tutorialDashFlag == false)MoveGame();
 		//オブジェクトとの当たり判定をとる
 		UpdateHitObject();
 	}
@@ -116,10 +115,15 @@ void TutorialEnemy::UpdateMovePhase()
 void TutorialEnemy::UpdateStateTutorial()
 {
 	//ダッシュシーンに移ったら
-	if (tutorialDashFlag == true)
+	if (tutorialDashFlag == true && length(position - playerPos) >= 20)
 	{
 		tutorialDashFlag = false;
 		SetDash();
+	}
+	else if (tutorialDashFlag == false && length(position - playerPos) < 20)
+	{
+		tutorialDashFlag = true;
+		SetStand();
 	}
 }
 
