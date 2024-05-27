@@ -1,19 +1,20 @@
 #include "PlayerBulletParticleHeader.hlsli"
 
-//0”ÔƒXƒƒbƒg‚Éİ’è‚³‚ê‚½ƒeƒNƒXƒ`ƒƒ
+//0ï¿½ÔƒXï¿½ï¿½ï¿½bï¿½gï¿½Éİ’è‚³ï¿½ê‚½ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½
 Texture2D<float4> tex : register(t0);
-//0”ÔƒXƒƒbƒg‚Éİ’è‚³‚ê‚½ƒTƒ“ƒvƒ‰[
+//0ï¿½ÔƒXï¿½ï¿½ï¿½bï¿½gï¿½Éİ’è‚³ï¿½ê‚½ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½[
 SamplerState smp : register(s0);
-//ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg
+//ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½|ï¿½Cï¿½ï¿½ï¿½g
 float4 main(GSOutput input) : SV_TARGET
 {
-	//‰æ‘œ‚Ìƒf[ƒ^
+	//ï¿½æ‘œï¿½Ìƒfï¿½[ï¿½^
 	float4 texData = float4(tex.Sample(smp,input.uv));
 	
     float f = 1.0f - input.frame;
     float r = 1.0f;
     float g = 0.3f;
+    float b = 0.3f;
 
-	//ƒAƒ‹ƒtƒ@’l‚ğ‡¬
-    return float4(texData.x * (r * f), texData.y * (g * f), 0.0f, 1);
+	//ï¿½Aï¿½ï¿½ï¿½tï¿½@ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    return float4(texData.x, texData.y * (g * f), 0, 1);
 }
