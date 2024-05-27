@@ -53,7 +53,7 @@ bool EnemyState::nextAttack01;
 
 Enemy::Enemy()
 {
-	enemyState = new AttackOmen1();
+	enemyState = new Stand();
 }
 
 Enemy::~Enemy()
@@ -321,6 +321,14 @@ void Enemy::SetCallMiniEnemy()
 
 void EnemyState::StaticInitialize()
 {
+	//プレイヤーのシェーダを別に設定
+	JSONLoader::TextureData textureData;
+	textureData.textureVol = 2;
+	textureData.shaderVol = 1;
+	textureData.textureNum1 = 71;	//白いテクスチャ
+	textureData.textureNum2 = 88;	//炎のテクスチャ
+	textureData.shaderName = "Enemy";	//シェーダの名前
+
 	//立っているモデル
 	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
 	//歩いているモデル
@@ -338,9 +346,7 @@ void EnemyState::StaticInitialize()
 
 	//オブジェクト
 	object = new FbxObject3D;
-	object->Initialize();
-	object->SetModel(modelStand);
-	object->SetTextureNum(0);
+	object->Initialize(modelStand, textureData);
 	object->PlayAnimation();
 
 	//コライダーの設定
@@ -589,7 +595,7 @@ void EnemyState::SetGame(Enemy* enemy)
 	nextCallMiniEnemy = false;
 	nextDash = false;
 	nextAttack01 = true;
-	enemy->ChangeState(new AttackOmen1());
+	//enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 

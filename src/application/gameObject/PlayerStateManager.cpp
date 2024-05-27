@@ -355,7 +355,14 @@ void Attack3::UpdateAttack()
 	if (objectTimer % bullet1Interval == 0.0f)
 	{
 		XMFLOAT3 velo = rollRotation(XMFLOAT3(0.0f, 0.0f, 1.0f), rotation0);
-		velo = normalize(velo) * bullet1Speed; 
+		float rand1 = GetRand(0.9f, 1.1f);
+		float rand2 = GetRand(0.9f, 1.1f);
+		float rand3 = GetRand(-0.1f, 0.1f);
+		float rand4 = GetRand(0.9f, 1.1f);
+		velo = normalize(velo) * (bullet1Speed * rand1);
+		velo.x = velo.x * rand2;
+		velo.y = velo.y + rand3;
+		velo.z = velo.z * rand4;
 		bullet->SetBullet(position + bullet1AddPosition, velo, 0.0f, bullet1Frame);
 	}
 }

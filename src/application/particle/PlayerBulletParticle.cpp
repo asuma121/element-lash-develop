@@ -466,7 +466,7 @@ void PlayerBulletParticle::Add(XMFLOAT3 pos, float startScale)
 			, (float)rand() / RAND_MAX * randVelo - randVelo / 2.0f);
 		XMFLOAT3 accel(0.0f, (float)rand() / RAND_MAX * randAcc, 0.0f);
 
-		AddParticle(30, p, velocity, accel, startScale, 0.0f);
+		AddParticle(10, p, velocity, accel, startScale, 0.0f);
 	}
 }
 

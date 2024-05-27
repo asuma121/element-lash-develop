@@ -1,22 +1,22 @@
 cbuffer cbuff0 : register(b0)
 {
-	matrix mat;	//3D•ÏŠ·s—ñ
-	matrix matBillboard;	//ƒ[ƒ‹ƒhs—ñ
+	matrix mat;	//3Dï¿½ÏŠï¿½ï¿½sï¿½ï¿½
+	matrix matBillboard;	//ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½
 }
 
-//’¸“_ƒVƒF[ƒ_[‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ö‚Ì‚â‚èŽæ‚è‚ÉŽg—p‚·‚é\‘¢‘Ì
+//ï¿½ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½Ö‚Ì‚ï¿½ï¿½ï¿½ï¿½ÉŽgï¿½pï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½
 struct VSOutput
 {
-	float4 pos1 : POSITIONA;	//ƒVƒXƒeƒ€—p’¸“_À•W
-    float4 pos2 : POSITIONB; //ƒVƒXƒeƒ€—p’¸“_À•W
-	float scale : SCALE;	//ƒXƒP[ƒ‹
-    float frame : FRAME;	//ƒ^ƒCƒ}[
+	float4 pos1 : POSITIONA;	//ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½W
+    float4 pos2 : POSITIONB; //ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½W
+	float scale : SCALE;	//ï¿½Xï¿½Pï¿½[ï¿½ï¿½
+    float frame : FRAME;	//ï¿½^ï¿½Cï¿½}ï¿½[
 };
 
-//ƒWƒIƒƒgƒŠƒVƒF[ƒ_‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ö‚Ìo—Í
+//ï¿½Wï¿½Iï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½ï¿½ï¿½ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½Ö‚Ìoï¿½ï¿½
 struct GSOutput
 {
-	float4 svpos:SV_POSITION;	//ƒVƒXƒeƒ€—p’¸“_À•W
-	float2 uv:TEXCOORD;	//uv’l
-    float frame : FRAME;	//ƒ^ƒCƒ}[
+	float4 svpos:SV_POSITION;	//ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½W
+	float2 uv:TEXCOORD;	//uvï¿½l
+    float frame : FRAME;	//ï¿½^ï¿½Cï¿½}ï¿½[
 };

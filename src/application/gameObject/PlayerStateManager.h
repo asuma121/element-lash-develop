@@ -113,9 +113,9 @@ public:
 private:
 
 	//炎を出す間隔
-	int bullet1Interval = 4.0f;
+	int bullet1Interval = 2.0f;
 	//炎のスピード
-	float bullet1Speed = 2.0f;
+	float bullet1Speed = 1.5f;
 	//炎のスケール
 	XMFLOAT3  bullet1Scale = { 10.0f,10.0f,10.0f };
 	XMFLOAT3  bullet1LastScale = { 1.0f,1.0f,1.0f };

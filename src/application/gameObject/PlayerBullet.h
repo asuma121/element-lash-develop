@@ -170,6 +170,6 @@ private:
 	float bulletPos[3] = { 0.0f,0.0f,0.0f };
 
 	//’e‚Ì‘å‚«‚­‚È‚éŠg‘å—¦
-	float scaleAcc = 0.05f;
+	float scaleAcc = 0.07f;
 };
 
