@@ -122,26 +122,14 @@ void TutorialScene::UpdateObject()
 
 	//地形
 	terrain->Update();
-
-	////カメラ更新
-	//if (tutorialSpriteFlag == 13)
-	//{
-	//	camera->UpdateTutorial(tutorial13Timer);
-	//}
-	//else
-	//{
-	//	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
-	//}
-	///*camera_->DebugUpdate();*/
-	//camera->Update();
 }
 
 void TutorialScene::UpdateSprite()
 {
 	//スキップ
-	if (tutorialSpriteFlag < 12 && keyManager->TriggerKey(KeyManager::PAD_START))
+	if (tutorialSpriteFlag < 14 && keyManager->TriggerKey(KeyManager::PAD_START))
 	{
-		tutorialSpriteFlag = 12;
+		tutorialSpriteFlag = 14;
 	}
 	//スプライトの処理
 	//黒幕

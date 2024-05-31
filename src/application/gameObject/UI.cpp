@@ -807,6 +807,7 @@ void UI::UpdateTutorial()
 		}
 		//スプライト更新
 		tutorial1Sprite->Update();
+		blackSpriteTimer = 0;
 	}
 	//黒幕と上下の黒いバー
 	if (tutorialFlag == 15)
@@ -1164,7 +1165,7 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 	}
 
 	//ボス登場時以外スキップ描画
-	if (tutorialFlag < 12)
+	if (tutorialFlag < 14)
 	{
 		tutorial12Sprite->Draw(cmdList);
 		if (keyManager->GetConnectFlag() == true)startButtonSprite->Draw(cmdList);
@@ -1772,6 +1773,7 @@ void UI::SetTutorial()
 	shiftKeySprite1->Update(shiftKeySpritePos1, keySpriteScale2);
 	shiftKeyPushSprite1->Update(shiftKeySpritePos1, keySpriteScale2);
 	shiftKeySprite2->Update(shiftKeySpritePos2, keySpriteScale3);
+	blackSprite3->SetAlpha(0.0f);
 }
 
 void UI::SetTitleTimer(int moveTutorialTimer, int moveTutorialTime)

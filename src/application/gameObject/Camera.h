@@ -180,7 +180,7 @@ private:
 	//オブジェクトのコライダーデータ
 	std::vector<JSONLoader::ColliderData> objectColliderData;
 	//オブジェクト衝突時の押し戻し
-	float knockBackSpeed = 0.01f;
+	float knockBackSpeed = 0.1f;
 
 	//プレイヤー
 	//ターゲットまでの距離

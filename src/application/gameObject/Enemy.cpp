@@ -595,7 +595,7 @@ void EnemyState::SetGame(Enemy* enemy)
 	nextCallMiniEnemy = false;
 	nextDash = false;
 	nextAttack01 = true;
-	//enemy->ChangeState(new AttackOmen1());
+	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
