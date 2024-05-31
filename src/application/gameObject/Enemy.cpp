@@ -71,6 +71,7 @@ void Enemy::UpdateGame1()
 {
 	//ステート更新
 	enemyState->SetHitPlayer(hitPlayer);
+	hitBodyFlag = enemyState->GetHitBodyFlag();
 	enemyState->Update();
 
 	//フラグを戻す
@@ -84,6 +85,7 @@ void Enemy::UpdateGame2()
 {
 	//ステート更新
 	enemyState->SetHitPlayer(hitPlayer);
+	hitBodyFlag = enemyState->GetHitBodyFlag();
 	enemyState->Update();
 
 	//フラグを戻す
@@ -383,6 +385,13 @@ void EnemyState::StaticInitialize()
 	nextAttack01 = false;
 }
 
+void EnemyState::UpdateColliderDate()
+{
+	colliderData.scale = colliderScale;
+	colliderData.rotation = rotation;
+	colliderData.center = position;
+}
+
 void EnemyState::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	object->Draw(cmdList);
@@ -424,13 +433,8 @@ void EnemyState::Update()
 	//タイマー更新
 	objectTimer++;
 
-	////ダウン状態更新
-	//UpdateDown();
-
 	//コライダーデータ更新
-	colliderData.scale = colliderScale;
-	colliderData.rotation = rotation;
-	colliderData.center = position;
+	UpdateColliderDate();
 
 	//攻撃更新
 	UpdateAttack();
@@ -456,13 +460,8 @@ void EnemyState::UpdateMovePhase()
 	//タイマー更新
 	objectTimer++;
 
-	////ダウン状態更新
-	//UpdateDown();
-
 	//コライダーデータ更新
-	colliderData.scale = colliderScale;
-	colliderData.rotation = rotation;
-	colliderData.center = position;
+	UpdateColliderDate();
 
 	//攻撃更新
 	UpdateAttackMovePhase();
@@ -492,9 +491,7 @@ void EnemyState::UpdateTutorial(int timer)
 	tutorialTimer = timer;
 
 	//コライダーデータ更新
-	colliderData.scale = colliderScale;
-	colliderData.rotation = rotation;
-	colliderData.center = position;
+	UpdateColliderDate();
 
 	//弾更新
 	bullet->SetPlayerPos(playerPos);

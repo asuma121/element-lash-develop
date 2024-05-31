@@ -253,6 +253,11 @@ public://メンバ関数
 	/// </summary>
 	void SetCallMiniEnemy();
 
+	/// <summary>
+	///倒れている間は体の当たり判定をなくす
+	/// </summary>
+	bool HitBodyFlag() { return hitBodyFlag;}
+
 	//静的メンバ変数
 private:
 	//カメラ
@@ -282,6 +287,9 @@ private:
 	//被弾
 	bool HitFlag1 = false;
 	bool hitElec = false;
+
+	//倒れている間は体の当たり判定をなくす
+	bool hitBodyFlag = false;
 
 	//ダメージ
 	float fireDamege = 0.45f;
@@ -375,6 +383,8 @@ public:	//メンバ関数
 	virtual void UpdateHitWall(JSONLoader::ColliderData objectColliderData) {};
 	//柱との当たり判定処理 歩き、ダッシュのみ
 	virtual void UpdateHitPiller(JSONLoader::ColliderData objectColliderData){};
+	//コライダーデータ
+	virtual void UpdateColliderDate();
 
 	//通常関数
 	//描画
@@ -434,6 +444,8 @@ public:	//メンバ関数
 	void SetMovePhase(Enemy* enemy);
 	bool GetCallEnemyFlag() { return callEnemyFlag; };
 	XMFLOAT3 GetCallEnemyPos() { return callEnemyPos; };
+	//倒れている間は体の当たり判定をなくす
+	bool GetHitBodyFlag() { return hitBodyFlag; }
 
 protected:	//静的メンバ変数
 
@@ -562,6 +574,10 @@ protected:	//メンバ変数
 	//コライダー
 	//コライダーの大きさ
 	XMFLOAT3 colliderScale = { 30.0f,30.0f,30.0f };
+	//転んでいる時のコライダーの大きさ
+	XMFLOAT3 fallDownColliderScale = { 45.0f,45.0f,45.0f };
+	//転んでいる時に移動させるコライダー
+	XMFLOAT3 fallDownCollderAddPos = { 0.0f,0.0f,-50.0f };
 
 	//オブジェクトのコライダーデータ
 	std::vector<JSONLoader::ColliderData> objectColliderData;
@@ -582,4 +598,7 @@ protected:	//メンバ変数
 	//爆発用
 	float explosionTime = 5.0f;
 	float explosionTimer = explosionTime;
+
+	//倒れている間は体の当たり判定をなくす
+	bool hitBodyFlag = false;
 };

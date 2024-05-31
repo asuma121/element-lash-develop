@@ -117,6 +117,8 @@ public:
 	void UpdateState(Enemy* enemy);
 	//ゲームのステート更新
 	void UpdateStateMovePhase(Enemy* enemy)override;
+	//コライダーデータの処理
+	void UpdateColliderDate()override;
 };
 
 //起き上がり

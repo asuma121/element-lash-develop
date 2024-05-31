@@ -119,7 +119,7 @@ void Phase1::UpdateCollider()
 	}
 
 	//敵と時機の当たり判定
-	if (player->GetInvincibleFlag() == false)
+	if (player->GetInvincibleFlag() == false && enemy->HitBodyFlag())
 	{
 		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
 		{
@@ -168,6 +168,8 @@ void Phase1::DrawFBX()
 	//ステート更新
 	player->UpdateState();
 	enemy->UpdateStateGame();
+
+	ColliderManager::Draw(dxCommon->GetCommandList());
 }
 
 void Phase1::DrawSprite()
@@ -315,7 +317,7 @@ void Phase2::UpdateCollider()
 	}
 
 	//敵と時機の当たり判定
-	if (player->GetInvincibleFlag() == false)
+	if (player->GetInvincibleFlag() == false && enemy->HitBodyFlag())
 	{
 		if (ColliderManager::CheckCollider(player->GetColliderData(), enemy->GetColliderData()))
 		{

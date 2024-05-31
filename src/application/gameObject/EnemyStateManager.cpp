@@ -12,6 +12,9 @@ void Stand::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void Stand::Move()
@@ -48,6 +51,9 @@ void Walk::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void Walk::Move()
@@ -75,6 +81,9 @@ void Attack01::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void Attack01::Move()
@@ -111,6 +120,9 @@ void AttackOmen1::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void AttackOmen1::Move()
@@ -226,6 +238,9 @@ void Dash::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void Dash::Move()
@@ -331,6 +346,9 @@ void CallMiniEnemy::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void CallMiniEnemy::Move()
@@ -449,6 +467,9 @@ void FallDown::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = false;
 }
 
 void FallDown::Move()
@@ -475,6 +496,15 @@ void FallDown::UpdateStateMovePhase(Enemy* enemy)
 	}
 }
 
+void FallDown::UpdateColliderDate()
+{
+	colliderData.scale = fallDownColliderScale;
+	colliderData.rotation = rotation;
+	//角度の向きに回転
+	XMFLOAT3 addPos = rollRotation(fallDownCollderAddPos, rotation);
+	colliderData.center = position + addPos;
+}
+
 void GetUp::Initialize()
 {
 	//アニメーションの設定
@@ -485,6 +515,9 @@ void GetUp::Initialize()
 	//タイマーの設定
 	objectTimer = 0;
 	objectTimeFlag = false;
+
+	//体の当たり判定の処理
+	hitBodyFlag = true;
 }
 
 void GetUp::Move()
