@@ -54,15 +54,14 @@ public:	//サブクラス
 
 public:	//メンバ関数
 
+	//コンストラクタ デストラクタ
+	ShadowMap() {};
+	~ShadowMap();
+
 	/// <summary>
 	///初期化
 	/// </summary>
 	void Initialize();
-
-	/// <summary>
-	///終了時処理
-	/// </summary>
-	void Finalize();
 
 	/// <summary>
 	///更新

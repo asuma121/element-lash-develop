@@ -274,6 +274,7 @@ void FbxObject3D::Draw(ID3D12GraphicsCommandList* cmdList)
 	//深度値をセット
 	cmdList->SetDescriptorHeaps(1, &depthSRV);
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = depthSRV->GetGPUDescriptorHandleForHeapStart();
+	/*handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);*/
 	cmdList->SetGraphicsRootDescriptorTable(3, handle);
 	handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	cmdList->SetGraphicsRootDescriptorTable(4, handle);

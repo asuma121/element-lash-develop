@@ -33,7 +33,7 @@ public://メンバ関数
 	/// インストラクタ デストラクタ
 	/// </summary>
 	TutorialEnemy() {};
-	~TutorialEnemy() {};
+	~TutorialEnemy();
 
 	/// <summary>
 	///初期化

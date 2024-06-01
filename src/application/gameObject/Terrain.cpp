@@ -8,6 +8,9 @@ Terrain::~Terrain()
 	delete skySphereModel;
 	delete skySphereObject;
 	delete coliseumModel;
+	delete coliseumObject;
+	delete coliseum2Model;
+	delete coliseum2Object;
 	delete pillerModel;
 }
 

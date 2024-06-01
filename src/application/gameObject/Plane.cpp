@@ -11,6 +11,12 @@
 
 Camera* Plane::camera = nullptr;
 
+Plane::~Plane()
+{
+	delete object;
+	delete model;
+}
+
 void Plane::Initialize()
 {
 	//シェーダを別に設定

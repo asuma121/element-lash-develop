@@ -19,7 +19,7 @@ private:	//エイリアス
 public:	//メンバ関数
 
 	LockOn() {};
-	~LockOn() {};
+	~LockOn();
 
 	/// <summary>
 	///初期化

@@ -2,6 +2,13 @@
 #include "mathOriginal.h"
 #include "imgui.h"
 
+LockOn::~LockOn()
+{
+	delete lockOnSpriteModel1;
+	delete lockOnSprite1;
+	delete lockOnSprite2;
+}
+
 void LockOn::Initialize()
 {
 	//ビルボードのスプライト モデル

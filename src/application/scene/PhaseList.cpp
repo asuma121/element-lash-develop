@@ -168,8 +168,6 @@ void Phase1::DrawFBX()
 	//ステート更新
 	player->UpdateState();
 	enemy->UpdateStateGame();
-
-	ColliderManager::Draw(dxCommon->GetCommandList());
 }
 
 void Phase1::DrawSprite()

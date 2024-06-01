@@ -52,6 +52,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//コントローラー
 	DXInput* dxInput = nullptr;
+	dxInput = new DXInput();
 	dxInput = DXInput::GetInstance();
 
 	//キーマネージャー

@@ -23,6 +23,10 @@ ComPtr<ID3D12RootSignature>ShadowMap::rootsignature0;
 ComPtr<ID3D12PipelineState>ShadowMap::pipelinestate0;
 const float ShadowMap::clearColor[4] = { 0.25f,0.5f, 0.1f, 0.0f };
 
+ShadowMap::~ShadowMap()
+{
+}
+
 void ShadowMap::Initialize()
 {
 	HRESULT result;
@@ -357,79 +361,6 @@ void ShadowMap::Update()
 	constMapTransform->mat.r[3].m128_f32[0] = -1.0f + (position.x / width) * 2;
 	constMapTransform->mat.r[3].m128_f32[1] = 1.0f - (position.y / height) * 2;
 }
-
-//void ShadowMap::Draw0(ID3D12GraphicsCommandList* cmdList)
-//{
-//
-//	//パイプライン、ルートシグネチャをセット
-//	cmdList->SetPipelineState(pipelinestate1.Get());
-//	cmdList->SetGraphicsRootSignature(rootsignature1.Get());
-//
-//	//プリミティブ形状の設定コマンド
-//	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//
-//	//頂点バッファビューの設定コマンド
-//	cmdList->IASetVertexBuffers(0, 1, &vbView);
-//
-//	//定数バッファビューの設定コマンド
-//	cmdList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
-//	//デスクリプタヒープの配列をセットするコマンド
-//	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap.Get() };
-//	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-//	//SRVヒープの先頭ハンドルを取得
-//	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap.Get()->GetGPUDescriptorHandleForHeapStart();
-//
-//	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-//	cmdList->SetGraphicsRootDescriptorTable(2, srvGpuHandle);
-//
-//	D3D12_GPU_DESCRIPTOR_HANDLE handle = depthSRVHeap->GetGPUDescriptorHandleForHeapStart();
-//	handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-//	cmdList->SetDescriptorHeaps(1, depthSRVHeap.GetAddressOf());
-//	cmdList->SetGraphicsRootDescriptorTable(3, handle);
-//
-//	//定数バッファビューの設定コマンド
-//	cmdList->SetGraphicsRootConstantBufferView(1, constBuffTransform->GetGPUVirtualAddress());
-//
-//	//描画コマンド
-//	cmdList->DrawInstanced(_countof(vertices), 1, 0, 0);
-//}
-//
-//void ShadowMap::Draw1(ID3D12GraphicsCommandList* cmdList)
-//{
-//
-//	//パイプライン、ルートシグネチャをセット
-//	cmdList->SetPipelineState(pipelinestate0.Get());
-//	cmdList->SetGraphicsRootSignature(rootsignature0.Get());
-//
-//	//プリミティブ形状の設定コマンド
-//	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//
-//	//頂点バッファビューの設定コマンド
-//	cmdList->IASetVertexBuffers(0, 1, &vbView);
-//
-//	//定数バッファビューの設定コマンド
-//	cmdList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
-//	//デスクリプタヒープの配列をセットするコマンド
-//	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap.Get() };
-//	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-//	//SRVヒープの先頭ハンドルを取得
-//	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap.Get()->GetGPUDescriptorHandleForHeapStart();
-//
-//	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-//	cmdList->SetGraphicsRootDescriptorTable(2, srvGpuHandle);
-//
-//	cmdList->SetDescriptorHeaps(1, depthSRVHeap.GetAddressOf());
-//	D3D12_GPU_DESCRIPTOR_HANDLE handle = depthSRVHeap->GetGPUDescriptorHandleForHeapStart();
-//	cmdList->SetGraphicsRootDescriptorTable(3, handle);
-//	handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-//	cmdList->SetGraphicsRootDescriptorTable(4, handle);
-//
-//	//定数バッファビューの設定コマンド
-//	cmdList->SetGraphicsRootConstantBufferView(1, constBuffTransform->GetGPUVirtualAddress());
-//
-//	//描画コマンド
-//	cmdList->DrawInstanced(_countof(vertices), 1, 0, 0);
-//}
 
 void ShadowMap::CreateGraphicsPipeLine0()
 {

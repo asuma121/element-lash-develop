@@ -42,11 +42,6 @@ public:	//メンバ関
 public:	//ゲッター
 
 	/// <summary>
-	///テクスチャのバッファ取得
-	/// </summary>
-	ID3D12Resource* GetTextureBuff(int number) { return textureBuff[number].Get(); }
-
-	/// <summary>
 	///シェーダリソースビュー取得
 	/// </summary>
 	ID3D12DescriptorHeap* GetSrvHeap() { return srvHeap.Get(); }

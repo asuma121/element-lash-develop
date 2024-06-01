@@ -8,6 +8,19 @@
 
 Camera* TutorialEnemy::camera = nullptr;
 
+TutorialEnemy::~TutorialEnemy()
+{
+	delete object;
+	delete modelDash;
+	delete modelDown;
+	delete modelStand;
+	delete hpBar1;
+	delete hpBar2;
+	delete hpBar3;
+	delete hpBar4;
+}
+
+
 void TutorialEnemy::Initialize()
 {
 	//HPバーのスプライト

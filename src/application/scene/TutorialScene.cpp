@@ -431,22 +431,20 @@ void TutorialScene::Draw()
 
 	//スプライト描画
 	DrawSprite();
-
-	/*ColliderManager::Draw(dxCommon->GetCommandList());*/
 }
 
 void TutorialScene::DrawFBX()
 {
 	//オブジェクト描画
-	player->Draw(dxCommon->GetCommandList());
-	enemy->Draw(dxCommon->GetCommandList());
-	tutorialEnemy->Draw(dxCommon->GetCommandList());
+	//player->Draw(dxCommon->GetCommandList());
+	//enemy->Draw(dxCommon->GetCommandList());
+	//tutorialEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
-	terrain->Draw(dxCommon->GetCommandList());
+	//terrain->Draw(dxCommon->GetCommandList());
 
 	//ステート更新
-	player->UpdateState();
-	enemy->UpdateStateTutorial();
+	/*player->UpdateState();*/
+	/*enemy->UpdateStateTutorial();*/
 }
 
 void TutorialScene::DrawSprite()
@@ -472,9 +470,9 @@ void TutorialScene::DrawFBXLightView()
 
 void TutorialScene::SetSRV(ID3D12DescriptorHeap* SRV)
 {
-	player->SetSRV(SRV);
-	enemy->SetSRV(SRV);
-	tutorialEnemy->SetSRV(SRV);
+	//player->SetSRV(SRV);
+	///enemy->SetSRV(SRV);
+	//tutorialEnemy->SetSRV(SRV);
 	plane->SetSRV(SRV);
 }
 
