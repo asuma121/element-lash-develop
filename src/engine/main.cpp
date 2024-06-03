@@ -208,7 +208,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	FbxObject3D::SetCamera(camera);
 	FbxObject3D::SetLight(light);
 	FbxObject3D::SetLightGroup(lightGroup);
-	FbxObject3D::SetTextureManager(textureManager);
 	FbxObject3D::CreateGraphicsPipelineLightView();
 	FbxObject3D::CreateGraphicsPipeline();
 

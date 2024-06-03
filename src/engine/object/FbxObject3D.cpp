@@ -30,7 +30,6 @@ ID3D12Device* FbxObject3D::device = nullptr;
 Camera* FbxObject3D::camera = nullptr;
 Light* FbxObject3D::light = nullptr;
 LightGroup* FbxObject3D::lightGroup = nullptr;
-TextureManager* FbxObject3D::textureManager = nullptr;
 
 void FbxObject3D::Initialize()
 {

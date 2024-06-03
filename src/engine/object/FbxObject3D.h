@@ -73,17 +73,11 @@ public:	//静的メンバ関数
 	/// </summary>
 	static void SetLightGroup(LightGroup* lightGroup) { FbxObject3D::lightGroup = lightGroup; }
 
-	/// <summary>
-	///テクスチャマネージャーセット
-	/// </summary>
-	static void SetTextureManager(TextureManager* textureManager) { FbxObject3D::textureManager = textureManager; }
-
 private://静的メンバ変数
 	static ID3D12Device* device;
 	static Camera* camera;
 	static Light* light;
 	static LightGroup* lightGroup;
-	static TextureManager* textureManager;
 
 public://メンバ関数
 
