@@ -14,11 +14,10 @@
 #include <DirectXTex.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
-#define PI 3.1415
 
 using namespace Microsoft::WRL;
 
-ID3D12Device* ShadowMap::device = nullptr;
+ID3D12Device* ShadowMap::device = nullptr; 
 ComPtr<ID3D12RootSignature>ShadowMap::rootsignature0;
 ComPtr<ID3D12PipelineState>ShadowMap::pipelinestate0;
 const float ShadowMap::clearColor[4] = { 0.25f,0.5f, 0.1f, 0.0f };
@@ -59,7 +58,7 @@ void ShadowMap::Initialize()
 	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 	//頂点バッファの生成
-	ID3D12Resource* vertBuff = nullptr;
+	ComPtr<ID3D12Resource>vertBuff;
 	result = device->CreateCommittedResource(
 		&heapProp,
 		D3D12_HEAP_FLAG_NONE,
@@ -71,7 +70,6 @@ void ShadowMap::Initialize()
 	assert(SUCCEEDED(result));
 
 	//GPU上のバッファに対応した仮想メモリを取得
-	/*Vertex* vertMap = nullptr;*/
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	assert(SUCCEEDED(result));
 	//全頂点に対して
@@ -148,8 +146,8 @@ void ShadowMap::Initialize()
 	//リソース設定
 	D3D12_RESOURCE_DESC textureResourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		width,
-		(UINT)height,
+		(UINT64)width,
+		(UINT64)height,
 		1, 0, 1, 0,
 		D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
@@ -168,12 +166,12 @@ void ShadowMap::Initialize()
 	assert(SUCCEEDED(result));
 
 	//テクスチャ生成用設定
-	const UINT pixelCount = width * height;
-	const UINT rowPitch = sizeof(UINT) * width;
-	const UINT depthPitch = rowPitch * height;
+	const UINT pixelCount = (UINT)width * (UINT)height;
+	const UINT rowPitch = sizeof(UINT) * (UINT)width;
+	const UINT depthPitch = rowPitch * (UINT)height;
 	//画像イメージ
 	UINT* img = new UINT[pixelCount];
-	for (int i = 0; i < pixelCount; i++)
+	for (int i = 0; i < (int)pixelCount; i++)
 	{
 		img[i] = 0xff0000ff;
 	}
@@ -233,8 +231,8 @@ void ShadowMap::Initialize()
 	//深度バッファの作成
 	D3D12_RESOURCE_DESC depthResDesc = {};
 	depthResDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	depthResDesc.Width = width;
-	depthResDesc.Height = height;
+	depthResDesc.Width = (UINT64)width;
+	depthResDesc.Height = (UINT)height;
 	depthResDesc.DepthOrArraySize = 1;
 	depthResDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	depthResDesc.SampleDesc.Count = 1;
@@ -586,7 +584,7 @@ void ShadowMap::PreDrawScene0(ID3D12GraphicsCommandList* cmdList)
 	CD3DX12_VIEWPORT a1 = CD3DX12_VIEWPORT(0.0f, 0.0f, width, height);
 	cmdList->RSSetViewports(1, &a1);
 	//シザー矩形の設定
-	CD3DX12_RECT a2 = CD3DX12_RECT(0, 0, width, height);
+	CD3DX12_RECT a2 = CD3DX12_RECT(0, 0, (LONG)width, (LONG)height);
 	cmdList->RSSetScissorRects(1, &a2);
 
 
@@ -614,7 +612,7 @@ void ShadowMap::Shake()
 	if (shakeFlag == true)
 	{
 		shakeTimer++;
-		shakePos = position + XMFLOAT2(0.0f, shake(position.y, 5.0f));
+		shakePos = position + XMFLOAT2(0.0f, shake((int)position.y, 5));
 		SetPosition(shakePos);
 		if (shakeTimer >= shakeMaxTime)
 		{

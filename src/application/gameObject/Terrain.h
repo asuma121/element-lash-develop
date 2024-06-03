@@ -79,7 +79,7 @@ private:	//メンバ変数
 	ObjModel* pillerModel = nullptr;
 	
 	//天球以外のオブジェクト
-	std::vector<ObjObject3D*> objects;
+	std::vector<std::unique_ptr<ObjObject3D>> objects;
 
 	//判定を持つオブジェクトすべてのコライダーデータ
 	std::vector<JSONLoader::ColliderData>colliderData;

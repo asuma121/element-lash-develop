@@ -15,7 +15,7 @@ UI* ClearScene::ui = nullptr;
 void ClearScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	//ˆø”‚©‚ç‘ã“ü
-	ClearScene::dxCommon = dxCommon;
+	ClearScene::dxCommon = dxCommon; 
 	ClearScene::keyManager = keyManager;
 }
 
@@ -124,7 +124,7 @@ void ClearScene::UpdateObject()
 	player->UpdateGame();
 
 	//“G
-	enemy->UpdateClear(clearFromGameTimer);
+	enemy->UpdateClear((int)clearFromGameTimer);
 
 	//’n–Ê
 	plane->Update();

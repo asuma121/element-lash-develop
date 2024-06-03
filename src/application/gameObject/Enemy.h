@@ -221,12 +221,12 @@ public://メンバ関数
 	// <summary>
 	///HP取得
 	/// </summary>
-	int GetHP() { return HP; };
+	int GetHP() { return (int)HP; };
 
 	// <summary>
 	///最大HP取得
 	/// </summary>
-	int GetMaxHP() { return maxHP; };
+	int GetMaxHP() { return (int)maxHP; };
 
 	/// <summary>
 	///敵呼び出し座標取得
@@ -307,9 +307,6 @@ private:
 	//1フレームあたりの落下量
 	float fallFrame = 1.0f / 60.0f;
 
-	//ジャンプ
-	float jumpHeight = 0.4;
-
 	//スピード
 	float speed = 0.15f;
 	float walkSpeed = 1.0f;
@@ -349,11 +346,6 @@ private:
 
 class EnemyState
 {
-public:	//静的メンバ関数
-
-	//静的メンバ変数初期化
-	static void StaticInitialize();
-
 public:	//メンバ関数
 
 	//コンストラクタ デストラクタ
@@ -362,7 +354,7 @@ public:	//メンバ関数
 
 	//仮想関数
 	//各ステート初期化
-	virtual void Initialize() = 0;
+	virtual void InitializeState() = 0;
 	//攻撃処理
 	virtual void UpdateAttack() {};
 	//攻撃処理
@@ -387,6 +379,10 @@ public:	//メンバ関数
 	virtual void UpdateColliderDate();
 
 	//通常関数
+	//初期化
+	void Initialize();
+	//終了処理
+	void Finalize();
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
@@ -534,7 +530,7 @@ protected:	//メンバ変数
 	//雷パーティクルを出すフレームの間隔
 	int elecInterval = 7;
 	//雷を出しているフレーム数
-	int elecFrame = 40.0f;
+	int elecFrame = 40;
 	//でかい雷のスケール
 	float elecStartSlace1 = 10.0f;
 	float elecEndSlace1 = 10.0f;

@@ -14,7 +14,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-ComPtr<ID3D12RootSignature>BillboardSprite::rootsignature;
+ComPtr<ID3D12RootSignature>BillboardSprite::rootsignature; 
 ComPtr<ID3D12PipelineState>BillboardSprite::pipelinestate;
 
 ID3D12Device* BillboardSprite::device = nullptr;

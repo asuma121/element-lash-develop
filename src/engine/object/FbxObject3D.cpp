@@ -21,7 +21,7 @@ using namespace DirectX;
 
 //ライト視点のルートシグネチャとパイプライン(shadowMap用)
 ComPtr<ID3D12RootSignature>FbxObject3D::rootsignature0;
-ComPtr<ID3D12PipelineState>FbxObject3D::pipelinestate0;
+ComPtr<ID3D12PipelineState>FbxObject3D::pipelinestate0; 
 //影付きカメラ視点のルートシグネチャとパイプライン
 ComPtr<ID3D12RootSignature>FbxObject3D::rootsignature2;
 ComPtr<ID3D12PipelineState>FbxObject3D::pipelinestate2;
@@ -30,6 +30,7 @@ ID3D12Device* FbxObject3D::device = nullptr;
 Camera* FbxObject3D::camera = nullptr;
 Light* FbxObject3D::light = nullptr;
 LightGroup* FbxObject3D::lightGroup = nullptr;
+TextureManager* FbxObject3D::textureManager = nullptr;
 
 void FbxObject3D::Initialize()
 {
@@ -118,15 +119,15 @@ void FbxObject3D::Update()
 
 	//blenderと軸が違うため角度を変える
 	XMFLOAT3 rot = rotation;
-	rot.x -= 0.5 * PI;
+	rot.x -= 0.5 * (float)PI;
 
 	//ボーンがある場合スケールがでかくなるので調整(ボーンウェイトが上手く読み込めてないため)
 	XMFLOAT3 sca = scale;
 	if (model->GetArmature())
 	{
-		sca.x *= 0.1;
-		sca.y *= 0.1;
-		sca.z *= 0.1;
+		sca.x *= 0.1f;
+		sca.y *= 0.1f;
+		sca.z *= 0.1f;
 	}
 
 	//スケール、回転、平行移動行列の計算
@@ -272,9 +273,9 @@ void FbxObject3D::Draw(ID3D12GraphicsCommandList* cmdList)
 	lightGroup->Draw(cmdList, 5);
 
 	//深度値をセット
-	cmdList->SetDescriptorHeaps(1, &depthSRV);
+	ID3D12DescriptorHeap* ppHeaps[] = { depthSRV };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = depthSRV->GetGPUDescriptorHandleForHeapStart();
-	/*handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);*/
 	cmdList->SetGraphicsRootDescriptorTable(3, handle);
 	handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	cmdList->SetGraphicsRootDescriptorTable(4, handle);

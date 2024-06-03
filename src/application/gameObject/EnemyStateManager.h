@@ -5,7 +5,7 @@ class Stand : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//ステートの更新
@@ -19,7 +19,7 @@ class Walk : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//ステートの更新
@@ -31,7 +31,7 @@ class Attack01 : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//ステートの更新
@@ -43,7 +43,7 @@ class AttackOmen1 : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//クリア専用更新
@@ -65,7 +65,7 @@ class Dash : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//ステートの更新
@@ -92,7 +92,7 @@ class CallMiniEnemy : public EnemyState
 {
 	public:
 		//オブジェクトごとの初期化
-		void Initialize();
+		void InitializeState();
 		//ステートごとの動き
 		void Move();
 		//ステートの更新
@@ -110,7 +110,7 @@ class FallDown : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//ステートの更新
@@ -126,7 +126,7 @@ class GetUp : public EnemyState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートごとの動き
 	void Move();
 	//ステートの更新

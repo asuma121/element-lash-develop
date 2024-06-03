@@ -58,6 +58,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	enemyState->Finalize();
 	delete enemyState;
 }
 
@@ -65,6 +66,7 @@ void Enemy::Initialize()
 {
 	//ステートの初期化
 	enemyState->Initialize();
+	enemyState->InitializeState();
 }
 
 void Enemy::UpdateGame1()
@@ -313,7 +315,7 @@ void Enemy::ChangeState(EnemyState* newState)
 	enemyState = newState;
 
 	//初期化
-	enemyState->Initialize();
+	enemyState->InitializeState();
 }
 
 void Enemy::SetCallMiniEnemy()
@@ -321,7 +323,7 @@ void Enemy::SetCallMiniEnemy()
 	enemyState->SetCallMiniEnemy();
 }
 
-void EnemyState::StaticInitialize()
+void EnemyState::Initialize()
 {
 	//プレイヤーのシェーダを別に設定
 	JSONLoader::TextureData textureData;
@@ -332,18 +334,25 @@ void EnemyState::StaticInitialize()
 	textureData.shaderName = "Enemy";	//シェーダの名前
 
 	//立っているモデル
+	modelStand = new FbxModel();
 	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
 	//歩いているモデル
+	modelWalk = new FbxModel();
 	modelWalk = FbxLoader::GetInstance()->LoadModelFromFile("enemyWalk");
 	//攻撃1のモデル
+	modelAttack1 = new FbxModel();
 	modelAttack1 = FbxLoader::GetInstance()->LoadModelFromFile("enemyAttack1");
 	//攻撃前兆のモデル
+	modelAttackOmen1 = new FbxModel();
 	modelAttackOmen1 = FbxLoader::GetInstance()->LoadModelFromFile("enemyAttack1Omen");
 	//ダッシュのモデル
+	modelDash = new FbxModel();
 	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("enemyDash");
 	//転ぶモデル
+	modelFallDown = new FbxModel();
 	modelFallDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyFallDown");
 	//立ち上がるモデル
+	modelGetUp = new FbxModel();
 	modelGetUp = FbxLoader::GetInstance()->LoadModelFromFile("enemyGetUp");
 
 	//オブジェクト
@@ -383,6 +392,22 @@ void EnemyState::StaticInitialize()
 	nextCallMiniEnemy = false;
 	nextDash = false;
 	nextAttack01 = false;
+}
+
+void EnemyState::Finalize()
+{
+	delete object;
+	delete modelStand;
+	delete modelWalk;
+	delete modelAttack1;
+	delete modelAttackOmen1;
+	delete modelDash;
+	delete modelFallDown;
+	delete modelGetUp;
+	delete bullet;
+	delete elecParticle;
+	delete explosionParticle1;
+	delete explosionParticle2;
 }
 
 void EnemyState::UpdateColliderDate()
@@ -607,6 +632,6 @@ void EnemyState::SetMovePhase(Enemy* enemy)
 {
 	//転ぶアニメーションにセット
 	enemy->ChangeState(new FallDown());
-	rotation = XMFLOAT3(0.0f, PI, 0.0f);
+	rotation = XMFLOAT3(0.0f, (float)PI, 0.0f);
 	position = XMFLOAT3(0.0f, 0.0f, 100.0f);
 }

@@ -18,7 +18,7 @@ void JSONLoader::LoadFile(const std::string& fileName)
 	//オブジェクトデータリセット
 	objectData.clear();
 	colliderData.clear();
-	textureData.clear();
+	textureData.clear(); 
 
 	//ファイルを開く
 	std::ifstream file;
@@ -87,9 +87,9 @@ void JSONLoader::LoadFile(const std::string& fileName)
 				objectData1.rotation.z = -(float)transform["rotation"][1];
 			}
 			//弧度法に変換
-			objectData1.rotation.x *= 1.0f / 360.0f * (2.0f * PI);
-			objectData1.rotation.y *= 1.0f / 360.0f * (2.0f * PI);
-			objectData1.rotation.z *= 1.0f / 360.0f * (2.0f * PI);
+			objectData1.rotation.x *= 1.0f / 360.0f * (2.0f * (float)PI);
+			objectData1.rotation.y *= 1.0f / 360.0f * (2.0f * (float)PI);
+			objectData1.rotation.z *= 1.0f / 360.0f * (2.0f * (float)PI);
 			// スケーリング
 			objectData1.scale.x = (float)transform["scale"][0];
 			objectData1.scale.y = (float)transform["scale"][2];
@@ -125,9 +125,9 @@ void JSONLoader::LoadFile(const std::string& fileName)
 				colliderData1.rotation.z = -(float)transform["rotation"][1];
 			}*/
 			//弧度法に変換
-			colliderData1.rotation.x *= 1.0f / 360.0f * (2.0f * PI);
-			colliderData1.rotation.y *= 1.0f / 360.0f * (2.0f * PI);
-			colliderData1.rotation.z *= 1.0f / 360.0f * (2.0f * PI);
+			colliderData1.rotation.x *= 1.0f / 360.0f * (2.0f * (float)PI);
+			colliderData1.rotation.y *= 1.0f / 360.0f * (2.0f * (float)PI);
+			colliderData1.rotation.z *= 1.0f / 360.0f * (2.0f * (float)PI);
 
 			//テクスチャデータ
 			if (object.contains("textureNum1"))
@@ -238,9 +238,9 @@ std::vector<JSONLoader::ColliderData> JSONLoader::LoadTerrainCollider(const std:
 			colliderData1.rotation.y = -(float)transform["rotation"][2];
 			colliderData1.rotation.z = -(float)transform["rotation"][1];
 			//弧度法に変換
-			colliderData1.rotation.x *= 1.0f / 360.0f * (2.0f * PI);
-			colliderData1.rotation.y *= 1.0f / 360.0f * (2.0f * PI);
-			colliderData1.rotation.z *= 1.0f / 360.0f * (2.0f * PI);
+			colliderData1.rotation.x *= 1.0f / 360.0f * (2.0f * (float)PI);
+			colliderData1.rotation.y *= 1.0f / 360.0f * (2.0f * (float)PI);
+			colliderData1.rotation.z *= 1.0f / 360.0f * (2.0f * (float)PI);
 			// スケーリング
 			colliderData1.scale.x = (float)transform["scale"][0];
 			colliderData1.scale.y = (float)transform["scale"][2];
@@ -320,9 +320,9 @@ std::vector<JSONLoader::ObjectData> JSONLoader::LoadTerrainObject(const std::str
 			objectData1.rotation.y = -(float)transform["rotation"][2];
 			objectData1.rotation.z = -(float)transform["rotation"][1];
 			//弧度法に変換
-			objectData1.rotation.x *= 1.0f / 360.0f * (2.0f * PI);
-			objectData1.rotation.y *= 1.0f / 360.0f * (2.0f * PI);
-			objectData1.rotation.z *= 1.0f / 360.0f * (2.0f * PI);
+			objectData1.rotation.x *= 1.0f / 360.0f * (2.0f * (float)PI);
+			objectData1.rotation.y *= 1.0f / 360.0f * (2.0f * (float)PI);
+			objectData1.rotation.z *= 1.0f / 360.0f * (2.0f * (float)PI);
 			// スケーリング
 			objectData1.scale.x = (float)transform["scale"][0];
 			objectData1.scale.y = (float)transform["scale"][2];

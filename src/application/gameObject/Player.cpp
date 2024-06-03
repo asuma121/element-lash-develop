@@ -17,13 +17,15 @@
 Camera* Player::camera = nullptr;
 KeyManager* Player::keyManager = nullptr;
 LockOn* Player::lockOn = nullptr;
+//オブジェクト
+FbxObject3D* PlayerState::object = nullptr;
+//モデル
 FbxModel* PlayerState::modelWait = nullptr;
 FbxModel* PlayerState::modelRun = nullptr;
 FbxModel* PlayerState::modelAttack1 = nullptr;
 FbxModel* PlayerState::modelAttack2 = nullptr;
 FbxModel* PlayerState::modelAttack3 = nullptr;
 FbxModel* PlayerState::modelDown = nullptr;
-FbxObject3D* PlayerState::object = nullptr;
 //コライダーデータ
 JSONLoader::ColliderData PlayerState::colliderData;
 //シェーダのデータ
@@ -52,6 +54,7 @@ Player::Player()
 
 Player::~Player()
 {
+	playerState->Finalize();
 	delete playerState;
 }
 
@@ -59,6 +62,8 @@ void Player::Initialize()
 {
 	//プレイヤーステートの初期化
 	playerState->Initialize();
+	playerState->InitializeState();
+
 }
 void Player::UpdateGame()
 {
@@ -81,7 +86,7 @@ void Player::UpdateGame()
 	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->SetHP(HP);
+	playerState->SetHP((int)HP);
 	playerState->Update();
 
 	//1フレーム前のフォルムを代入
@@ -372,7 +377,7 @@ void Player::ChangeState(PlayerState* newState)
 	playerState = newState;
 
 	//初期化
-	playerState->Initialize();
+	playerState->InitializeState();
 }
 
 void PlayerState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
@@ -591,8 +596,22 @@ void PlayerState::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
 	}
 }
 
-void PlayerState::StaticInitialize()
+void PlayerState::Initialize()
 {
+	//モデルの読み込み
+	modelWait = new FbxModel();
+	modelWait = FbxLoader::GetInstance()->LoadModelFromFile("playerWait");
+	modelRun = new FbxModel();
+	modelRun = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
+	modelAttack1 = new FbxModel();
+	modelAttack1 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack1");
+	modelAttack2 = new FbxModel();
+	modelAttack2 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack2");
+	modelAttack3 = new FbxModel();
+	modelAttack3 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack3");
+	modelDown = new FbxModel();
+	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("playerDown");
+
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため
 	colliderData.objectName = "player";
@@ -609,14 +628,6 @@ void PlayerState::StaticInitialize()
 	textureData.textureNum2 = 70;	//炎のテクスチャ
 	textureData.shaderName = "PlayerFire";	//シェーダの名前
 	textureData.shaderName2 = "PlayerElec";	//シェーダの名前
-
-	//モデル
-	modelWait = FbxLoader::GetInstance()->LoadModelFromFile("playerWait");
-	modelRun = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
-	modelAttack1 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack1");
-	modelAttack2 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack2");
-	modelAttack3 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack3");
-	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("playerDown");
 
 	//オブジェクト
 	object = new FbxObject3D;
@@ -648,6 +659,20 @@ void PlayerState::StaticInitialize()
 	//あたりフラグ
 	invincibleFlag = false;
 	hitTimer = 0;
+}
+
+void PlayerState::Finalize()
+{
+	delete object;
+	delete modelRun;
+	delete modelWait;
+	delete modelAttack1;
+	delete modelAttack2;
+	delete modelAttack3;
+	delete modelDown;
+	delete bullet;
+	delete elecParticle1;
+	delete elecParticle2;
 }
 
 void PlayerState::Move()

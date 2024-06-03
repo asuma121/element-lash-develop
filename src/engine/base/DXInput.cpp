@@ -140,6 +140,7 @@ bool DXInput::PushKey(const Pad& pad)
     if (pad == PAD_RIGHT_SHOULDER)return key.PAD_RIGHT_SHOULDER;
     if (pad == PAD_START)return key.PAD_START;
     if (pad == PAD_BACK)return key.PAD_BACK;
+    return false;
 }
 
 bool DXInput::TriggerKey(const Pad &pad)
@@ -192,6 +193,7 @@ bool DXInput::TriggerKey(const Pad &pad)
         if (key.PAD_BACK != oldKey.PAD_BACK)return true;
         return false;
     }
+    return false;
 }
 
 float DXInput::GetStick(const Stick &stick)
@@ -202,6 +204,7 @@ float DXInput::GetStick(const Stick &stick)
     if (stick == LStickY)return this->stick.LStickY;
     if (stick == RStick)return this->stick.RStick;
     if (stick == LStick)return this->stick.LStick;
+    return false;
 }
 
 float DXInput::GetStickRot(const Stick &stick)
@@ -269,4 +272,5 @@ float DXInput::GetOldStick(const Stick &stick)
     if (stick == LStickY)return this->oldStick.LStickY;
     if (stick == RStick)return this->oldStick.RStick;
     if (stick == LStick)return this->oldStick.LStick;
+    return false;
 }

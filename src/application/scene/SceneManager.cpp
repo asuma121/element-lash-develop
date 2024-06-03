@@ -7,14 +7,14 @@
 
 Scene::Scene()
 {
-	sceneState = new TutorialScene();
+	sceneState = new TitleScene();
 }
 
 Scene::~Scene()
 {
 	delete sceneState;
 }
-
+ 
 void Scene::Initialize()
 {
 	sceneState->Initialize();

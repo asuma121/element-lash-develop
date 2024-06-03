@@ -12,7 +12,7 @@ void Phase1::PhaseInitialize()
 void Phase1::DrawFBXLightView()
 {
 	//SRVをセット
-	player->DrawLightView(dxCommon->GetCommandList());
+	player->DrawLightView(dxCommon->GetCommandList()); 
 	enemy->DrawLightView(dxCommon->GetCommandList());
 }
 
@@ -91,9 +91,6 @@ void Phase1::UpdateObject()
 
 void Phase1::UpdateCollider()
 {
-	//事前処理
-	ColliderManager::PreUpdate();
-
 	//カメラ当たり判定更新
 	camera->SetObjectCollider(terrain->GetColliderData());
 
@@ -148,9 +145,6 @@ void Phase1::UpdateCollider()
 		//敵にヒットフラグ送信
 		enemy->HitElec();
 	}
-
-	//後処理
-	ColliderManager::PostUpdate();
 
 	//カメラ更新
 	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
@@ -287,9 +281,6 @@ void Phase2::UpdateObject()
 
 void Phase2::UpdateCollider()
 {
-	//事前処理
-	ColliderManager::PreUpdate();
-
 	//カメラ当たり判定更新
 	camera->SetObjectCollider(terrain->GetColliderData());
 
@@ -378,9 +369,6 @@ void Phase2::UpdateCollider()
 		//敵にヒットフラグ送信
 		tutorialEnemy->HitElec();
 	}
-
-	//後処理
-	ColliderManager::PostUpdate();
 
 	//カメラ更新
 	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());

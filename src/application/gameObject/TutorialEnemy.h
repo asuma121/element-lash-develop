@@ -298,10 +298,10 @@ public:
 	FbxModel* modelStand= nullptr;
 
 	//スプライト
-	Sprite* hpBar1 = nullptr;	//HPバーの枠
-	Sprite* hpBar2 = nullptr;	//HPバー
-	Sprite* hpBar3 = nullptr;	//現在のHPのとこにつけるやつ
-	Sprite* hpBar4 = nullptr;	//BOSS HPのテキスト
+	std::unique_ptr<Sprite>hpBar1;	//HPバーの枠
+	std::unique_ptr<Sprite>hpBar2;	//HPバー
+	std::unique_ptr<Sprite>hpBar3;	//現在のHPのとこにつけるやつ
+	std::unique_ptr<Sprite>hpBar4;	//BOSS HPのテキスト
 
 	//チュートリアルのフラグ
 	int tutorialFlag = 0;

@@ -25,7 +25,6 @@ ObjModel* ObjModel::GetInstance()
 void ObjModel::Initialize(ID3D12Device* device, const std::string& filename, const std::string& resourcename)
 {
 	this->device = device;
-	HRESULT result;
 
 	//頂点初期化
 	InitializeVertex(filename);
@@ -135,7 +134,7 @@ void ObjModel::InitializeVertex(const std::string& filename)
 	//ファイルを閉じる
 	file.close();
 
-	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices.size());
+	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * (UINT)vertices.size());
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);

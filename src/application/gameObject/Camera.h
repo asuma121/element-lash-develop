@@ -168,9 +168,9 @@ private:
 	float DebugTargetDistance = 40.0f;
 	//加算用
 	float DebugChangeRot = (float)PI;
-	float DebugChangeRot2 = PI * (13.0f / 40.0f);
-	float maxDebugChangeRot2 = PI * (19.0f / 40.0f);
-	float minDebugChangeRot2 = PI * (8.0f / 40.0f);
+	float DebugChangeRot2 = (float)PI * (13.0f / 40.0f);
+	float maxDebugChangeRot2 = (float)PI * (19.0f / 40.0f);
+	float minDebugChangeRot2 = (float)PI * (8.0f / 40.0f);
 	float DebugChangeDistance = 0.0f;
 
 	//コライダーデータ

@@ -67,7 +67,7 @@ void Terrain::Initialize(ID3D12Device* device)
 
 	//コライダー
 	colliderData = JSONLoader::LoadTerrainCollider("Resources/json/stage.json");
-	colliderNum = colliderData.size();
+	colliderNum = (int)colliderData.size();
 	for (int i = 0; i < colliderData.size(); i++)
 	{
 		ColliderManager::SetCollider(colliderData[i]);

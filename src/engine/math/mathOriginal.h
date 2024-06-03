@@ -133,6 +133,7 @@ const DirectX::XMFLOAT2 operator/(DirectX::XMFLOAT2 v, float s);
 //長さ
 float length(DirectX::XMFLOAT2 v);
 float length(float x,float y);
+float length(int x, int y);
 //正規化
 DirectX::XMFLOAT2 normalize(DirectX::XMFLOAT2 v);
 DirectX::XMFLOAT2 normalize(float x,float y);

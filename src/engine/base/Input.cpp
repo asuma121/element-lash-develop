@@ -11,7 +11,7 @@
 Input* Input::GetInstance()
 {
 	static Input instance;
-	return &instance;
+	return &instance; 
 }
 
 void Input::Initialize(WinApp* winApp)

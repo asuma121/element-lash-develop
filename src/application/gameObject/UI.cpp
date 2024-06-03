@@ -1784,10 +1784,10 @@ void UI::SetTitleTimer(int moveTutorialTimer, int moveTutorialTime)
 
 void UI::SetHP(int playerHP, int playerMaxHP, int enemyHP, int enemyMaxHP)
 {
-	this->playerHP = playerHP;
-	this->playerMaxHP = playerMaxHP;
-	this->enemyHP = enemyHP;
-	this->enemyMaxHP = enemyMaxHP;
+	this->playerHP = (float)playerHP;
+	this->playerMaxHP = (float)playerMaxHP;
+	this->enemyHP = (float)enemyHP;
+	this->enemyMaxHP = (float)enemyMaxHP;
 }
 
 void UI::SetTutorialTimer(int LStickTimer, int LStickTime, int RStickTimer, int RStickTime,

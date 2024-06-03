@@ -14,7 +14,7 @@ Plane* TutorialScene::plane = nullptr;
 Terrain* TutorialScene::terrain = nullptr;
 UI* TutorialScene::ui = nullptr;
 
-TutorialScene::TutorialScene()
+TutorialScene::TutorialScene() 
 {
 }
 
@@ -319,55 +319,10 @@ void TutorialScene::UpdateSprite()
 			moveGameFlag = true;
 		}
 	}
-	////いい感じチュートリアル
-	//if (tutorialSpriteFlag == 11)
-	//{
-	//	tutorialIikannjiTimer++;
-	//	//時間経過でチュートリアル終了
-	//	if (tutorialIikannjiTimer >= tutorialIikannjiMaxTime)
-	//	{
-	//		tutorialSpriteFlag = 12;
-	//		tutorialIikannjiTimer = 0;
-	//	}
-	//}
-	////敵登場までの間
-	//if (tutorialSpriteFlag == 12)
-	//{
-	//	tutorial12Timer++;
-	//	//時間経過でチュートリアル終了
-	//	if (tutorial12Timer >= tutorial12MaxTime)
-	//	{
-	//		tutorialSpriteFlag = 13;
-	//	}
-	//}
-	//if (tutorialSpriteFlag == 13)
-	//{
-	//	tutorial13Timer++;
-	//	//黒幕
-	//	if (tutorial13Timer >= tutorial13MaxTime)
-	//	{
-	//		blackSpriteTimer++;
-	//	}
-	//	//時間経過でチュートリアル終了
-	//	if (tutorial13Timer >= tutorial13MaxTime + blackSpriteMaxTime)
-	//	{
-	//		//リセット
-	//		Reset();
-	//		//プレイヤーをゲームにセット
-	//		player->SetGameScene();
-	//		//敵をゲームにセット
-	//		enemy->SetGameScene();
-	//		//ゲームに移る
-	//		moveGameFlag = true;
-	//	}
-	//}
 }
 
 void TutorialScene::UpdateCollider()
 {
-	//事前処理
-	ColliderManager::PreUpdate();
-
 	//カメラ当たり判定更新
 	camera->SetObjectCollider(terrain->GetColliderData());
 
@@ -397,9 +352,6 @@ void TutorialScene::UpdateCollider()
 		//敵にヒットフラグ送信
 		tutorialEnemy->HitElec();
 	}
-
-	//後処理
-	ColliderManager::PostUpdate();
 }
 
 void TutorialScene::UpdateParticle()
@@ -410,11 +362,11 @@ void TutorialScene::Reset()
 {
 	//タイマーリセット
 	blackSpriteTimer = 0;
-	tutorialLStickTimer = 0.0f;
-	tutorialRStickTimer = 0.0f;
-	tutorialIikannjiTimer = 0.0f;
-	tutorialAttackTimer = 0.0f;
-	tutorialAttack2Timer = 0.0f;
+	tutorialLStickTimer = 0;
+	tutorialRStickTimer = 0;
+	tutorialIikannjiTimer = 0;
+	tutorialAttackTimer = 0;
+	tutorialAttack2Timer = 0;
 	tutorial12Timer = 0;
 	tutorial13Timer = 0;
 	//フラグを元に戻す
@@ -436,15 +388,15 @@ void TutorialScene::Draw()
 void TutorialScene::DrawFBX()
 {
 	//オブジェクト描画
-	//player->Draw(dxCommon->GetCommandList());
-	//enemy->Draw(dxCommon->GetCommandList());
-	//tutorialEnemy->Draw(dxCommon->GetCommandList());
+	player->Draw(dxCommon->GetCommandList());
+	enemy->Draw(dxCommon->GetCommandList());
+	tutorialEnemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
-	//terrain->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
 
 	//ステート更新
-	/*player->UpdateState();*/
-	/*enemy->UpdateStateTutorial();*/
+	player->UpdateState();
+	enemy->UpdateStateTutorial();
 }
 
 void TutorialScene::DrawSprite()
@@ -470,9 +422,9 @@ void TutorialScene::DrawFBXLightView()
 
 void TutorialScene::SetSRV(ID3D12DescriptorHeap* SRV)
 {
-	//player->SetSRV(SRV);
-	///enemy->SetSRV(SRV);
-	//tutorialEnemy->SetSRV(SRV);
+	player->SetSRV(SRV);
+	enemy->SetSRV(SRV);
+	tutorialEnemy->SetSRV(SRV);
 	plane->SetSRV(SRV);
 }
 

@@ -10,7 +10,7 @@
 #include "ColliderManager.h"
 #include "imgui.h"
 
-Camera* EnemyBullet::camera = nullptr;
+Camera* EnemyBullet::camera = nullptr; 
 
 void EnemyBullet::Initialize()
 {

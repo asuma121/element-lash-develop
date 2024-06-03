@@ -3,8 +3,6 @@
 #include "FbxLoader.h"
 #include "imgui.h"
 #include "ColliderManager.h"
-#define G 6.674	//万有引力定数
-#define GAcceleration 9.80665 * 1/10	//重力加速度
 
 Camera* TutorialEnemy::camera = nullptr;
 
@@ -14,27 +12,27 @@ TutorialEnemy::~TutorialEnemy()
 	delete modelDash;
 	delete modelDown;
 	delete modelStand;
-	delete hpBar1;
-	delete hpBar2;
-	delete hpBar3;
-	delete hpBar4;
 }
 
 
 void TutorialEnemy::Initialize()
 {
 	//HPバーのスプライト
-	hpBar1 = new Sprite();
-	hpBar1->Initialize();
+	Sprite* newHpBarSprite1 = new Sprite();
+	newHpBarSprite1->Initialize();
+	hpBar1.reset(newHpBarSprite1);
 	hpBar1->SetTextureNum(58);
-	hpBar2 = new Sprite();
-	hpBar2->Initialize();
+	Sprite* newHpBarSprite2 = new Sprite();
+	newHpBarSprite2->Initialize();
+	hpBar2.reset(newHpBarSprite2);
 	hpBar2->SetTextureNum(59);
-	hpBar3 = new Sprite();
-	hpBar3->Initialize();
+	Sprite* newHpBarSprite3 = new Sprite();
+	newHpBarSprite3->Initialize();
+	hpBar3.reset(newHpBarSprite3);
 	hpBar3->SetTextureNum(60);
-	hpBar4 = new Sprite();
-	hpBar4->Initialize();
+	Sprite* newHpBarSprite4 = new Sprite();
+	newHpBarSprite4->Initialize();
+	hpBar4.reset(newHpBarSprite4);
 	hpBar4->SetTextureNum(61);
 
 	//モデル

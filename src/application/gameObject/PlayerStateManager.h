@@ -5,7 +5,7 @@ class Wait : public PlayerState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
 };
@@ -15,7 +15,7 @@ class Run : public PlayerState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
 	//タイトルのみの処理
@@ -27,7 +27,7 @@ class Attack1 : public PlayerState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
 	//オブジェクトごとの攻撃
@@ -65,7 +65,7 @@ class Attack2 : public PlayerState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
 	//オブジェクトごとの攻撃
@@ -102,7 +102,7 @@ class Attack3 : public PlayerState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
 	//オブジェクトごとの攻撃
@@ -113,7 +113,7 @@ public:
 private:
 
 	//炎を出す間隔
-	int bullet1Interval = 2.0f;
+	int bullet1Interval = 2;
 	//炎のスピード
 	float bullet1Speed = 1.9f;
 	//炎のスケール
@@ -133,7 +133,7 @@ class Down : public PlayerState
 {
 public:
 	//オブジェクトごとの初期化
-	void Initialize();
+	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
 	//動き

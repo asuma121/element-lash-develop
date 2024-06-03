@@ -1,7 +1,7 @@
 #include "PlayerStateManager.h"
 #include "mathOriginal.h"
 
-void Wait::Initialize()
+void Wait::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -48,7 +48,7 @@ void Wait::UpdateState(Player* player)
 	}
 }
 
-void Run::Initialize()
+void Run::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -70,7 +70,7 @@ void Run::UpdateState(Player* player)
 	}
 
 	//炎状態でRボタンを押していたら攻撃3へ
-	if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire)
+	if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire) 
 	{
 		player->ChangeState(new Attack3());
 		return;
@@ -107,8 +107,8 @@ void Run::MoveTitle(float timer)
 		rotation0 = rotation0 + rotVelocity;
 
 		//座標加算
-		posVelocity.x = 0.9;
-		posVelocity.z = -0.1;
+		posVelocity.x = 0.9f;
+		posVelocity.z = -0.1f;
 	}
 
 	//シーン遷移タイマーが始動したら
@@ -141,7 +141,7 @@ void Run::MoveTitle(float timer)
 	position = position + posVelocity;
 }
 
-void Attack1::Initialize()
+void Attack1::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -203,14 +203,14 @@ void Attack1::UpdateAttack()
 	if (objectTimer == elecFlame)
 	{
 		elecParticle1->AddParticle(attack1Time - elecFlame, position + addElecPos2,
-			lockOnPos, elecStartSlace1, elecEndSlace1, 10.0f, elecStrength);
+			lockOnPos, elecStartSlace1, elecEndSlace1, 10, elecStrength);
 	}
 	if (objectTimer > elecFlame && (int)objectTimer % elecInterval == 0)
 	{
 		for (int i = 0; i < elecVol; i++)
 		{
-			elecParticle1->AddParticle(20.0f, position + addElecPos2,
-				lockOnPos, elecStartSlace2, elecEndSlace2, 20.0f, elecStrength);
+			elecParticle1->AddParticle(20, position + addElecPos2,
+				lockOnPos, elecStartSlace2, elecEndSlace2, 20, elecStrength);
 		}
 	}
 }
@@ -231,7 +231,7 @@ void Attack1::Move()
 	return;
 }
 
-void Attack2::Initialize()
+void Attack2::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -287,14 +287,14 @@ void Attack2::UpdateAttack()
 	if (objectTimer == elecFlame)
 	{
 		elecParticle1->AddParticle(attack2Time - elecFlame, position + addElecPos2,
-			lockOnPos, elecStartSlace1, elecEndSlace1, 10.0f, elecStrength);
+			lockOnPos, elecStartSlace1, elecEndSlace1, 10, elecStrength);
 	}
 	if (objectTimer > elecFlame && (int)objectTimer % elecInterval == 0)
 	{
 		for (int i = 0; i < elecVol; i++)
 		{
-			elecParticle1->AddParticle(20.0f, position + addElecPos2,
-				lockOnPos, elecStartSlace2, elecEndSlace2, 20.0f, elecStrength);
+			elecParticle1->AddParticle(20, position + addElecPos2,
+				lockOnPos, elecStartSlace2, elecEndSlace2, 20, elecStrength);
 		}
 	}
 }
@@ -315,7 +315,7 @@ void Attack2::Move()
 	return;
 }
 
-void Attack3::Initialize()
+void Attack3::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -388,7 +388,7 @@ void Attack3::Move()
 	position = position + posVelocity;
 }
 
-void Down::Initialize()
+void Down::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();

@@ -18,7 +18,7 @@ ID3D12Device* PlayerBulletParticle::device = nullptr;
 Camera* PlayerBulletParticle::camera = nullptr;
 
 
-void PlayerBulletParticle::CreateGraphicsPipeline()
+void PlayerBulletParticle::CreateGraphicsPipeline() 
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -275,8 +275,8 @@ void PlayerBulletParticle::CreateBuffers()
 	D3D12_RESOURCE_DESC textureResourceDesc{};
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	textureResourceDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	textureResourceDesc.Width = textureWidth;	//幅
-	textureResourceDesc.Height = textureHeight;	//高さ
+	textureResourceDesc.Width = (UINT)textureWidth;	//幅
+	textureResourceDesc.Height = (UINT)textureHeight;	//高さ
 	textureResourceDesc.DepthOrArraySize = 1;
 	textureResourceDesc.MipLevels = 1;
 	textureResourceDesc.SampleDesc.Count = 1;
@@ -294,8 +294,8 @@ void PlayerBulletParticle::CreateBuffers()
 		0,
 		nullptr,
 		imageData,
-		sizeof(XMFLOAT4) * textureWidth,
-		sizeof(XMFLOAT4) * imageDataCount
+		sizeof(XMFLOAT4) * (UINT)textureWidth,
+		sizeof(XMFLOAT4) * (UINT)imageDataCount
 	);
 
 	//デスクリプタヒープ生成

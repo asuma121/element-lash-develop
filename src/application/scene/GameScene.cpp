@@ -108,7 +108,7 @@ void PhaseState::Initialize()
 void PhaseState::Update()
 {
 	//フェーズタイマー更新
-	phaseTimer += 1.0f;
+	phaseTimer += 1;
 
 	//オブジェクト更新
 	UpdateObject();

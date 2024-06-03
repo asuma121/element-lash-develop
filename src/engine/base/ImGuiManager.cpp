@@ -12,7 +12,7 @@
 void ImGuiManager::Initialize(WinApp* winApp, DirectXCommon* dxCommon)
 {
 	this->winApp_ = winApp;
-	this->dxCommon_ = dxCommon;
+	this->dxCommon_ = dxCommon; 
 
 	HRESULT result;
 

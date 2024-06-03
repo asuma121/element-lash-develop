@@ -165,31 +165,7 @@
     <ClCompile Include="src\engine\base\JSONLoader.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderCubeModel.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderCubeObject.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderFrustumModel.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderFrustumObject.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\collision\ColliderManager.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderPlaneModel.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderPlaneObject.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderSphereModel.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\collision\ColliderSphereObject .cpp">
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
     <ClCompile Include="src\application\particle\ElecParticle.cpp">
@@ -344,31 +320,7 @@
     <ClInclude Include="src\engine\base\JSONLoader.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderCubeModel.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderCubeObject.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderFrustumModel.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderFrustumObject.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\collision\ColliderManager.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderPlaneModel.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderPlaneObject.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderSphereModel.h">
-      <Filter>ヘッダー ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\collision\ColliderSphereObject.h">
       <Filter>ヘッダー ファイル\collision</Filter>
     </ClInclude>
     <ClInclude Include="src\application\particle\ElecParticle.h">

@@ -2,7 +2,7 @@
 #include "mathOriginal.h"
 #include "ColliderManager.h"
 
-void Stand::Initialize()
+void Stand::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -41,7 +41,7 @@ void Stand::UpdateStateTutorial(Enemy* enemy)
 	}
 }
 
-void Walk::Initialize()
+void Walk::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -71,7 +71,7 @@ void Walk::UpdateState(Enemy* enemy)
 {
 }
 
-void Attack01::Initialize()
+void Attack01::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -110,7 +110,7 @@ void Attack01::UpdateState(Enemy* enemy)
 	}
 }
 
-void AttackOmen1::Initialize()
+void AttackOmen1::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -228,7 +228,7 @@ void AttackOmen1::UpdateAttack()
 	}
 }
 
-void Dash::Initialize()
+void Dash::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -336,7 +336,7 @@ void Dash::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
 	hitObjectFlag = true;
 }
 
-void CallMiniEnemy::Initialize()
+void CallMiniEnemy::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -406,7 +406,7 @@ void CallMiniEnemy::UpdateAttack()
 	if (objectTimer == frameCallMiniEnemy2)
 	{
 		elecParticle->AddParticle(elecFrame, callEnemyPos1 + addElecPos1,
-			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60.0f, elecStrength);
+			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60, elecStrength);
 		explosionParticle1->Add(callEnemyPos1);
 	}
 	//敵呼び出し
@@ -416,8 +416,8 @@ void CallMiniEnemy::UpdateAttack()
 		{
 			for (int i = 0; i < elecVol; i++)
 			{
-				elecParticle->AddParticle(3.0f, callEnemyPos1 + addElecPos2,
-					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength);
+				elecParticle->AddParticle(3, callEnemyPos1 + addElecPos2,
+					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15, elecStrength);
 			}
 		}
 	}
@@ -440,7 +440,7 @@ void CallMiniEnemy::UpdateAttackMovePhase()
 	if (objectTimer == frameCallMiniEnemy2)
 	{
 		elecParticle->AddParticle(elecFrame, callEnemyPos1 + addElecPos1,
-			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60.0f, elecStrength);
+			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60, elecStrength);
 		explosionParticle1->Add(callEnemyPos1);
 	}
 	//敵呼び出し
@@ -450,14 +450,14 @@ void CallMiniEnemy::UpdateAttackMovePhase()
 		{
 			for (int i = 0; i < elecVol; i++)
 			{
-				elecParticle->AddParticle(3.0f, callEnemyPos1 + addElecPos2,
-					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15.0f, elecStrength); 
+				elecParticle->AddParticle(3, callEnemyPos1 + addElecPos2,
+					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15, elecStrength); 
 			}
 		}
 	}
 }
 
-void FallDown::Initialize()
+void FallDown::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();
@@ -505,7 +505,7 @@ void FallDown::UpdateColliderDate()
 	colliderData.center = position + addPos;
 }
 
-void GetUp::Initialize()
+void GetUp::InitializeState()
 {
 	//アニメーションの設定
 	object->StopAnimation();

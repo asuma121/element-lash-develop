@@ -84,9 +84,9 @@ void Camera::TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer)
 	//シーン遷移タイマーが動いていない時
 	if (timer < 119)
 	{
-		eye_.x = playerPos.x + (cos(-playerRot.y - (PI / 2)) * distance);
-		eye_.y = playerPos.y + (cos(-playerRot.x + (PI * 15 / 40)) * distance);
-		eye_.z = playerPos.z + (sin(-playerRot.y + (PI / 2)) * distance);
+		eye_.x = playerPos.x + (cos(-playerRot.y - ((float)PI / 2)) * distance);
+		eye_.y = playerPos.y + (cos(-playerRot.x + ((float)PI * 15 / 40)) * distance);
+		eye_.z = playerPos.z + (sin(-playerRot.y + ((float)PI / 2)) * distance);
 		originalPlayerPos = playerPos;
 		originalPlayerRot = playerRot;
 		target_ = { playerPos.x,5.0f,playerPos.z };
@@ -94,9 +94,9 @@ void Camera::TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer)
 	//シーン遷移タイマーが動いているとき
 	if (timer > 120)
 	{
-		eye_.x = originalPlayerPos.x + (cos(-originalPlayerRot.y - (PI / 2)) * distance);
-		eye_.y = originalPlayerPos.y + (cos(-originalPlayerRot.x + (PI * 15 / 40)) * distance);
-		eye_.z = originalPlayerPos.z + (sin(-originalPlayerRot.y + (PI / 2)) * distance);
+		eye_.x = originalPlayerPos.x + (cos(-originalPlayerRot.y - ((float)PI / 2)) * distance);
+		eye_.y = originalPlayerPos.y + (cos(-originalPlayerRot.x + ((float)PI * 15 / 40)) * distance);
+		eye_.z = originalPlayerPos.z + (sin(-originalPlayerRot.y + ((float)PI / 2)) * distance);
 		target_ = { originalPlayerPos.x,5.0f,originalPlayerPos.z };
 	}
 
@@ -164,9 +164,9 @@ void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
 	if (DebugChangeRot2 > maxDebugChangeRot2)DebugChangeRot2 = maxDebugChangeRot2 - 0.001f;
 	if (DebugChangeRot2 < minDebugChangeRot2)DebugChangeRot2 = minDebugChangeRot2 + 0.001f;
 
-	eye_.x = playerPos.x + (cos(-playerRot.y - (PI / 2)) * playerTargetDistance);
+	eye_.x = playerPos.x + (cos(-playerRot.y - ((float)PI / 2)) * playerTargetDistance);
 	eye_.y = playerPos.y + (cos(-playerRot.x + DebugChangeRot2) * playerTargetDistance);
-	eye_.z = playerPos.z + (sin(-playerRot.y - (PI / 2)) * playerTargetDistance);
+	eye_.z = playerPos.z + (sin(-playerRot.y - ((float)PI / 2)) * playerTargetDistance);
 
 	////1フレームあたりの移動量
 	//float rot = (float)PI / 120.0f;
@@ -235,11 +235,11 @@ void Camera::UpdateClear(XMFLOAT3 enemyPos, float timer)
 {
 	target_ = clearAddPos;
 
-	float addRot = PI / 640.0f * timer;
+	float addRot = (float)PI / 640.0f * timer;
 
 	eye_.x = enemyPos.x + (- addRot * playerTargetDistance);
-	eye_.y = enemyPos.y + (+ (PI * 15 / 40) * playerTargetDistance);
-	eye_.z = enemyPos.z + (- (PI / 2) * playerTargetDistance);
+	eye_.y = enemyPos.y + (+ ((float)PI * 15 / 40) * playerTargetDistance);
+	eye_.z = enemyPos.z + (- ((float)PI / 2) * playerTargetDistance);
 }
 
 void Camera::SetTarget(XMFLOAT3 pos)

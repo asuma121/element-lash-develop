@@ -146,6 +146,7 @@ private:	//メンバ変数
 	//頂点データ
 	Vertex vertices[6];
 	Vertex* vertMap = nullptr;
+	ComPtr<ID3D12Resource> vertBuff;
 	//定数バッファ マテリアル
 	ComPtr<ID3D12Resource>constBuffMaterial;
 	ConstBuffMaterial* constMapMaterial = nullptr;

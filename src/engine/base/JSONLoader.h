@@ -139,5 +139,5 @@ private:
 	std::vector<ObjectData>objectData;
 	std::vector<ColliderData>colliderData;
 	std::vector<TextureData>textureData;
-	size_t objectNum = 0.0f;
+	size_t objectNum = 0;
 };

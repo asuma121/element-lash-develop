@@ -13,7 +13,7 @@ Camera* Plane::camera = nullptr;
 
 Plane::~Plane()
 {
-	delete object;
+	delete object; 
 	delete model;
 }
 

@@ -138,7 +138,7 @@ public:	//メンバ変数
 	float lightAtten[3] = { 0.0f,0.0f,0.0f };
 
 	//シーン遷移用
-	int titleMoveTime = 120.0f;
+	int titleMoveTime = 120;
 
 	//黒いスプライト
 	std::unique_ptr<Sprite>blackSprite1;

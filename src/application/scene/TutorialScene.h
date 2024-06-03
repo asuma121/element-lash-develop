@@ -149,23 +149,23 @@ private:	//メンバ変数
 	float blackSpriteTimer = 0.0f;
 	float blackSpriteMaxTime = 120.0f;
 	int tutorialSpriteFlag = 1;	//その番号のスプライト描画
-	int tutorialLStickTimer = 0.0f;
-	int tutorialLStickMaxTime = 240.0f;
-	int tutorialRStickTimer = 0.0f;
-	int tutorialRStickMaxTime = 240.0f;
-	int tutorialIikannjiTimer = 0.0f;
-	int tutorialIikannjiMaxTime = 200.0f;
-	int tutorialAttackTimer = 0.0f;
-	int tutorialAttackMaxTime = 200.0f;
-	int tutorialAttack2Timer = 0.0f;
-	int tutorialAttack2MaxTime = 2.0f;
-	int tutorial12Timer = 0.0f;
-	int tutorial12MaxTime = 120.0f;
-	int tutorial13Timer = 0.0f;
-	int tutorial13MaxTime = 320.0f;
+	int tutorialLStickTimer = 0;
+	int tutorialLStickMaxTime = 240;
+	int tutorialRStickTimer = 0;
+	int tutorialRStickMaxTime = 240;
+	int tutorialIikannjiTimer = 0;
+	int tutorialIikannjiMaxTime = 200;
+	int tutorialAttackTimer = 0;
+	int tutorialAttackMaxTime = 200;
+	int tutorialAttack2Timer = 0;
+	int tutorialAttack2MaxTime = 2;
+	int tutorial12Timer = 0;
+	int tutorial12MaxTime = 120;
+	int tutorial13Timer = 0;
+	int tutorial13MaxTime = 320;
 	//敵が真ん中に現れた
-	int tutorial10Timer = 0.0f;
-	int tutorial10MaxTime = 150.0f;
+	int tutorial10Timer = 0;
+	int tutorial10MaxTime = 150;
 
 	//タイマー
 	float gameTimer = 0.0f;

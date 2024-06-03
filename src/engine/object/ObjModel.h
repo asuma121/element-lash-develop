@@ -131,7 +131,7 @@ public:
 	/// <summary>
 	///インデックスバッファ取得
 	/// </summary>
-	UINT GetIndicesSize() { return indices.size(); };
+	UINT GetIndicesSize() { return (UINT)indices.size(); };
 
 	/// <summary>
 	///インデックスバッファビュー取得

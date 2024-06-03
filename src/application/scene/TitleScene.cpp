@@ -14,7 +14,7 @@ Terrain* TitleScene::terrain = nullptr;
 TitleScene::TitleScene()
 {
 }
-
+ 
 TitleScene::~TitleScene()
 {
 }
@@ -69,7 +69,7 @@ void TitleScene::NextScene(Scene* pScene)
 void TitleScene::UpdateObject()
 {
 	//カメラ
-	camera->TitleUpdate(player->GetPosition(), player->GetRotation0(), moveTutorialTimer);
+	camera->TitleUpdate(player->GetPosition(), player->GetRotation0(), (float)moveTutorialTimer);
 	camera->Update();
 
 	//ライト
@@ -92,7 +92,7 @@ void TitleScene::UpdateObject()
 	ui->UpdateTitle();
 
 	//プレイヤー
-	player->UpdateTitle(moveTutorialTimer);
+	player->UpdateTitle((float)moveTutorialTimer);
 }
 
 void TitleScene::UpdateSprite()

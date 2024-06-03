@@ -11,7 +11,7 @@ void FPS::FpsControlBegin() {
 	//周波数取得
 	QueryPerformanceFrequency(&cpuClock);
 	//計測開始時間の初期化
-	QueryPerformanceCounter(&timeStart);
+	QueryPerformanceCounter(&timeStart); 
 }
 
 void FPS::FpsControlEnd() {

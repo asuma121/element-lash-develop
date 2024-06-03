@@ -208,21 +208,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	FbxObject3D::SetCamera(camera);
 	FbxObject3D::SetLight(light);
 	FbxObject3D::SetLightGroup(lightGroup);
+	FbxObject3D::SetTextureManager(textureManager);
 	FbxObject3D::CreateGraphicsPipelineLightView();
 	FbxObject3D::CreateGraphicsPipeline();
 
-	//コライダーの球
-	ColliderSphereObject::SetDevice(dxCommon->GetDevice());
-	ColliderSphereObject::SetCamera(camera);
-
-	//コライダーのキューブ
-	ColliderCubeObject::SetDevice(dxCommon->GetDevice());
-	ColliderCubeObject::SetCamera(camera);
-
 	camera->Initialize();
-
-	//コライダーマネージャー
-	ColliderManager::StaticInitialize(dxCommon->GetDevice());
 
 	//自機の弾パーティクル
 	PlayerBulletParticle::SetSpriteManager(textureManager);
@@ -230,25 +220,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	PlayerBulletParticle::SetCamera(camera);
 	PlayerBulletParticle::CreateGraphicsPipeline();
 
-	//敵の弾パーティクル
+	////敵の弾パーティクル
 	EnemyBulletParticle::SetSpriteManager(textureManager);
 	EnemyBulletParticle::SetDevice(dxCommon->GetDevice());
 	EnemyBulletParticle::SetCamera(camera);
 	EnemyBulletParticle::CreateGraphicsPipeline();
 
-	//雷パーティクル
+	////雷パーティクル
 	ElecParticle::SetSpriteManager(textureManager);
 	ElecParticle::SetDevice(dxCommon->GetDevice());
 	ElecParticle::SetCamera(camera);
 	ElecParticle::CreateGraphicsPipeline();
 
-	//爆発パーティクル
+	////爆発パーティクル
 	ExplosionParticle1::SetSpriteManager(textureManager);
 	ExplosionParticle1::SetDevice(dxCommon->GetDevice());
 	ExplosionParticle1::SetCamera(camera);
 	ExplosionParticle1::CreateGraphicsPipeline();
 
-	//爆発パーティクル
+	////爆発パーティクル
 	ExplosionParticle2::SetSpriteManager(textureManager);
 	ExplosionParticle2::SetDevice(dxCommon->GetDevice());
 	ExplosionParticle2::SetCamera(camera);
@@ -257,11 +247,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//ロックオン
 	LockOn* lockOn = nullptr;
 	lockOn = new LockOn();
-	lockOn->SetCamera(camera);
+	lockOn->SetCamera(camera); 
 	lockOn->Initialize();
-
-	//プレイヤーステート
-	PlayerState::StaticInitialize();
 
 	//プレイヤー初期化
 	Player::SetCamera(camera);
@@ -270,9 +257,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Player* player = nullptr;
 	player = new Player();
 	player->Initialize();
-
-	//敵ステート
-	EnemyState::StaticInitialize();
 
 	//敵初期化
 	Enemy::SetCamera(camera);
@@ -360,7 +344,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//シーンの更新
 		scene->Update();
 
-		//// 4. 描画コマンド
+		// 4. 描画コマンド
 
 		//shadowMap
 		shadowMap->PreDrawScene0(dxCommon->GetCommandList());
@@ -402,7 +386,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	delete plane;
 	delete terrain;
 	delete enemy;
-	delete tutorialEnemy;
+	delete tutorialEnemy; 
 	delete ui;
 	delete light;
 	delete lightGroup;

@@ -86,11 +86,6 @@ public:
 	void UpdateTitle(float timer);
 
 	/// <summary>
-	///更新 スプライト
-	/// </summary>
-	void UpdateSprite();
-
-	/// <summary>
 	///更新 コライダー
 	/// </summary>
 	void UpdateCollider();
@@ -263,12 +258,12 @@ public:
 	// <summary>
 	///HP取得
 	/// </summary>
-	int GetHP() { return HP; };
+	int GetHP() { return (int)HP; };
 
 	// <summary>
 	///最大HP取得
 	/// </summary>
-	int GetMaxHP() { return MaxHP; };
+	int GetMaxHP() { return (int)MaxHP; };
 
 	/// <summary>
 	///プレイヤーの状態変更
@@ -327,12 +322,6 @@ private:
 
 class PlayerState
 {
-
-public:	//静的メンバ関数
-
-	//静的メンバ変数初期化
-	static void StaticInitialize();
-
 public:	//メンバ関数
 
 	//コンストラクタ デストラクタ
@@ -341,7 +330,7 @@ public:	//メンバ関数
 
 	//仮想関数
 	//各ステート初期化
-	virtual void Initialize() = 0;
+	virtual void InitializeState() = 0;
 	//攻撃処理
 	virtual void UpdateAttack() {};
 	//移動処理
@@ -353,6 +342,10 @@ public:	//メンバ関数
 
 
 	//通常関数
+	//初期化
+	void Initialize();
+	//終了時処理
+	void Finalize();
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
@@ -433,6 +426,7 @@ protected:	//静的メンバ変数
 	static FbxModel* modelAttack2;
 	static FbxModel* modelAttack3;
 	static FbxModel* modelDown;
+
 	//オブジェクト
 	static FbxObject3D* object;
 	//コライダーデータ
