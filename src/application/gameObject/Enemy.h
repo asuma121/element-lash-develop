@@ -341,7 +341,7 @@ private:
 	bool isDead = false;
 
 	//高さ
-	XMFLOAT3 addPos = { 0.0f,50.0f,0.0f };
+	XMFLOAT3 addPos = { 0.0f,0.0f,0.0f };
 };
 
 class EnemyState
@@ -442,6 +442,8 @@ public:	//メンバ関数
 	XMFLOAT3 GetCallEnemyPos() { return callEnemyPos; };
 	//倒れている間は体の当たり判定をなくす
 	bool GetHitBodyFlag() { return hitBodyFlag; }
+	//雷用の高さ取得
+	XMFLOAT3 GetAddPos() { return addPos; }
 
 protected:	//静的メンバ変数
 
@@ -597,4 +599,13 @@ protected:	//メンバ変数
 
 	//倒れている間は体の当たり判定をなくす
 	bool hitBodyFlag = false;
+
+	//高さ
+	XMFLOAT3 addPos = { 0.0f,0.0f,0.0f };
+	//立っている時の高さ
+	XMFLOAT3 standAddPos = { 0.0f,50.0f,0.0f };
+	//倒れている時の高さ
+	XMFLOAT3 fallDownAddPos = { 0.0f,10.0f,-40.0f };
+	//高さの加算
+	XMFLOAT3 addAddPos = { 0.0f,0.0f,0.0f };
 };

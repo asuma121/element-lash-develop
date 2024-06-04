@@ -15,6 +15,9 @@ void Stand::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
 }
 
 void Stand::Move()
@@ -54,6 +57,9 @@ void Walk::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
 }
 
 void Walk::Move()
@@ -84,6 +90,9 @@ void Attack01::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
 }
 
 void Attack01::Move()
@@ -123,6 +132,9 @@ void AttackOmen1::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
 }
 
 void AttackOmen1::Move()
@@ -241,6 +253,9 @@ void Dash::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
 }
 
 void Dash::Move()
@@ -349,6 +364,9 @@ void CallMiniEnemy::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
 }
 
 void CallMiniEnemy::Move()
@@ -470,10 +488,21 @@ void FallDown::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = false;
+
+	//‚‚³‚Ìˆ—
+	addPos = standAddPos;
+	//‚‚³‚Ì‰ÁŽZ‚Ì’l‚Ìˆ—
+	//Šp“x‚ÌŒü‚«‚É‰ñ“]
+	XMFLOAT3 addPos1 = rollRotation(fallDownAddPos, rotation);
+	addAddPos = (addPos1 - addPos) / (frameFallDownEnemy / 2.0f);
 }
 
 void FallDown::Move()
 {
+	if ((frameFallDownEnemy / 2.0f) > objectTimer)
+	{
+		addPos = addPos + addAddPos;
+	}
 }
 
 void FallDown::UpdateState(Enemy* enemy)
@@ -501,8 +530,8 @@ void FallDown::UpdateColliderDate()
 	colliderData.scale = fallDownColliderScale;
 	colliderData.rotation = rotation;
 	//Šp“x‚ÌŒü‚«‚É‰ñ“]
-	XMFLOAT3 addPos = rollRotation(fallDownCollderAddPos, rotation);
-	colliderData.center = position + addPos;
+	XMFLOAT3 addPosition = rollRotation(fallDownCollderAddPos, rotation);
+	colliderData.center = position + addPosition;
 }
 
 void GetUp::InitializeState()
@@ -518,10 +547,19 @@ void GetUp::InitializeState()
 
 	//‘Ì‚Ì“–‚½‚è”»’è‚Ìˆ—
 	hitBodyFlag = true;
+
+	//‚‚³‚Ì‰ÁŽZ‚Ì’l‚Ìˆ—
+	//Šp“x‚ÌŒü‚«‚É‰ñ“]
+	XMFLOAT3 addPos1 = rollRotation(fallDownAddPos, rotation);
+	addAddPos = (standAddPos - addPos1) / (frameGetUpEnemy / 2.0f);
 }
 
 void GetUp::Move()
 {
+	if ((frameGetUpEnemy / 2.0f) > objectTimer)
+	{
+		addPos = addPos + addAddPos;
+	}
 }
 
 void GetUp::UpdateState(Enemy* enemy)

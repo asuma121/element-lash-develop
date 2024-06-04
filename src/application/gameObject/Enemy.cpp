@@ -74,6 +74,7 @@ void Enemy::UpdateGame1()
 	//ステート更新
 	enemyState->SetHitPlayer(hitPlayer);
 	hitBodyFlag = enemyState->GetHitBodyFlag();
+	addPos = enemyState->GetAddPos();
 	enemyState->Update();
 
 	//フラグを戻す
@@ -88,6 +89,7 @@ void Enemy::UpdateGame2()
 	//ステート更新
 	enemyState->SetHitPlayer(hitPlayer);
 	hitBodyFlag = enemyState->GetHitBodyFlag();
+	addPos = enemyState->GetAddPos();
 	enemyState->Update();
 
 	//フラグを戻す
