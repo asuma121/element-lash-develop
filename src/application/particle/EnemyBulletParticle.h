@@ -138,7 +138,7 @@ public:	//静的メンバ変数
 	static ID3D12Device* device;
 	static Camera* camera;
 	//頂点最大数
-	static const int vertexCount = 1024;
+	static const int vertexCount = 10000;
 	//火花1回に使う頂点数
 	static const int sparkCount = 4;
 

@@ -143,6 +143,9 @@ public:
 	/// </summary>
 	D3D12_VERTEX_BUFFER_VIEW GetVbView() { return vbView; }
 
+	////頂点バッファの更新
+	//void UpdateVertices();
+
 public:
 	/*DirectXCommon* dx = nullptr;*/
 	ID3D12Device* device;

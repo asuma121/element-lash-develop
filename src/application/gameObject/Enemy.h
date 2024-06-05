@@ -374,7 +374,7 @@ public:	//メンバ関数
 	//壁との当たり判定処理 歩き、ダッシュのみ 
 	virtual void UpdateHitWall(JSONLoader::ColliderData objectColliderData) {};
 	//柱との当たり判定処理 歩き、ダッシュのみ
-	virtual void UpdateHitPiller(JSONLoader::ColliderData objectColliderData){};
+	virtual void UpdateHitPiller(JSONLoader::ColliderData objectColliderData,int pillerNum){};
 	//コライダーデータ
 	virtual void UpdateColliderDate();
 
@@ -490,6 +490,12 @@ protected:	//静的メンバ変数
 	static bool nextCallMiniEnemy ;
 	static bool nextDash ;
 	static bool nextAttack01;
+
+	//柱とのあたり処理
+	//いずれかの柱にそのシーンに突入してから当たったか
+	static bool hitPillerFlag;
+	//最後に当たった柱の番号
+	static int hitPillerNum;
 
 protected:	//メンバ変数
 

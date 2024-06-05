@@ -50,6 +50,10 @@ JSONLoader::ColliderData EnemyState::colliderData;
 bool EnemyState::nextCallMiniEnemy;
 bool EnemyState::nextDash;
 bool EnemyState::nextAttack01;
+//いずれかの柱にそのシーンに突入してから当たったか
+bool EnemyState::hitPillerFlag = false;
+//最後に当たった柱の番号
+int EnemyState::hitPillerNum = 0;
 
 Enemy::Enemy()
 {
@@ -445,14 +449,17 @@ void EnemyState::UpdateObject()
 void EnemyState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 {
 	//弾のパーティクル描画
-	bullet->DrawParticle(cmdList);
+	if (bullet->GetBulletNum() >= 1)
+	{
+		bullet->DrawParticle(cmdList);
+	}
 
 	//雷描画
-	elecParticle->Draw(cmdList);
+	//elecParticle->Draw(cmdList);
 
-	//爆発描画
-	explosionParticle1->Draw(cmdList);
-	explosionParticle2->Draw(cmdList);
+	////爆発描画
+	//explosionParticle1->Draw(cmdList);
+	//explosionParticle2->Draw(cmdList);
 }
 
 void EnemyState::Update()
@@ -592,7 +599,7 @@ void EnemyState::UpdateCollider()
 		//壁との当たり判定処理
 		if (objectColliderData[i].objectName.substr(0, 6) == "piller")
 		{
-			UpdateHitPiller(objectColliderData[i]);
+			UpdateHitPiller(objectColliderData[i],i);
 		}
 	}
 }
@@ -611,6 +618,7 @@ void EnemyState::SetTutorial(Enemy* enemy)
 	tutorialTimer = 0;
 	//最後しか描画しないため、それまで画面外
 	position = XMFLOAT3(0.0f, 1000.0f, 0.0f);
+	hitPillerFlag = false;
 }
 
 void EnemyState::SetGame(Enemy* enemy)
@@ -619,6 +627,7 @@ void EnemyState::SetGame(Enemy* enemy)
 	nextCallMiniEnemy = false;
 	nextDash = false;
 	nextAttack01 = true;
+	hitPillerFlag = false;
 	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
@@ -628,6 +637,7 @@ void EnemyState::SetClear(Enemy* enemy)
 	//攻撃前兆にセット
 	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	hitPillerFlag = false;
 }
 
 void EnemyState::SetMovePhase(Enemy* enemy)
@@ -636,4 +646,5 @@ void EnemyState::SetMovePhase(Enemy* enemy)
 	enemy->ChangeState(new FallDown());
 	rotation = XMFLOAT3(0.0f, (float)PI, 0.0f);
 	position = XMFLOAT3(0.0f, 0.0f, 100.0f);
+	hitPillerFlag = false;
 }

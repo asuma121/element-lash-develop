@@ -73,14 +73,14 @@ public:
 	//壁との当たり判定処理
 	void UpdateHitWall(JSONLoader::ColliderData objectColliderData) override;
 	//柱との当たり判定
-	void UpdateHitPiller(JSONLoader::ColliderData objectColliderData)override;
+	void UpdateHitPiller(JSONLoader::ColliderData objectColliderData, int pillerNum)override;
 
 public:	//メンバ変数
 
 	//オブジェクトと衝突フラグ
 	bool hitObjectFlag = false;
 	//オブジェクト衝突時の押し戻し
-	float knockBackSpeed = 0.001f;
+	float knockBackSpeed = 0.1f;
 
 	//一度プレイヤーに衝突したらオブジェクトにぶつかるまで同じ方向へダッシュ
 	XMFLOAT3 dashVec = { 0.0f, 0.0f, 0.0f };

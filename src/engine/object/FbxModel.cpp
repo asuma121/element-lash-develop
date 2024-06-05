@@ -108,6 +108,9 @@ void FbxModel::Draw(ID3D12GraphicsCommandList* cmdList, int textureNum)
 
 void FbxModel::DrawTexture1(ID3D12GraphicsCommandList* cmdList, int textureNum)
 {
+	//描画コマンド
+	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
+
 	//頂点バッファをセット
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 	//インデックスバッファをセット

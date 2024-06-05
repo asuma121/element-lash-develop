@@ -327,11 +327,8 @@ void Dash::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
 	hitObjectFlag = true;
 }
 
-void Dash::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
+void Dash::UpdateHitPiller(JSONLoader::ColliderData objectColliderData, int pillerNum)
 {
-	//タイマー90フレーム以内は判定をとらない
-	if (objectTimer < frameNoPillerHit)return;
-
 	//柱に衝突してなかったら処理終了
 	if(ColliderManager::CheckCollider(colliderData, objectColliderData) == false)return;
 
@@ -347,8 +344,15 @@ void Dash::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
 		//コライダーデータの座標更新
 		colliderData.center = position;
 	}
+
 	//フラグを立てる
-	hitObjectFlag = true;
+	if (hitPillerFlag == true && pillerNum != hitPillerNum)hitObjectFlag = true;
+	else if(hitPillerFlag == false)hitObjectFlag = true;
+
+	//まだそのシーンで柱に衝突していなかったらフラグを戻す
+	if (hitPillerFlag == false)hitPillerFlag = true;
+	//最後に当たった柱の番号を残す
+	hitPillerNum = pillerNum;
 }
 
 void CallMiniEnemy::InitializeState()

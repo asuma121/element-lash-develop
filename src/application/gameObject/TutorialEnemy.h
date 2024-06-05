@@ -233,7 +233,7 @@ public://メンバ関数
 	/// <summary>
 	///死亡フラグ取得
 	/// </summary>
-	bool GetIsDead() { return isDead2; }
+	bool GetIsDead() { return isDead3; }
 
 	/// <summary>
 	///プレイヤーとヒット時

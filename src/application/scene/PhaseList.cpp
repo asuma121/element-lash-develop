@@ -154,10 +154,10 @@ void Phase1::UpdateCollider()
 void Phase1::DrawFBX()
 {
 	//FBX描画
-	player->Draw(dxCommon->GetCommandList());
-	enemy->Draw(dxCommon->GetCommandList());
+	/*player->Draw(dxCommon->GetCommandList());
+	enemy->Draw(dxCommon->GetCommandList());*/
 	plane->Draw(dxCommon->GetCommandList());
-	terrain->Draw(dxCommon->GetCommandList());
+	/*terrain->Draw(dxCommon->GetCommandList());*/
 
 	//ステート更新
 	player->UpdateState();
@@ -166,7 +166,7 @@ void Phase1::DrawFBX()
 
 void Phase1::DrawSprite()
 {
-	//UI描画
+	////UI描画
 	ui->DrawGame1(dxCommon->GetCommandList());
 
 	//プレイヤーのスプライト描画

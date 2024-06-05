@@ -9,6 +9,7 @@
 #include <d3dcompiler.h>
 #include <DirectXTex.h>
 
+#include "mathOriginal.h"
 #include "fstream"
 #include "string"
 #include "sstream"
@@ -532,3 +533,29 @@ void ObjModel::LoadTexture(const std::string& resourcename)
 		cpuDescHandleSRV
 	);
 }
+
+//void ObjModel::UpdateVertices()
+//{
+//	HRESULT result;
+//
+//	for (int i = 0; i < vertices.size(); i++)
+//	{
+//		//点データの追加
+//		vertices[i].pos = vertices[i].pos + XMFLOAT3(0.1f,0.0f,0.1f);
+//	}
+//
+//	// 頂点バッファへのデータ転送
+//	VertexPosNormalUv* vertMap = nullptr;
+//	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
+//	if (SUCCEEDED(result)) {
+//		std::copy(vertices.begin(), vertices.end(), vertMap);
+//		vertBuff->Unmap(0, nullptr);
+//	}
+//
+//	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * (UINT)vertices.size());
+//
+//	// 頂点バッファビューの作成
+//	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+//	vbView.SizeInBytes = sizeVB;
+//	vbView.StrideInBytes = sizeof(vertices[0]);
+//}
