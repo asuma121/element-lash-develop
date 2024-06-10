@@ -57,6 +57,7 @@
     <ClCompile Include="src\engine\base\JSONLoader.cpp" />
     <ClCompile Include="src\engine\base\KeyManager.cpp" />
     <ClCompile Include="src\engine\base\Message.cpp" />
+    <ClCompile Include="src\engine\base\SrvManager.cpp" />
     <ClCompile Include="src\engine\base\TextureManager.cpp" />
     <ClCompile Include="src\engine\base\WinApp.cpp" />
     <ClCompile Include="src\engine\collision\ColliderManager.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="src\engine\base\JSONLoader.h" />
     <ClInclude Include="src\engine\base\KeyManager.h" />
     <ClInclude Include="src\engine\base\Message.h" />
+    <ClInclude Include="src\engine\base\SrvManager.h" />
     <ClInclude Include="src\engine\base\WinApp.h" />
     <ClInclude Include="src\engine\collision\ColliderManager.h" />
     <ClInclude Include="src\engine\math\mathOriginal.h" />

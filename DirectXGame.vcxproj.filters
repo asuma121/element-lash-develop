@@ -261,6 +261,9 @@
     <ClCompile Include="src\application\particle\ParticleManager.cpp">
       <Filter>ソース ファイル\particle</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\base\SrvManager.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\base\WinApp.h">
@@ -415,6 +418,9 @@
     </ClInclude>
     <ClInclude Include="src\application\particle\ParticleManager.h">
       <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\base\SrvManager.h">
+      <Filter>ソース ファイル\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
