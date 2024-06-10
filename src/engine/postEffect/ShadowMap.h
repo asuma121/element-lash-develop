@@ -10,6 +10,7 @@
 #include "array"
 #include "DirectXMath.h"
 #include "DirectXTex.h"
+#include "SrvManager.h"
 #include "vector"
 
 class ShadowMap
@@ -145,6 +146,7 @@ public:	//セッター
 private:	//静的メンバ変数
 	//デバイス
 	static ID3D12Device* device;
+	//SrvManager
 	//ルートシグネチャ
 	static ComPtr<ID3D12RootSignature>rootsignature0;
 	//パイプラインステートオブジェクト

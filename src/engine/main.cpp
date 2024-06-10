@@ -66,12 +66,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, dxCommon);*/
 
+	//SrvManager
+	SrvManager* srvManager = nullptr;
+	srvManager = new SrvManager();
+	srvManager->SetDxCommon(dxCommon);
+	srvManager->Initialize();
+
 	//テクスチャマネージャー
 	TextureManager* textureManager = nullptr;
 	textureManager = new TextureManager();
 
 	//テクスチャマネージャー
 	TextureManager::SetDevice(dxCommon->GetDevice());
+	TextureManager::SetSrvManager(srvManager);
 	//ゲームで使うテクスチャをすべてセット
 	textureManager->Initialize();
 	textureManager->LoadFile(0, L"Resources/pictures/white1x1.png");
@@ -166,13 +173,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//スプライト
 	Sprite::SetDevice(dxCommon->GetDevice());
-	Sprite::SetTextureManager(textureManager);
+	Sprite::SetSrvManager(srvManager);
 	Sprite::CreateGraphicsPipeLine();
 
 	//FBXローダー初期化
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
-	//テクスチャマネージャーセット
-	FbxModel::SetTextureManager(textureManager);
+	//FBXモデル初期化
+	FbxModel::SetSrvManager(srvManager);
 	FbxModel::SetDevice(dxCommon->GetDevice());
 
 	//カメラ初期化
@@ -182,7 +189,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//ビルボードのスプライト
 	BillboardSpriteModel::SetDevice(dxCommon->GetDevice());
-	BillboardSpriteModel::SetSpriteManager(textureManager);
+	BillboardSpriteModel::SetSrvManager(srvManager);
 	BillboardSprite::SetDevice(dxCommon->GetDevice());
 	BillboardSprite::SetCamera(camera);
 	BillboardSprite::CreateGraphicsPipeline();
@@ -214,31 +221,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	camera->Initialize();
 
 	//自機の弾パーティクル
-	PlayerBulletParticle::SetSpriteManager(textureManager);
+	PlayerBulletParticle::SetSrvManager(srvManager);
 	PlayerBulletParticle::SetDevice(dxCommon->GetDevice());
 	PlayerBulletParticle::SetCamera(camera);
 	PlayerBulletParticle::CreateGraphicsPipeline();
 
 	////敵の弾パーティクル
-	EnemyBulletParticle::SetSpriteManager(textureManager);
+	EnemyBulletParticle::SetSrvManager(srvManager);
 	EnemyBulletParticle::SetDevice(dxCommon->GetDevice());
 	EnemyBulletParticle::SetCamera(camera);
 	EnemyBulletParticle::CreateGraphicsPipeline();
 
 	////雷パーティクル
-	ElecParticle::SetSpriteManager(textureManager);
+	ElecParticle::SetSrvManager(srvManager);
 	ElecParticle::SetDevice(dxCommon->GetDevice());
 	ElecParticle::SetCamera(camera);
 	ElecParticle::CreateGraphicsPipeline();
 
 	////爆発パーティクル
-	ExplosionParticle1::SetSpriteManager(textureManager);
+	ExplosionParticle1::SetSrvManager(srvManager);
 	ExplosionParticle1::SetDevice(dxCommon->GetDevice());
 	ExplosionParticle1::SetCamera(camera);
 	ExplosionParticle1::CreateGraphicsPipeline();
 
 	////爆発パーティクル
-	ExplosionParticle2::SetSpriteManager(textureManager);
+	ExplosionParticle2::SetSrvManager(srvManager);
 	ExplosionParticle2::SetDevice(dxCommon->GetDevice());
 	ExplosionParticle2::SetCamera(camera);
 	ExplosionParticle2::CreateGraphicsPipeline();
@@ -390,6 +397,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	delete light;
 	delete lightGroup;
 	delete textureManager;
+	delete srvManager;
 	delete camera;
 	delete keyManager;
 

@@ -422,6 +422,9 @@
     <ClInclude Include="src\engine\base\SrvManager.h">
       <Filter>ソース ファイル\base</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\base\TextureManager.h">
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="external\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj.filters" />

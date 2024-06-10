@@ -9,23 +9,14 @@
 
 //静的メンバ変数
 ID3D12Device* TextureManager::device = nullptr;
+SrvManager* TextureManager::srvManager = nullptr;
 
 void TextureManager::Initialize()
 {
-	HRESULT result;
+	/*HRESULT result;*/
 
 	metadata.resize(kMaxSrvCount);
 	scratchImg.resize(kMaxSrvCount);
-
-	//デスクリプタヒープの設定
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	srvHeapDesc.NumDescriptors = kMaxSrvCount;
-
-	//設定を元にSRV用デスクリプタヒープを生成
-	result = device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
-	assert(SUCCEEDED(result));
 }
 
 void TextureManager::LoadFile(int number, const wchar_t* fileName)
@@ -101,24 +92,7 @@ void TextureManager::LoadFile(int number, const wchar_t* fileName)
 		assert(SUCCEEDED(result));
 	}
 
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	if (number > 0)
-	{
-		srvHandle.ptr += (incrementSize * number);
-	}
-
-	//シェーダリソースビューの作成
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = textureResourceDesc.Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = textureResourceDesc.MipLevels;
-
-	//ハンドルの指す位置にシェーダリソースビュー作成
-	device->CreateShaderResourceView(textureBuff[number].Get(), &srvDesc, srvHandle);
+	//SRV生成
+	srvManager->CreateSRVForTexture2D(number, textureBuff[number].Get(), textureResourceDesc.Format, textureResourceDesc.MipLevels);
 
 }

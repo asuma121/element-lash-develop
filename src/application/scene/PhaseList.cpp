@@ -154,10 +154,10 @@ void Phase1::UpdateCollider()
 void Phase1::DrawFBX()
 {
 	//FBX描画
-	/*player->Draw(dxCommon->GetCommandList());
-	enemy->Draw(dxCommon->GetCommandList());*/
+	player->Draw(dxCommon->GetCommandList());
+	enemy->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
-	/*terrain->Draw(dxCommon->GetCommandList());*/
+	terrain->Draw(dxCommon->GetCommandList());
 
 	//ステート更新
 	player->UpdateState();

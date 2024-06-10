@@ -11,6 +11,7 @@
 #include "array"
 #include "DirectXTex.h"
 #include "vector"
+#include "SrvManager.h"
 
 class TextureManager
 {
@@ -39,28 +40,20 @@ public:	//メンバ関
 	/// </summary>
 	void LoadFile(int number, const wchar_t* fileName);
 
-public:	//ゲッター
-
-	/// <summary>
-	///シェーダリソースビュー取得
-	/// </summary>
-	ID3D12DescriptorHeap* GetSrvHeap() { return srvHeap.Get(); }
-
 public:
 	static void SetDevice(ID3D12Device* device) { TextureManager::device = device; }
+	static void SetSrvManager(SrvManager* srvManager) { TextureManager::srvManager = srvManager; }
 
 private:	//静的メンバ変数
 
-	/// <summary>
-	///デバイスセット
-	/// </summary>
+	//デバイスセット
 	static ID3D12Device* device;
+	//SrvManger
+	static SrvManager* srvManager;
 
 private:	//メンバ変数
 	//テクスチャバッファ
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kMaxSrvCount>textureBuff;
-	//デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
 	std::vector<DirectX::TexMetadata> metadata;
 	std::vector<DirectX::ScratchImage> scratchImg;
 };

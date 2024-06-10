@@ -37,9 +37,9 @@ private:	//エイリアス
 public:	//静的メンバ関数
 
 	/// <summary>
-	///テクスチャマネージャーセット
+	///SrvManagerセット
 	/// </summary>
-	static void SetSpriteManager(TextureManager* spriteManager) { BillboardSpriteModel::spriteManager = spriteManager; }
+	static void SetSrvManager(SrvManager* srvManager) { BillboardSpriteModel::srvManager = srvManager; }
 
 	/// <summary>
 	///デバイスセット
@@ -96,26 +96,14 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vbView = {};
 	//インデックスバッファビュー
 	D3D12_INDEX_BUFFER_VIEW ibView = {};
-	//SRV用デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap>descHeapSRV;
 	//アンビエント係数
 	XMFLOAT3 ambient = { 1,1,1 };
 	//ディフューズ係数
 	XMFLOAT3 diffuse = { 1,1,1 };
-	//テクスチャメタデータ
-	TexMetadata metadata = {};
-	//スクラッチイメージ
-	ScracthImage scratchImg = {};
-	//画像用デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	const size_t textureWidth = 256;
-	const size_t textureHeight = 256;
-	const size_t imageDataCount = textureWidth * textureHeight;
-	XMFLOAT4* imageData = new XMFLOAT4[imageDataCount];
-	//テクスチャーのGPUのハンドル
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle;
 
-	static TextureManager* spriteManager;
+	//SrvManger
+	static SrvManager* srvManager;
+	//デバイス
 	static ID3D12Device* device;
 	int textureNum = 0;
 };

@@ -117,6 +117,7 @@
     <ClInclude Include="src\engine\base\KeyManager.h" />
     <ClInclude Include="src\engine\base\Message.h" />
     <ClInclude Include="src\engine\base\SrvManager.h" />
+    <ClInclude Include="src\engine\base\TextureManager.h" />
     <ClInclude Include="src\engine\base\WinApp.h" />
     <ClInclude Include="src\engine\collision\ColliderManager.h" />
     <ClInclude Include="src\engine\math\mathOriginal.h" />

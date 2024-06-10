@@ -114,12 +114,10 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vbView = {};
 	//インデックスバッファビュー
 	D3D12_INDEX_BUFFER_VIEW ibView = {};
-	//SRV用デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap>descHeapSRV;
 
 private:	//静的メンバ変数
-	//テクスチャマネージャー
-	static TextureManager* textureManager;
+	//SrvManger
+	static SrvManager* srvManager;
 	//デバイス
 	static ID3D12Device* device;
 
@@ -130,9 +128,9 @@ public:
 	~FbxModel();
 
 	/// <summary>
-	///テクスチャマネージャーセット
+	///SrvManagerセット
 	/// </summary>
-	static void SetTextureManager(TextureManager* textureManager) { FbxModel::textureManager = textureManager; }
+	static void SetSrvManager(SrvManager* srvManager) { FbxModel::srvManager = srvManager; }
 
 	/// <summary>
 	///デバイスセット

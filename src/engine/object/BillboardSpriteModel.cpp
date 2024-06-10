@@ -8,7 +8,7 @@
 
 #include "BillboardSpriteModel.h"
 
-TextureManager* BillboardSpriteModel::spriteManager = nullptr;
+SrvManager* BillboardSpriteModel::srvManager = nullptr;
 ID3D12Device* BillboardSpriteModel::device = nullptr;
 
 void BillboardSpriteModel::CreateBuffers()
@@ -105,86 +105,6 @@ void BillboardSpriteModel::CreateBuffers()
 	ibView.BufferLocation = indexBuff->GetGPUVirtualAddress();
 	ibView.Format = DXGI_FORMAT_R16_UINT;
 	ibView.SizeInBytes = sizeIB;
-
-
-	//テクスチャ設定
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);	//デスクリプタのサイズ
-	imageData = new XMFLOAT4[imageDataCount];
-	//全ピクセルを初期化
-	for (size_t i = 0; i < imageDataCount; i++)
-	{
-		imageData[i].x = 1.0f;
-		imageData[i].y = 0.0f;
-		imageData[i].z = 0.0f;
-		imageData[i].w = 1.0f;
-	}
-
-	//テクスチャバッファ設定
-	//ヒープ設定
-	D3D12_HEAP_PROPERTIES textureHeapProp{};
-	textureHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
-	textureHeapProp.CPUPageProperty =
-		D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	textureHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-	//リソース設定
-	D3D12_RESOURCE_DESC textureResourceDesc{};
-	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	textureResourceDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	textureResourceDesc.Width = (UINT)textureWidth;	//幅
-	textureResourceDesc.Height = (UINT)textureHeight;	//高さ
-	textureResourceDesc.DepthOrArraySize = 1;
-	textureResourceDesc.MipLevels = 1;
-	textureResourceDesc.SampleDesc.Count = 1;
-	//テクスチャバッファの生成
-	result = device->CreateCommittedResource(
-		&textureHeapProp,
-		D3D12_HEAP_FLAG_NONE,
-		&textureResourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&texBuff)
-	);
-	//テクスチャバッファにデータ転送
-	result = texBuff->WriteToSubresource(
-		0,
-		nullptr,
-		imageData,
-		sizeof(XMFLOAT4) * (UINT)textureWidth,
-		sizeof(XMFLOAT4) * (UINT)imageDataCount
-	);
-
-	//デスクリプタヒープ生成
-	//SRVの最大個数
-	const size_t kMaxSRVCount = 2056;
-
-	//デスクリプタヒープの設定
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc{};
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダーから見えるように
-	srvHeapDesc.NumDescriptors = kMaxSRVCount;
-
-	//設定をもとにSRV用デスクリプタヒープを生成
-	result = device->CreateDescriptorHeap(
-		&srvHeapDesc,
-		IID_PPV_ARGS(&srvHeap)
-	);
-	assert(SUCCEEDED(result));
-
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
-	//シェーダリソースビュー設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};	//設定構造体
-	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	srvDesc.Shader4ComponentMapping =
-		D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
-	srvDesc.Texture2D.MipLevels = 1;
-	//ハンドルの指す位置にシェーダリソースビュー作成
-	device->CreateShaderResourceView(
-		texBuff.Get(),
-		&srvDesc,
-		srvHeap->GetCPUDescriptorHandleForHeapStart()
-	);
 }
 
 void BillboardSpriteModel::CreateVertex()
@@ -285,22 +205,10 @@ void BillboardSpriteModel::Draw(ID3D12GraphicsCommandList* cmdList)
 	//頂点バッファをセット
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { spriteManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = spriteManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum;
-	}
-
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum);
 
 	//描画コマンド
 	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);

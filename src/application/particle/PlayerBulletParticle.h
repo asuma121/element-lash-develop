@@ -78,9 +78,9 @@ public://サブクラス
 public:	//静的メンバ関数
 
 	/// <summary>
-	///テクスチャマネージャー
+	///SrvManagerセット
 	/// </summary>
-	static void SetSpriteManager(TextureManager* spriteManager) { PlayerBulletParticle::spriteManager = spriteManager; };
+	static void SetSrvManager(SrvManager* srvManager) { PlayerBulletParticle::srvManager = srvManager; }
 
 	/// <summary>
 	///デバイスセット
@@ -135,8 +135,12 @@ public:
 	void SetTextureNum(int num) { textureNum = num; }
 
 public:	//静的メンバ変数
-	static TextureManager* spriteManager;
+
+	//SrvManger
+	static SrvManager* srvManager;
+	//デバイス
 	static ID3D12Device* device;
+	//カメラ
 	static Camera* camera;
 	//頂点最大数
 	static const int vertexCount = 1024;
@@ -157,24 +161,6 @@ private:
 	ComPtr<ID3D12Resource>texBuff;
 	//頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView = {};
-	//SRV用デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap>descHeapSRV;
-	//アンビエント係数
-	XMFLOAT3 ambient = { 1,1,1 };
-	//ディフューズ係数
-	XMFLOAT3 diffuse = { 1,1,1 };
-	//テクスチャメタデータ
-	TexMetadata metadata = {};
-	//スクラッチイメージ
-	ScracthImage scratchImg = {};
-	//画像用デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	const size_t textureWidth = 256;
-	const size_t textureHeight = 256;
-	const size_t imageDataCount = textureWidth * textureHeight;
-	XMFLOAT4* imageData = new XMFLOAT4[imageDataCount];
-	//テクスチャーのGPUのハンドル
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle;
 
 	//パーティクル配列
 	std::forward_list<Particle>particles;

@@ -9,7 +9,7 @@
 
 using namespace Microsoft::WRL;
 
-TextureManager* FbxModel::textureManager = nullptr;
+SrvManager* FbxModel::srvManager = nullptr;
 ID3D12Device* FbxModel::device = nullptr;
 
 FbxModel::~FbxModel()
@@ -85,22 +85,10 @@ void FbxModel::Draw(ID3D12GraphicsCommandList* cmdList, int textureNum)
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { textureManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum;
-	}
-
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum);
 
 	//描画コマンド
 	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
@@ -116,22 +104,10 @@ void FbxModel::DrawTexture1(ID3D12GraphicsCommandList* cmdList, int textureNum)
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { textureManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum;
-	}
-
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum);
 }
 
 void FbxModel::DrawTexture2(ID3D12GraphicsCommandList* cmdList, int textureNum1, int textureNum2)
@@ -141,31 +117,12 @@ void FbxModel::DrawTexture2(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { textureManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//テクスチャ1枚目
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum1 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum1;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
-
-	//テクスチャ2枚目
-	srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	if (textureNum2 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum2;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ6番に設定
-	cmdList->SetGraphicsRootDescriptorTable(6, srvGpuHandle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
+	//ルートパラメーター6番にセット
+	srvManager->SetGraphicsRootDescriptorTable(6, textureNum2);
 }
 
 void FbxModel::DrawTexture3(ID3D12GraphicsCommandList* cmdList, int textureNum1, int textureNum2, int textureNum3)
@@ -175,40 +132,14 @@ void FbxModel::DrawTexture3(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { textureManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//テクスチャ1枚目
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum1 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum1;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
-
-	//テクスチャ2枚目
-	srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	if (textureNum2 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum2;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ6番に設定
-	cmdList->SetGraphicsRootDescriptorTable(6, srvGpuHandle);
-
-	//テクスチャ3枚目
-	srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	if (textureNum3 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum3;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ7番に設定
-	cmdList->SetGraphicsRootDescriptorTable(7, srvGpuHandle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
+	//ルートパラメーター6番にセット
+	srvManager->SetGraphicsRootDescriptorTable(6, textureNum2);
+	//ルートパラメーター7番にセット
+	srvManager->SetGraphicsRootDescriptorTable(7, textureNum3);
 }
 
 void FbxModel::DrawTexture4(ID3D12GraphicsCommandList* cmdList, int textureNum1, int textureNum2, int textureNum3, int textureNum4)
@@ -218,49 +149,16 @@ void FbxModel::DrawTexture4(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { textureManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//テクスチャ1枚目
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum1 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum1;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
-
-	//テクスチャ2枚目
-	srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	if (textureNum2 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum2;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ6番に設定
-	cmdList->SetGraphicsRootDescriptorTable(6, srvGpuHandle);
-
-	//テクスチャ3枚目
-	srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	if (textureNum3 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum3;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ7番に設定
-	cmdList->SetGraphicsRootDescriptorTable(7, srvGpuHandle);
-
-	//テクスチャ4枚目
-	srvGpuHandle = textureManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	if (textureNum4 > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum4;
-	}
-	//SRVヒープの先頭にあるSRVをルートパラメータ7番に設定
-	cmdList->SetGraphicsRootDescriptorTable(8, srvGpuHandle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
+	//ルートパラメーター6番にセット
+	srvManager->SetGraphicsRootDescriptorTable(6, textureNum2);
+	//ルートパラメーター7番にセット
+	srvManager->SetGraphicsRootDescriptorTable(7, textureNum3);
+	//ルートパラメーター8番にセット
+	srvManager->SetGraphicsRootDescriptorTable(8, textureNum3);
 }
 
 void FbxModel::PreDraw(ID3D12GraphicsCommandList* cmdList)

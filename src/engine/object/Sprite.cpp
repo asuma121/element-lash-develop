@@ -18,7 +18,7 @@ using namespace Microsoft::WRL;
 
 //静的メンバ変数
 ID3D12Device* Sprite::device = nullptr;
-TextureManager* Sprite::spriteManager = nullptr;
+SrvManager* Sprite::srvManager = nullptr;
 ComPtr<ID3D12RootSignature>Sprite::rootsignature;
 ComPtr<ID3D12PipelineState>Sprite::pipelinestate;
 
@@ -51,8 +51,6 @@ void Sprite::Initialize()
 	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 	//頂点バッファの生成
-	//ComPtr<ID3D12Resource> vertBuff;
-	//ID3D12Resource* vertBuff = nullptr;
 	result = device->CreateCommittedResource(
 		&heapProp,
 		D3D12_HEAP_FLAG_NONE,
@@ -198,22 +196,12 @@ void Sprite::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	//定数バッファビューの設定コマンド
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
-	//デスクリプタヒープの配列をセットするコマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { spriteManager->GetSrvHeap() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = spriteManager->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	//ハンドル1分のサイズ
-	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	//テクスチャの番号に合わせてハンドルを進める
-	if (textureNum > 0)
-	{
-		srvGpuHandle.ptr += incrementSize * textureNum;
-	}
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター1番にセット
+	srvManager->SetGraphicsRootDescriptorTable(1, textureNum);
 
-	//SRVヒープの先頭にあるSRVをルートパラメータ1晩に設定
-	cmdList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
 	//定数バッファビューの設定コマンド
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffTransform->GetGPUVirtualAddress());
 

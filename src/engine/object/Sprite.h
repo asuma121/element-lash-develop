@@ -9,7 +9,7 @@
 #include "d3dx12.h"
 #include "DirectXMath.h"
 #include "array"
-#include "TextureManager.h"
+#include "SrvManager.h"
 
 class Sprite
 {
@@ -70,9 +70,9 @@ public:	//静的メンバ変数セッター
 	static void SetDevice(ID3D12Device* device) { Sprite::device = device; }
 
 	/// <summary>
-	///デバイスセット
+	///SrvManagerセット
 	/// </summary>
-	static void SetTextureManager(TextureManager* spriteManager) { Sprite::spriteManager = spriteManager; }
+	static void SetSrvManager(SrvManager* srvManager) { Sprite::srvManager = srvManager; }
 
 	/// <summary>
 	///デバイスセット
@@ -131,8 +131,8 @@ public:	//ゲッター
 private:
 	//デバイス
 	static ID3D12Device* device;
-	//スプライトマネージャー
-	static TextureManager* spriteManager;
+	//SrvManger
+	static SrvManager* srvManager;
 	//ルートシグネチャ
 	static ComPtr<ID3D12RootSignature>rootsignature;
 	//パイプラインステートオブジェクト
