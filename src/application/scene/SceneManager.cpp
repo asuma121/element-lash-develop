@@ -35,11 +35,6 @@ void Scene::DrawFBXLightView()
 	sceneState->DrawFBXLightView();
 }
 
-void Scene::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	sceneState->SetSRV(SRV);
-}
-
 void Scene::NextScene(Scene* pState)
 {
 	sceneState->NextScene(pState);

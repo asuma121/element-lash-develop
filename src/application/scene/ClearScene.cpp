@@ -195,13 +195,6 @@ void ClearScene::DrawFBXLightView()
 	enemy->DrawLightView(dxCommon->GetCommandList());
 }
 
-void ClearScene::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	player->SetSRV(SRV);
-	enemy->SetSRV(SRV);
-	plane->SetSRV(SRV);
-}
-
 DirectX::XMMATRIX ClearScene::GetLightViewProjection()
 {
 	return light->GetMatViewProjection();

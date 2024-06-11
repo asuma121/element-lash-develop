@@ -64,11 +64,6 @@ void GameScene::DrawFBXLightView()
 	phaseState->DrawFBXLightView();
 }
 
-void GameScene::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	phaseState->SetSRV(SRV);
-}
-
 void GameScene::ChangePhase(PhaseState* newPhase)
 {
 	debugNum[0] = 1;

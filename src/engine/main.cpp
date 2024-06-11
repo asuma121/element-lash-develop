@@ -212,6 +212,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//FBXオブジェクト初期化
 	FbxObject3D::SetDevice(dxCommon->GetDevice());
+	FbxObject3D::SetSrvManager(srvManager);
 	FbxObject3D::SetCamera(camera);
 	FbxObject3D::SetLight(light);
 	FbxObject3D::SetLightGroup(lightGroup);
@@ -299,6 +300,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//ShadowMap
 	ShadowMap* shadowMap = nullptr;
 	ShadowMap::SetDevice(dxCommon->GetDevice());
+	ShadowMap::SetSrvManager(srvManager);
 	shadowMap = new ShadowMap;
 	shadowMap->Initialize();
 	shadowMap->CreateGraphicsPipeLine0();
@@ -356,8 +358,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		shadowMap->PreDrawScene0(dxCommon->GetCommandList());
 		scene->DrawFBXLightView();
 		shadowMap->PostDrawScene0(dxCommon->GetCommandList());
-		//シーンにSRVを渡す
-		scene->SetSRV(shadowMap->GetSRV());
 
 		//描画前処理
 		dxCommon->PreDraw();

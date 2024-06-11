@@ -87,7 +87,7 @@ void FbxModel::Draw(ID3D12GraphicsCommandList* cmdList, int textureNum)
 
 	//描画用のデスクリプタヒープ設定
 	srvManager->PreDraw();
-	//ルートパラメーター1番にセット
+	//ルートパラメーター1番にテクスチャセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum);
 
 	//描画コマンド
@@ -104,8 +104,6 @@ void FbxModel::DrawTexture1(ID3D12GraphicsCommandList* cmdList, int textureNum)
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//描画用のデスクリプタヒープ設定
-	srvManager->PreDraw();
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum);
 }
@@ -117,8 +115,6 @@ void FbxModel::DrawTexture2(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//描画用のデスクリプタヒープ設定
-	srvManager->PreDraw();
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
 	//ルートパラメーター6番にセット
@@ -132,8 +128,6 @@ void FbxModel::DrawTexture3(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//描画用のデスクリプタヒープ設定
-	srvManager->PreDraw();
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
 	//ルートパラメーター6番にセット
@@ -149,8 +143,6 @@ void FbxModel::DrawTexture4(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//インデックスバッファをセット
 	cmdList->IASetIndexBuffer(&ibView);
 
-	//描画用のデスクリプタヒープ設定
-	srvManager->PreDraw();
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
 	//ルートパラメーター6番にセット

@@ -107,11 +107,6 @@ public: //メンバ関数
 	void DrawFBXLightView();
 
 	/// <summary>
-	///セッター
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-
-	/// <summary>
 	///ゲッター
 	/// </summary>
 	DirectX::XMMATRIX GetLightViewProjection();

@@ -182,11 +182,6 @@ void TitleScene::DrawFBXLightView()
 	player->DrawLightView(dxCommon->GetCommandList());
 }
 
-void TitleScene::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	player->SetSRV(SRV);
-}
-
 void TitleScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	//ˆø”‚©‚ç‘ã“ü

@@ -214,11 +214,6 @@ void Enemy::UpdateCollider()
 	enemyState->UpdateCollider();
 }
 
-void Enemy::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	enemyState->SetSRV(SRV);
-}
-
 void Enemy::SetPlayerPos(XMFLOAT3 playerPos)
 {
 	enemyState->SetPlayerPos(playerPos);
@@ -431,11 +426,6 @@ void EnemyState::Draw(ID3D12GraphicsCommandList* cmdList)
 void EnemyState::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 {
 	object->DrawLightView(cmdList);
-}
-
-void EnemyState::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	object->SetSRV(SRV);
 }
 
 void EnemyState::UpdateObject()

@@ -419,15 +419,6 @@ void TutorialScene::DrawFBXLightView()
 	enemy->DrawLightView(dxCommon->GetCommandList());
 	tutorialEnemy->DrawLightView(dxCommon->GetCommandList());
 }
-
-void TutorialScene::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	player->SetSRV(SRV);
-	enemy->SetSRV(SRV);
-	tutorialEnemy->SetSRV(SRV);
-	plane->SetSRV(SRV);
-}
-
 void TutorialScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 {
 	// ˆø”‚©‚ç‘ã“ü

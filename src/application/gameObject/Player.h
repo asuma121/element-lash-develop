@@ -131,11 +131,6 @@ public:
 	void UpdateFormTutorial();
 
 	/// <summary>
-	///srvセット
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-
-	/// <summary>
 	///座標セット
 	/// </summary>
 	void SetPosition(XMFLOAT3 pos) {};
@@ -350,8 +345,6 @@ public:	//メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
 	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
 	//オブジェクトの更新
 	void UpdateObject();
 	//パーティクル描画

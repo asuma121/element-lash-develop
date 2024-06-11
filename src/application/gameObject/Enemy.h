@@ -124,11 +124,6 @@ public://メンバ関数
 	void UpdateCollider();
 
 	/// <summary>
-	///srvセット
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-
-	/// <summary>
 	///プレイヤーの座標セット
 	/// </summary>
 	void SetPlayerPos(XMFLOAT3 playerPos);

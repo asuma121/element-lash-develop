@@ -45,7 +45,6 @@ void Plane::Initialize()
 void Plane::Update()
 {
 	//動く
-	Move();
 	object->SetPosition(position);
 	object->SetRotation(rotation);
 	object->SetScale(scale);
@@ -57,13 +56,4 @@ void Plane::Update()
 void Plane::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	object->Draw(cmdList);
-}
-
-void Plane::Move()
-{
-}
-
-void Plane::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	object->SetSRV(SRV);
 }

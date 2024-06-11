@@ -16,14 +16,6 @@ void Phase1::DrawFBXLightView()
 	enemy->DrawLightView(dxCommon->GetCommandList());
 }
 
-void Phase1::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	//SRVをセット
-	player->SetSRV(SRV);
-	enemy->SetSRV(SRV);
-	plane->SetSRV(SRV);
-}
-
 void Phase1::NextPhase(GameScene* gameScene)
 {
 	//フェーズチェンジフラグがたったら
@@ -194,15 +186,6 @@ void Phase2::DrawFBXLightView()
 	tutorialEnemy->DrawLightView(dxCommon->GetCommandList());
 	player->DrawLightView(dxCommon->GetCommandList());
 	enemy->DrawLightView(dxCommon->GetCommandList());
-}
-
-void Phase2::SetSRV(ID3D12DescriptorHeap* SRV)
-{	
-	//SRVをセット
-	tutorialEnemy->SetSRV(SRV);
-	player->SetSRV(SRV);
-	enemy->SetSRV(SRV);
-	plane->SetSRV(SRV);;
 }
 
 void Phase2::NextPhase(GameScene* gameScene)
@@ -420,15 +403,6 @@ void MovePhase::DrawFBXLightView()
 	tutorialEnemy->DrawLightView(dxCommon->GetCommandList());
 	player->DrawLightView(dxCommon->GetCommandList());
 	enemy->DrawLightView(dxCommon->GetCommandList());
-}
-
-void MovePhase::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	//SRVをセット
-	tutorialEnemy->SetSRV(SRV);
-	player->SetSRV(SRV);
-	enemy->SetSRV(SRV);
-	plane->SetSRV(SRV);
 }
 
 void MovePhase::NextPhase(GameScene* gameScene)

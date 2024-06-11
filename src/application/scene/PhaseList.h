@@ -6,7 +6,6 @@ class Phase1 : public PhaseState
 public:
 	void PhaseInitialize();
 	void DrawFBXLightView();
-	void SetSRV(ID3D12DescriptorHeap* SRV);
 	void NextPhase(GameScene* gameScene);
 	void UpdateObject();
 	void UpdateCollider();
@@ -21,7 +20,6 @@ class Phase2 : public PhaseState
 public:
 	void PhaseInitialize();
 	void DrawFBXLightView();
-	void SetSRV(ID3D12DescriptorHeap* SRV);
 	void NextPhase(GameScene* gameScene);
 	void UpdateObject();
 	void UpdateCollider();
@@ -36,7 +34,6 @@ class MovePhase : public PhaseState
 public:
 	void PhaseInitialize();
 	void DrawFBXLightView();
-	void SetSRV(ID3D12DescriptorHeap* SRV);
 	void NextPhase(GameScene* gameScene);
 	void UpdateObject();
 	void UpdateCollider();

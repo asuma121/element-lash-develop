@@ -59,11 +59,6 @@ public: //メンバ関数
 	void DrawFBXLightView();
 
 	/// <summary>
-	///セッター
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-
-	/// <summary>
 	///フェーズ移動
 	/// </summary>
 	void ChangePhase(PhaseState* newPhase);
@@ -114,7 +109,6 @@ public:	//仮想関数
 	virtual void Update();
 	virtual void Draw();
 	virtual void DrawFBXLightView() = 0;
-	virtual void SetSRV(ID3D12DescriptorHeap* SRV) = 0;
 	virtual void NextPhase(GameScene* gameScene) = 0;
 
 public:

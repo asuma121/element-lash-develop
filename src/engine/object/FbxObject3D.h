@@ -59,6 +59,11 @@ public:	//静的メンバ関数
 	static void SetDevice(ID3D12Device* device) { FbxObject3D::device = device; }
 
 	/// <summary>
+	///SrvManagerセット
+	/// </summary>
+	static void SetSrvManager(SrvManager* srvManager) { FbxObject3D::srvManager = srvManager; }
+
+	/// <summary>
 	///カメラセット
 	/// </summary>
 	static void SetCamera(Camera* camera) { FbxObject3D::camera = camera; }
@@ -74,9 +79,16 @@ public:	//静的メンバ関数
 	static void SetLightGroup(LightGroup* lightGroup) { FbxObject3D::lightGroup = lightGroup; }
 
 private://静的メンバ変数
+
+	//デバイス
 	static ID3D12Device* device;
+	//SrvManger
+	static SrvManager* srvManager;
+	//カメラ
 	static Camera* camera;
+	//ライト
 	static Light* light;
+	//ライトグループ
 	static LightGroup* lightGroup;
 
 public://メンバ関数
@@ -165,11 +177,6 @@ public://メンバ関数
 	///スケール取得
 	/// </summary>
 	void SetScale(XMFLOAT3 sca) { scale = sca; }
-
-	/// <summary>
-	///srv取得
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV) { depthSRV = SRV; }
 
 	/// <summary>
 	///オブジェクトデータ取得
@@ -262,9 +269,6 @@ private:
 
 	//定数バッファ
 	ComPtr<ID3D12Resource>constBuffSkin;
-
-	//外部から受け取るSRV
-	ID3D12DescriptorHeap* depthSRV;
 
 	//1フレームの時間
 	FbxTime frameTime;

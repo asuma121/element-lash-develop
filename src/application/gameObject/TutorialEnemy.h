@@ -121,11 +121,6 @@ public://メンバ関数
 	void StatusManager();
 
 	/// <summary>
-	///srvセット
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-
-	/// <summary>
 	///座標セット
 	/// </summary>
 	void SetPosition(XMFLOAT3 position) { this->position = position; };

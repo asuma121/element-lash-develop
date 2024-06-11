@@ -48,26 +48,6 @@ public://静的メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
-	///ライト視点描画
-	/// </summary>
-	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-
-	/// <summary>
-	///移動
-	/// </summary>
-	void Move();
-
-	/// <summary>
-	///オブジェクトセット
-	/// </summary>
-	void SetObject(FbxObject3D* object);
-
-	/// <summary>
-	///srvセット
-	/// </summary>
-	void SetSRV(ID3D12DescriptorHeap* SRV);
-
-	/// <summary>
 	///座標取得
 	/// </summary>
 	XMFLOAT3 GetPosition() { return position; }

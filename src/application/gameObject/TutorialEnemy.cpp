@@ -322,11 +322,6 @@ void TutorialEnemy::StatusManager()
 {
 }
 
-void TutorialEnemy::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	object->SetSRV(SRV);
-}
-
 void TutorialEnemy::SetDash()
 {
 	//ダッシュモデルをセットしてアニメーション開始

@@ -96,6 +96,11 @@ public:	//静的メンバ関数
 	/// </summary>
 	static void SetDevice(ID3D12Device* device) { ShadowMap::device = device; }
 
+	/// <summary>
+	///SrvManagerセット
+	/// </summary>
+	static void SetSrvManager(SrvManager* srvManager) { ShadowMap::srvManager = srvManager; }
+
 public:	//セッター
 
 	/// <summary>
@@ -138,15 +143,16 @@ public:	//セッター
 	/// </summary>
 	void SetShake() { shakeFlag = true; };
 
-	/// <summary>
+	/*/// <summary>
 	///シェーダリソースビュー取得
 	/// </summary>
-	ID3D12DescriptorHeap* GetSRV() { return depthSRVHeap.Get(); }
+	ID3D12DescriptorHeap* GetSRV() { return depthSRVHeap.Get(); }*/
 
 private:	//静的メンバ変数
 	//デバイス
 	static ID3D12Device* device;
 	//SrvManager
+	static SrvManager* srvManager;
 	//ルートシグネチャ
 	static ComPtr<ID3D12RootSignature>rootsignature0;
 	//パイプラインステートオブジェクト
@@ -170,8 +176,8 @@ private:	//メンバ変数
 	XMFLOAT4 color = { 1,1,1,1 };
 	//テクスチャバッファ
 	ComPtr<ID3D12Resource>textureBuff;
-	//デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
+	////デスクリプタヒープ
+	//ComPtr<ID3D12DescriptorHeap> srvHeap;
 
 	//深度バッファ
 	ComPtr<ID3D12Resource>depthBuff;
@@ -179,8 +185,8 @@ private:	//メンバ変数
 	ComPtr<ID3D12DescriptorHeap>descHeapRTV;
 	//DSV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap>descHeapDSV;
-	//深度値テクスチャ用
-	ComPtr<ID3D12DescriptorHeap>depthSRVHeap;
+	////深度値テクスチャ用
+	//ComPtr<ID3D12DescriptorHeap>depthSRVHeap;
 	//shadowmap用深度バッファ ライト目線
 	ComPtr<ID3D12Resource>lightDepthBuff;
 
@@ -202,4 +208,6 @@ private:
 	//横幅 立幅
 	float width = 8000.0f;
 	float height = 4000.0f;
+
+	int frame = 0;
 };

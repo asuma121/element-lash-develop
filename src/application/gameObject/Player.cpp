@@ -192,12 +192,6 @@ void Player::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 	playerState->DrawParticle(cmdList);
 }
 
-void Player::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	//パーティクル描画
-	playerState->SetSRV(SRV);
-}
-
 void Player::SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData)
 {
 	playerState->SetObjectCollider(colliderData);
@@ -397,11 +391,6 @@ void PlayerState::Draw(ID3D12GraphicsCommandList* cmdList)
 void PlayerState::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 {
 	object->DrawLightView(cmdList);
-}
-
-void PlayerState::SetSRV(ID3D12DescriptorHeap* SRV)
-{
-	object->SetSRV(SRV);
 }
 
 void PlayerState::UpdateObject()

@@ -27,6 +27,7 @@ ComPtr<ID3D12RootSignature>FbxObject3D::rootsignature2;
 ComPtr<ID3D12PipelineState>FbxObject3D::pipelinestate2;
 
 ID3D12Device* FbxObject3D::device = nullptr;
+SrvManager* FbxObject3D::srvManager = nullptr;
 Camera* FbxObject3D::camera = nullptr;
 Light* FbxObject3D::light = nullptr;
 LightGroup* FbxObject3D::lightGroup = nullptr;
@@ -272,12 +273,11 @@ void FbxObject3D::Draw(ID3D12GraphicsCommandList* cmdList)
 	lightGroup->Draw(cmdList, 5);
 
 	//深度値をセット
-	ID3D12DescriptorHeap* ppHeaps[] = { depthSRV };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = depthSRV->GetGPUDescriptorHandleForHeapStart();
-	cmdList->SetGraphicsRootDescriptorTable(3, handle);
-	handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	cmdList->SetGraphicsRootDescriptorTable(4, handle);
+	//描画用のデスクリプタヒープ設定
+	srvManager->PreDraw();
+	//ルートパラメーター4番にセット
+	srvManager->SetGraphicsRootDescriptorTable(3, srvManager->GetShadowDepthIndexNum()[0]);
+	srvManager->SetGraphicsRootDescriptorTable(4, srvManager->GetShadowDepthIndexNum()[1]);
 
 	//モデル描画
 	if (textureVol == 1)model->DrawTexture1(cmdList, textureNum1);

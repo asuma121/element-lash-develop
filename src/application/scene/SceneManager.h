@@ -23,8 +23,6 @@ public:
 	void Draw();
 	//シーンライト目線描画
 	void DrawFBXLightView();
-	//シーンにSRVを渡す
-	void SetSRV(ID3D12DescriptorHeap* SRV);
 	//次のシーンに移る
 	void NextScene(Scene* pState);
 	
@@ -42,6 +40,5 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	virtual void DrawFBXLightView() = 0;
-	virtual void SetSRV(ID3D12DescriptorHeap* SRV) = 0;
 	virtual void NextScene(Scene* pState) = 0;
 };

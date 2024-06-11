@@ -36,6 +36,38 @@ void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResou
 	directXCommon->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 
+void SrvManager::CreateSRVForShadowMap(ID3D12Resource* pResource, DXGI_FORMAT format, UINT mipLevel)
+{
+	//シェーダリソースビューの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = mipLevel;
+
+	//ハンドルの指す位置にシェーダリソースビュー作成
+	directXCommon->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(Allocate() + 1));
+}
+
+void SrvManager::CreateDepthSRVForShadowMap(ID3D12Resource* pResource, DXGI_FORMAT format, UINT mipLevel)
+{
+	//設定するインデックスの番号取得
+	int indexNum = Allocate() + 1;
+
+	//シャドウマップのインデックスの番号として末尾に追加
+	shadowDepthIndexNum.emplace_back(indexNum);
+
+	//シェーダリソースビューの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = mipLevel;
+
+	//ハンドルの指す位置にシェーダリソースビュー作成
+	directXCommon->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(indexNum));
+}
+
 void SrvManager::PreDraw()
 {
 	//描画用のデスクリプタヒープ設定
@@ -51,9 +83,6 @@ void SrvManager::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_
 
 uint32_t SrvManager::Allocate()
 {
-	//最大数を超えた場合assert
-	assert(kMaxSRVCount < useIndex);
-
 	//returnする番号を一旦記録しておく
 	uint32_t index = useIndex;
 	//次回のために番号を1進める

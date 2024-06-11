@@ -17,10 +17,11 @@
 
 using namespace Microsoft::WRL;
 
-ID3D12Device* ShadowMap::device = nullptr; 
+ID3D12Device* ShadowMap::device = nullptr;
+SrvManager* ShadowMap::srvManager = nullptr;
 ComPtr<ID3D12RootSignature>ShadowMap::rootsignature0;
 ComPtr<ID3D12PipelineState>ShadowMap::pipelinestate0;
-const float ShadowMap::clearColor[4] = { 0.25f,0.5f, 0.1f, 0.0f };
+const float ShadowMap::clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 ShadowMap::~ShadowMap()
 {
@@ -187,24 +188,8 @@ void ShadowMap::Initialize()
 	assert(SUCCEEDED(result));
 	delete[] img;
 
-	//デスクリプタヒープの設定
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	srvHeapDesc.NumDescriptors = 2;
-
-	//設定を元にSRV用デスクリプタヒープを生成
-	result = device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
-	assert(SUCCEEDED(result));
-
 	//シェーダリソースビューの作成
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = 1;
-	//ハンドルの指す位置にシェーダリソースビュー作成
-	device->CreateShaderResourceView(textureBuff.Get(), &srvDesc, srvHeap->GetCPUDescriptorHandleForHeapStart());
+	srvManager->CreateSRVForShadowMap(textureBuff.Get(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 
 	//RTV用デスクリプタヒープ設定
@@ -297,32 +282,11 @@ void ShadowMap::Initialize()
 	);
 	assert(SUCCEEDED(result));
 
+	//深度のシェーダリソースビューの作成
+	srvManager->CreateDepthSRVForShadowMap(depthBuff.Get(), DXGI_FORMAT_R32_FLOAT, 1);
 
-	//深度テクスチャ用ヒープ
-	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
-	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	heapDesc.NodeMask = 0;
-	heapDesc.NumDescriptors = 2;
-	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	result = device->CreateDescriptorHeap(
-		&heapDesc,
-		IID_PPV_ARGS(&depthSRVHeap)
-	);
-	assert(SUCCEEDED(result));
-
-	//シェーダリソースビューの作成
-	D3D12_SHADER_RESOURCE_VIEW_DESC sResDesc{};
-	sResDesc.Format = DXGI_FORMAT_R32_FLOAT;
-	sResDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	sResDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	sResDesc.Texture2D.MipLevels = 1;
-	D3D12_CPU_DESCRIPTOR_HANDLE handle2 = depthSRVHeap->GetCPUDescriptorHandleForHeapStart();
-	device->CreateShaderResourceView(depthBuff.Get(), &sResDesc,
-		handle2);
-
-	//シェーダリソースビューの作成
-	handle2.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	device->CreateShaderResourceView(lightDepthBuff.Get(), &sResDesc, handle2);
+	//ライト深度のシェーダリソースビューの作成
+	srvManager->CreateDepthSRVForShadowMap(lightDepthBuff.Get(), DXGI_FORMAT_R32_FLOAT, 1);
 }
 
 
@@ -564,6 +528,8 @@ void ShadowMap::CreateGraphicsPipeLine0()
 
 void ShadowMap::PreDrawScene0(ID3D12GraphicsCommandList* cmdList)
 {
+	frame++;
+
 	//リソースバリアを変更
 	CD3DX12_RESOURCE_BARRIER a0 = CD3DX12_RESOURCE_BARRIER::Transition(
 		textureBuff.Get(),
@@ -587,9 +553,6 @@ void ShadowMap::PreDrawScene0(ID3D12GraphicsCommandList* cmdList)
 	CD3DX12_RECT a2 = CD3DX12_RECT(0, 0, (LONG)width, (LONG)height);
 	cmdList->RSSetScissorRects(1, &a2);
 
-
-	/*float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	cmdList->ClearRenderTargetView(rtvHandle, clearColor,0,nullptr);*/
 	//震度バッファのクリア
 	cmdList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
@@ -603,8 +566,6 @@ void ShadowMap::PostDrawScene0(ID3D12GraphicsCommandList* cmdList)
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
 	);
 	cmdList->ResourceBarrier(1, &a0);
-	//震度バッファのクリア
-	/*cmdList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);*/
 }
 
 void ShadowMap::Shake()
