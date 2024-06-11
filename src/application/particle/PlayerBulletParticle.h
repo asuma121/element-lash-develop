@@ -143,7 +143,7 @@ public:	//静的メンバ変数
 	//カメラ
 	static Camera* camera;
 	//頂点最大数
-	static const int vertexCount = 1024;
+	static const int vertexCount = 2048;
 	//火花1回に使う頂点数
 	static const int sparkCount = 4;
 

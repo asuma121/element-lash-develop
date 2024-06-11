@@ -419,10 +419,10 @@
     <ClInclude Include="src\application\particle\ParticleManager.h">
       <Filter>ヘッダー ファイル\particle</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\base\SrvManager.h">
-      <Filter>ソース ファイル\base</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\base\TextureManager.h">
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\base\SrvManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
   </ItemGroup>
