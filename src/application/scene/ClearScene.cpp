@@ -111,7 +111,8 @@ void ClearScene::UpdateObject()
 	}
 
 	//カメラ更新
-	camera->UpdateClear(enemy->GetPosition(), clearFromGameTimer);
+	camera->SetPlayerPos(player->GetPosition());
+	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
 
 	//ライト

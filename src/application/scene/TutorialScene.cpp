@@ -62,15 +62,18 @@ void TutorialScene::Update()
 	UpdateCollider();
 
 	//カメラ更新
-	if (tutorialSpriteFlag == 15)
+	/*if (tutorialSpriteFlag == 15)
 	{
 		camera->UpdateTutorial(tutorial13Timer);
 	}
 	else
 	{
 		camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
-	}
+	}*/
 	/*camera_->DebugUpdate();*/
+	//カメラ更新
+	camera->SetPlayerPos(player->GetPosition());
+	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
 }
 

@@ -68,8 +68,10 @@ void TitleScene::NextScene(Scene* pScene)
 
 void TitleScene::UpdateObject()
 {
-	//カメラ
-	camera->TitleUpdate(player->GetPosition(), player->GetRotation0(), (float)moveTutorialTimer);
+	//カメラ更新
+	camera->SetPhaseTimer(moveTutorialTimer);
+	camera->SetPlayerPos(player->GetPosition());
+	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
 
 	//ライト

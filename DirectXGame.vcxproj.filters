@@ -264,6 +264,9 @@
     <ClCompile Include="src\engine\base\SrvManager.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\application\gameObject\CamaeraStateManager.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\base\WinApp.h">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="src\engine\base\SrvManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gameObject\CamaeraStateManager.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

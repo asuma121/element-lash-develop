@@ -39,12 +39,18 @@ void TutorialEnemy::Initialize()
 	modelDash = FbxLoader::GetInstance()->LoadModelFromFile("enemyDash");
 	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyDown");
 	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
+
+	//テクスチャ
+	JSONLoader::TextureData textureData;
+	textureData.textureVol = 1;
+	textureData.shaderVol = 1;
+	textureData.textureNum1 = 88;	//白いテクスチャ
+	textureData.shaderName = "null";	//シェーダの名前
+
 	//オブジェクト
 	object = new FbxObject3D;
-	object->Initialize();
-	object->SetModel(modelStand);
-	object->SetTextureNum(0);
-	object->PlayAnimation();
+	object->Initialize(modelStand, textureData);
+	object->StopAnimation();
 
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため

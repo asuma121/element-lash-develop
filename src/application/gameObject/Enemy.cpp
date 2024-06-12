@@ -445,11 +445,11 @@ void EnemyState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 	}
 
 	//雷描画
-	//elecParticle->Draw(cmdList);
+	elecParticle->Draw(cmdList);
 
-	////爆発描画
-	//explosionParticle1->Draw(cmdList);
-	//explosionParticle2->Draw(cmdList);
+	//爆発描画
+	explosionParticle1->Draw(cmdList);
+	explosionParticle2->Draw(cmdList);
 }
 
 void EnemyState::Update()

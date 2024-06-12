@@ -139,7 +139,8 @@ void Phase1::UpdateCollider()
 	}
 
 	//カメラ更新
-	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
+	camera->SetPlayerPos(player->GetPosition());
+	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
 }
 
@@ -354,7 +355,8 @@ void Phase2::UpdateCollider()
 	}
 
 	//カメラ更新
-	camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
+	camera->SetPlayerPos(player->GetPosition());
+	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
 }
 
@@ -457,7 +459,8 @@ void MovePhase::UpdateObject()
 	terrain->Update();
 
 	//カメラ更新
-	camera->UpdateMovePhase();
+	camera->SetPlayerPos(player->GetPosition());
+	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
 
 	if (phaseTimer > movePhaseTime)

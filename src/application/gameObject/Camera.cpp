@@ -10,9 +10,17 @@
 #include "mathOriginal.h"
 #include "imgui.h"
 #include "ColliderManager.h"
+#include "CamaeraStateManager.h"
 #define PI 3.14159265359
 
 KeyManager* Camera::keyManager = nullptr;
+XMMATRIX CameraState::matProjection_;
+XMMATRIX CameraState::matView_;
+XMFLOAT3 CameraState::eye_;
+XMFLOAT3 CameraState::target_;
+XMFLOAT3 CameraState::up_;
+XMFLOAT3 CameraState::rotation;
+JSONLoader::ColliderData CameraState::colliderData;
 
 Camera* Camera::GetInstance()
 {
@@ -22,14 +30,100 @@ Camera* Camera::GetInstance()
 
 Camera::Camera()
 {
+	cameraState = new Title();
 }
 
 Camera::~Camera()
 {
+	delete cameraState;
 }
 
 void Camera::Initialize()
 {
+	//ステートの初期化
+	cameraState->Initialize();
+}
+
+
+void Camera::Update()
+{
+	cameraState->Update();
+}
+
+XMFLOAT3 Camera::GetEye()
+{
+	return cameraState->GetEye();
+}
+
+XMFLOAT3 Camera::GetTarget()
+{
+	return cameraState->GetTarget();
+}
+
+XMFLOAT3 Camera::GetUp()
+{
+	return cameraState->GetUp();
+}
+
+XMFLOAT3 Camera::GetRotation()
+{
+	return cameraState->GetRotation();
+}
+
+XMMATRIX Camera::GetMatProjection()
+{
+	return cameraState->GetMatProjection();
+}
+
+XMMATRIX Camera::GetMatView()
+{
+	return cameraState->GetMatView();
+}
+
+XMMATRIX Camera::GetMatViewProjection()
+{
+	return cameraState->GetMatView() * cameraState->GetMatProjection();
+}
+
+void Camera::SetPhaseTimer(int timer)
+{
+	cameraState->SetPhaseTimer(timer);
+}
+
+void Camera::SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData)
+{
+	cameraState->SetObjectCollider(colliderData);
+}
+
+void Camera::SetPlayerPos(XMFLOAT3 playerPos)
+{
+	cameraState->SetPlayerPos(playerPos);
+}
+
+void Camera::SetPlayerRot(XMFLOAT3 playerRot)
+{
+	cameraState->SetPlayerRot(playerRot);
+}
+
+void Camera::ChangeState(CameraState* newState)
+{
+	delete cameraState;
+	cameraState = newState;
+}
+
+void CameraState::Initialize()
+{
+	//射影変換の初期化
+	matProjection_ = XMMatrixIdentity();
+	//ビュー変換行列の初期化
+	matView_ = XMMatrixIdentity();
+
+	//視点座標、注視点、上方向、角度の初期化
+	eye_ = { 0, 0, 0 };
+	target_ = { 0, 0, 0 };
+	up_ = { 0, 1, 0 };
+	rotation = { 0, 0, 0 };
+
 	//射影変換
 	matProjection_ = XMMatrixPerspectiveFovLH(
 		XMConvertToRadians(45.0f),			//上下画角45度
@@ -50,209 +144,31 @@ void Camera::Initialize()
 	ColliderManager::SetCollider(colliderData);
 }
 
-
-void Camera::Update()
+void CameraState::Update()
 {
-	//コライダーデータの更新
-	colliderData.center = eye_;
+	//動き
+	Move();
 
-	for (int i = 0; i < objectColliderData.size(); i++)
-	{
-		//壁との当たり判定処理
-		if (objectColliderData[i].objectName.substr(0, 11) == "wall_camera")
-		{
-			UpdateHitWall(objectColliderData[i]);
-		}
-	}
-
-	//ビルボード行列の更新
-	BillboardUpdate();
+	//コライダーの更新
+	UpdateCollider();
 
 	//角度更新
-	//視点から注視点のベクトル取得
-	XMFLOAT3 vec = target_ - eye_;
-
-	rotation = getVectorRotation(vec);
+	UpdateRotation();
 
 	//射影変換
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
 }
 
-void Camera::TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer)
+void CameraState::UpdateRotation()
 {
-	float distance = 60.0f;
-	//シーン遷移タイマーが動いていない時
-	if (timer < 119)
-	{
-		eye_.x = playerPos.x + (cos(-playerRot.y - ((float)PI / 2)) * distance);
-		eye_.y = playerPos.y + (cos(-playerRot.x + ((float)PI * 15 / 40)) * distance);
-		eye_.z = playerPos.z + (sin(-playerRot.y + ((float)PI / 2)) * distance);
-		originalPlayerPos = playerPos;
-		originalPlayerRot = playerRot;
-		target_ = { playerPos.x,5.0f,playerPos.z };
-	}
-	//シーン遷移タイマーが動いているとき
-	if (timer > 120)
-	{
-		eye_.x = originalPlayerPos.x + (cos(-originalPlayerRot.y - ((float)PI / 2)) * distance);
-		eye_.y = originalPlayerPos.y + (cos(-originalPlayerRot.x + ((float)PI * 15 / 40)) * distance);
-		eye_.z = originalPlayerPos.z + (sin(-originalPlayerRot.y + ((float)PI / 2)) * distance);
-		target_ = { originalPlayerPos.x,5.0f,originalPlayerPos.z };
-	}
+	//視点から注視点のベクトル取得
+	XMFLOAT3 vec = target_ - eye_;
 
+	//カメラの角度取得
+	rotation = getVectorRotation(vec);
 }
 
-void Camera::BillboardUpdate()
-{
-	XMFLOAT3 eye = eye_;
-	XMFLOAT3 target = target_;
-	XMFLOAT3 up = up_;
-	//視点座標
-	XMVECTOR eyePosition = XMLoadFloat3(&eye);
-	//注視点座標
-	XMVECTOR targetPosition = XMLoadFloat3(&target);
-	//(仮の)上方向
-	XMVECTOR upVector = XMLoadFloat3(&up);
-
-	//カメラZ軸
-	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
-	//0ベクトルだと向きが定まらないので除外
-	assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
-	assert(!XMVector3IsInfinite(cameraAxisZ));
-	assert(!XMVector3Equal(upVector, XMVectorZero()));
-	assert(!XMVector3IsInfinite(upVector));
-	//ベクトルを正規化
-	cameraAxisZ = XMVector3Normalize(cameraAxisZ);
-
-	//カメラのX軸(右方向)
-	XMVECTOR cameraAxisX;
-	//X軸は上方向→Z軸の外積で決まる
-	cameraAxisX = XMVector3Cross(upVector, cameraAxisZ);
-	//ベクトルを正規化
-	cameraAxisX = XMVector3Normalize(cameraAxisX);
-
-	//カメラのY軸
-	XMVECTOR cameraAxisY;
-	//Y軸はZ軸→X軸の外積で求まる
-	cameraAxisY = XMVector3Cross(cameraAxisZ, cameraAxisX);
-	/*cameraAxisY = XMVector3Normalize(cameraAxisY);*/
-
-	//全方向ビルボード行列の計算
-	//ビルボード行列
-	matBillboard_.r[0] = cameraAxisX;
-	matBillboard_.r[1] = cameraAxisY;
-	matBillboard_.r[2] = cameraAxisZ;
-	matBillboard_.r[3] = XMVectorSet(0, 0, 0, 1);
-}
-
-void Camera::UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot)
-{
-	target_ = { playerPos.x,10.0f,playerPos.z };
-
-	/*eye_.x = sin(playerChangeRot) * playerTargetDistance + target_.x;
-	eye_.y = sin(playerChangeRot2) * playerTargetDistance;
-	eye_.z = cos(playerChangeRot) * playerTargetDistance + target_.z;*/
-
-	//1フレームあたりの移動量
-	float rot = ((float)PI / 200.0f) * (-keyManager->GetStick(KeyManager::RStickY));
-
-	//視点座標を変更
-	if (DebugChangeRot2 < maxDebugChangeRot2 && DebugChangeRot2 > minDebugChangeRot2)
-	{
-		DebugChangeRot2 += (float)rot;
-	}
-	if (DebugChangeRot2 > maxDebugChangeRot2)DebugChangeRot2 = maxDebugChangeRot2 - 0.001f;
-	if (DebugChangeRot2 < minDebugChangeRot2)DebugChangeRot2 = minDebugChangeRot2 + 0.001f;
-
-	eye_.x = playerPos.x + (cos(-playerRot.y - ((float)PI / 2)) * playerTargetDistance);
-	eye_.y = playerPos.y + (cos(-playerRot.x + DebugChangeRot2) * playerTargetDistance);
-	eye_.z = playerPos.z + (sin(-playerRot.y - ((float)PI / 2)) * playerTargetDistance);
-
-	////1フレームあたりの移動量
-	//float rot = (float)PI / 120.0f;
-
-	////視点座標を変更
-	//if (dxInput->GetStick(DXInput::RStickX) <= -0.1)
-	//{
-	//	DebugChangeRot -= (float)rot;
-	//}
-	//if (dxInput->GetStick(DXInput::RStickX) >= +0.1)
-	//{
-	//	DebugChangeRot += (float)rot;
-	//}
-	//if (dxInput->GetStick(DXInput::RStickY) <= -0.1)
-	//{
-	//	DebugChangeRot2 -= (float)rot;
-	//}
-	//if (dxInput->GetStick(DXInput::RStickY) >= +0.1)
-	//{
-	//	DebugChangeRot2 += (float)rot;
-	//}
-
-	//eye_.x = playerPos.x + (cos(DebugChangeRot) * playerTargetDistance);
-	//eye_.y = playerPos.y + (cos(DebugChangeRot2) * playerTargetDistance);
-	//eye_.z = playerPos.z + (sin(DebugChangeRot) * playerTargetDistance);
-}
-
-void Camera::UpdateMovePhase()
-{
-	eye_ = movePhaseEye;
-	target_ = movePhaseTarget;
-
-	debugEye[0] = eye_.x;
-	debugEye[1] = eye_.y;
-	debugEye[2] = eye_.z;
-	debugTarget[0] = target_.x;
-	debugTarget[1] = target_.y;
-	debugTarget[2] = target_.z;
-
-	////ImGui
-	//ImGui::Begin("camera");
-	//ImGui::SetWindowPos(ImVec2(500, 0));
-	//ImGui::SetWindowSize(ImVec2(500, 150));
-	//ImGui::InputFloat3("debugEye", debugEye);
-	//ImGui::InputFloat3("debugTarget", debugTarget);
-	//ImGui::End();
-}
-
-void Camera::UpdateTutorial(int tutorialTimer)
-{
-	int n = 60;
-	if (tutorialTimer < n)
-	{
-		eye_.x = -10.0f + (n - tutorialTimer) * 2.0f;
-	}
-	eye_.y = 85.0f;
-	eye_.z = 80.0f;
-
-	if (tutorialTimer < n)
-	{
-		target_ = { (n - tutorialTimer) * 2.0f,65.0f,0.0f };
-	}
-}
-
-void Camera::UpdateClear(XMFLOAT3 enemyPos, float timer)
-{
-	target_ = clearAddPos;
-
-	float addRot = (float)PI / 640.0f * timer;
-
-	eye_.x = enemyPos.x + (- addRot * playerTargetDistance);
-	eye_.y = enemyPos.y + (+ ((float)PI * 15 / 40) * playerTargetDistance);
-	eye_.z = enemyPos.z + (- ((float)PI / 2) * playerTargetDistance);
-}
-
-void Camera::SetTarget(XMFLOAT3 pos)
-{
-	target_ = pos;
-}
-
-void Camera::SetEye(XMFLOAT3 pos)
-{
-	eye_ = pos;
-}
-
-void Camera::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
+void CameraState::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
 {
 	//プレイヤーから原点のベクトル
 	XMFLOAT3 vec = XMFLOAT3(0.0f, 0.0f, 0.0f) - eye_;

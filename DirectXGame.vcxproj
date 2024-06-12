@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\application\gameObject\CamaeraStateManager.cpp" />
     <ClCompile Include="src\application\gameObject\Camera.cpp" />
     <ClCompile Include="src\application\gameObject\Enemy.cpp" />
     <ClCompile Include="src\application\gameObject\EnemyBullet.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="src\engine\postEffect\ShadowMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\application\gameObject\CamaeraStateManager.h" />
     <ClInclude Include="src\application\gameObject\Camera.h" />
     <ClInclude Include="src\application\gameObject\Enemy.h" />
     <ClInclude Include="src\application\gameObject\EnemyBullet.h" />
