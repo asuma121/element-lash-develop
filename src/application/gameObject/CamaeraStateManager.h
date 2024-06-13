@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 //プレイヤーに追従
-class FallowPlayer : public CameraState
+class FollowPlayer : public CameraState
 {
 public:
 	//コライダーの処理
@@ -27,7 +27,7 @@ public:
 };
 
 //フェーズの移動
-class MovePhase : public CameraState
+class MovePhase1 : public CameraState
 {
 public:
 	//ステートごとの動き
@@ -35,7 +35,7 @@ public:
 };
 
 //クリア
-class CLear : public CameraState
+class Clear : public CameraState
 {
 public:
 	//ステートごとの動き

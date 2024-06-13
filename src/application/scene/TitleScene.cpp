@@ -27,12 +27,8 @@ void TitleScene::Initialize()
 		//プレイヤーをタイトル用にセット
 		player->SetTitle();
 
-		//黒いスプライト1
-		Sprite* newBlackSprite1 = new Sprite();
-		newBlackSprite1->Initialize();
-		blackSprite1.reset(newBlackSprite1);
-		blackSprite1->SetTextureNum(83);
-		blackSprite1->SetScale(black1Scale);
+		//カメラをタイトル用にセット
+		camera->SetTitle();
 	}
 }
 
@@ -99,19 +95,6 @@ void TitleScene::UpdateObject()
 
 void TitleScene::UpdateSprite()
 {
-	//黒幕 シーン遷移時
-	if (moveTutorialTimer > blackSpriteTime)
-	{
-		blackSprite1->SetAlpha(((float)moveTutorialTimer - (float)blackSpriteTime) 
-			/ ((float)moveTutorialTime - (float)blackSpriteTime));
-	}
-	//黒幕 通常時
-	else
-	{
-		blackSprite1->SetAlpha(0.0f);
-	}
-	//スプライトの更新
-	blackSprite1->Update();
 }
 
 void TitleScene::UpdateMoveScene()
@@ -169,8 +152,6 @@ void TitleScene::DrawSprite()
 {
 	//UI描画
 	ui->DrawTitle(dxCommon->GetCommandList());
-	//黒幕描画
-	blackSprite1->Draw(dxCommon->GetCommandList());
 }
 
 void TitleScene::DrawParticle()

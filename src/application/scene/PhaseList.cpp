@@ -7,6 +7,7 @@ void Phase1::PhaseInitialize()
 	ui->SetGame();
 	player->SetGameScene();
 	enemy->SetGameScene();
+	camera->SetFollowPlayer();
 }
 
 void Phase1::DrawFBXLightView()
@@ -179,6 +180,7 @@ void Phase2::PhaseInitialize()
 	ui->SetGame();
 	player->SetGameScene();
 	enemy->SetGameScene();
+	camera->SetFollowPlayer();
 	tutorialEnemy->SetGameScene();
 }
 
@@ -397,6 +399,7 @@ void MovePhase::PhaseInitialize()
 	player->SetMovePhase();
 	enemy->SetMovePhase();
 	tutorialEnemy->SetMovePhase();
+	camera->SetMovePhase();
 }
 
 void MovePhase::DrawFBXLightView()

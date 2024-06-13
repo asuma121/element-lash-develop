@@ -33,6 +33,9 @@ void TutorialScene::Initialize()
 		//敵をチュートリアル用にセット
 		enemy->SetTutorial();
 
+		//カメラをチュートリアル用にセット
+		camera->SetFollowPlayer();
+
 		//チュートリアルの敵をセット
 		tutorialEnemy->SetTutorial();
 
@@ -62,16 +65,7 @@ void TutorialScene::Update()
 	UpdateCollider();
 
 	//カメラ更新
-	/*if (tutorialSpriteFlag == 15)
-	{
-		camera->UpdateTutorial(tutorial13Timer);
-	}
-	else
-	{
-		camera->UpdatePlayer(player->GetPosition(), player->GetRotation0());
-	}*/
-	/*camera_->DebugUpdate();*/
-	//カメラ更新
+	camera->SetPhaseTimer(tutorial13Timer);
 	camera->SetPlayerPos(player->GetPosition());
 	camera->SetPlayerRot(player->GetRotation0());
 	camera->Update();
@@ -297,6 +291,8 @@ void TutorialScene::UpdateSprite()
 		//時間経過でチュートリアル終了
 		if (tutorial12Timer >= tutorial12MaxTime)
 		{
+			//カメラをムービー用にセット
+			camera->SetTutorial();
 			tutorialSpriteFlag = 15;
 		}
 	}

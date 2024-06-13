@@ -135,13 +135,9 @@ public:	//メンバ変数
 	//シーン遷移用
 	int titleMoveTime = 120;
 
-	//黒いスプライト
-	std::unique_ptr<Sprite>blackSprite1;
 	//黒いスプライト 座標 スケール
 	XMFLOAT2 black1Pos = { 0.0f, 0.0f };
 	XMFLOAT2 black1Scale = { 1280.0f, 720.0f };
-	//黒いスプライト用の時間
-	int blackSpriteTime = 220;
 
 	//シーン遷移用フラグ シーンマネージャーに渡す
 	bool moveTutorialFlag1 = false;

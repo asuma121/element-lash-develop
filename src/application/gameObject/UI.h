@@ -57,6 +57,11 @@ public:
 	void UpdateMovePhase();
 
 	/// <summary>
+	///更新 クリアシーン
+	/// </summary>
+	void UpdateClear();
+
+	/// <summary>
 	///描画 ゲームシーン
 	/// </summary>
 	void DrawGame1(ID3D12GraphicsCommandList* cmdList);
@@ -80,6 +85,11 @@ public:
 	///描画 フェーズ間の移動
 	/// </summary>
 	void DrawMovePhase(ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
+	///描画 クリアシーン
+	/// </summary>
+	void DrawClear(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
 	///ゲームシーン用にUIセット
@@ -122,6 +132,11 @@ public:
 	///ゲームシーンのタイマーセット
 	/// </summary>
 	void SetPhaseTimer(int phaseTimer) { this->phaseTimer = phaseTimer; }
+
+	/// <summary>
+	///クリアシーンのタイマーセット
+	/// </summary>
+	void SetClearTimer(int clearTimer,int clearTime) { this->clearTimer = clearTimer; this->clearTime = clearTime;}
 
 	/// <summary>
 	///プレイヤーの状態セット
@@ -173,6 +188,8 @@ private:
 	XMFLOAT2 black3Scale = { 1280.0f, 720.0f };
 	float blackSpriteTimer = 0.0f;
 	float blackSpriteMaxTime = 120.0f;
+	int blackSpriteTitleTime = 220;
+	int moveTutorialTime = 300;
 	int phaseMoveTime = 746;
 	//キーボード ボタンのUI
 	//共通の座標、スケール
@@ -509,11 +526,11 @@ private:
 	float gameOverTimer = 0.0f;
 	float frameDown = 138.0f;
 
-	//デバッグ
-	float debugNum1[2] = { 0.0f,0.0f };
-	float debugNum2[1] = { 1.0f};
-	float debugNum3[2] = { 0.0f,0.0f };
-	float debugNum4[1] = { 1.0f};
-	float debugNum5[2] = { 0.0f,0.0f };
-	float debugNum6[1] = { 1.0f};
+	//クリアシーン用スプライト
+	std::unique_ptr<Sprite>clear1Sprite;
+	//クリアシーン用スプライト 座標 スケール
+	XMFLOAT2 clear1Pos = { 150.0f, 300.0f };
+	XMFLOAT2 clear1Scale = { 860.0f, 77.0f };
+	int clearTimer = 0; 
+	int clearTime = 0;
 };

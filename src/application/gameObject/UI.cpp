@@ -564,6 +564,12 @@ void UI::Initialize()
 	tutorial13Sprite2.reset(newTutorial13Sprite2);
 	tutorial13Sprite2->SetTextureNum(87);
 	tutorial13Sprite2->Update(tutorial13Pos3, tutorial13Scale2);
+	//クリアのスプライト
+	Sprite* newClear1Sprite = new Sprite();
+	newClear1Sprite->Initialize();
+	clear1Sprite.reset(newClear1Sprite);
+	clear1Sprite->SetTextureNum(29);
+	clear1Sprite->Update(clear1Pos, clear1Scale);
 }
 
 void UI::UpdateGame1()
@@ -888,6 +894,17 @@ void UI::UpdateTitle()
 	}
 	title3Sprite->SetAlpha((float)titleSprite3Timer / (float)titleSprite3MaxTime);
 
+	//黒幕 シーン遷移時
+	if (titleTimer > blackSpriteTitleTime)
+	{
+		blackSprite3->SetAlpha(((float)titleTimer - (float)blackSpriteTitleTime)
+			/ ((float)moveTutorialTime - (float)blackSpriteTitleTime));
+	}
+	//黒幕 通常時
+	else
+	{
+		blackSprite3->SetAlpha(0.0f);
+	}
 
 	//スプライトの更新
 	title1Sprite->Update();
@@ -897,6 +914,7 @@ void UI::UpdateTitle()
 	spaceKeyPushSprite1->Update();
 	AButtonSprite->Update();
 	AButtonPushSprite->Update();
+	blackSprite3->Update();
 }
 
 void UI::UpdateMovePhase()
@@ -908,6 +926,10 @@ void UI::UpdateMovePhase()
 		blackSprite3->SetAlpha(blackSpriteTimer / blackSpriteMaxTime);
 		blackSprite3->Update();
 	}
+}
+
+void UI::UpdateClear()
+{
 }
 
 void UI::DrawGame1(ID3D12GraphicsCommandList* cmdList)
@@ -1640,6 +1662,7 @@ void UI::DrawTutorial(ID3D12GraphicsCommandList* cmdList)
 
 void UI::DrawTitle(ID3D12GraphicsCommandList* cmdList)
 {
+	blackSprite3->Draw(cmdList);
 	title1Sprite->Draw(cmdList);
 	title2Sprite->Draw(cmdList);
 	//コントローラー未接続時
@@ -1681,6 +1704,14 @@ void UI::DrawMovePhase(ID3D12GraphicsCommandList* cmdList)
 	blackSprite1->Draw(cmdList);
 	blackSprite2->Draw(cmdList);
 	blackSprite3->Draw(cmdList);
+}
+
+void UI::DrawClear(ID3D12GraphicsCommandList* cmdList)
+{
+	//黒幕
+	blackSprite1->Draw(cmdList);
+	blackSprite2->Draw(cmdList);
+	if (clearTimer >= clearTime)clear1Sprite->Draw(cmdList);
 }
 
 void UI::SetGame()

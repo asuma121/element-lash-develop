@@ -331,12 +331,14 @@
     <LibraryPath>$(SolutionDir)\external\fbxsdk\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)generated\output\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)generated\obj\$(ProjectName)\$(Configuration)</IntDir>
+    <TargetName>エレメントラッシュ</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)\external\imgui;$(SolutionDir)\external\DirectXTex;$(SolutionDir)\external\fbxsdk\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\external\fbxsdk\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)generated\output\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)generated\obj\$(ProjectName)\$(Configuration)</IntDir>
+    <TargetName>エレメントラッシュ</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

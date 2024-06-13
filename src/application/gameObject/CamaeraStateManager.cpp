@@ -1,16 +1,23 @@
 #include "CamaeraStateManager.h"
 
-void FallowPlayer::UpdateCollider()
+void FollowPlayer::UpdateCollider()
 {
+	//コライダーデータの更新
+	colliderData.center = eye_;
+
+	for (int i = 0; i < objectColliderData.size(); i++)
+	{
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 11) == "wall_camera")
+		{
+			UpdateHitWall(objectColliderData[i]);
+		}
+	}
 }
 
-void FallowPlayer::Move()
+void FollowPlayer::Move()
 {
 	target_ = { playerPos.x,10.0f,playerPos.z };
-
-	/*eye_.x = sin(playerChangeRot) * playerTargetDistance + target_.x;
-	eye_.y = sin(playerChangeRot2) * playerTargetDistance;
-	eye_.z = cos(playerChangeRot) * playerTargetDistance + target_.z;*/
 
 	//1フレームあたりの移動量
 	float rot = ((float)PI / 200.0f) * (-keyManager->GetStick(KeyManager::RStickY));
@@ -32,7 +39,7 @@ void Title::Move()
 {
 	float distance = 60.0f;
 	//シーン遷移タイマーが動いていない時
-	if (timer < 119)
+	if (phaseTimer < 119)
 	{
 		eye_.x = playerPos.x + (cos(-playerRot.y - ((float)PI / 2)) * distance);
 		eye_.y = playerPos.y + (cos(-playerRot.x + ((float)PI * 15 / 40)) * distance);
@@ -42,7 +49,7 @@ void Title::Move()
 		target_ = { playerPos.x,5.0f,playerPos.z };
 	}
 	//シーン遷移タイマーが動いているとき
-	if (timer > 120)
+	if (phaseTimer > 120)
 	{
 		eye_.x = originalPlayerPos.x + (cos(-originalPlayerRot.y - ((float)PI / 2)) * distance);
 		eye_.y = originalPlayerPos.y + (cos(-originalPlayerRot.x + ((float)PI * 15 / 40)) * distance);
@@ -54,37 +61,30 @@ void Title::Move()
 void Tutorial::Move()
 {
 	int n = 60;
-	if (tutorialTimer < n)
+	if (phaseTimer < n)
 	{
-		eye_.x = -10.0f + (n - tutorialTimer) * 2.0f;
+		eye_.x = -10.0f + (n - phaseTimer) * 2.0f;
 	}
 	eye_.y = 85.0f;
 	eye_.z = 80.0f;
 
-	if (tutorialTimer < n)
+	if (phaseTimer < n)
 	{
-		target_ = { (n - tutorialTimer) * 2.0f,65.0f,0.0f };
+		target_ = { (n - phaseTimer) * 2.0f,65.0f,0.0f };
 	}
 }
 
-void MovePhase::Move()
+void MovePhase1::Move()
 {
 	eye_ = movePhaseEye;
 	target_ = movePhaseTarget;
-
-	debugEye[0] = eye_.x;
-	debugEye[1] = eye_.y;
-	debugEye[2] = eye_.z;
-	debugTarget[0] = target_.x;
-	debugTarget[1] = target_.y;
-	debugTarget[2] = target_.z;
 }
 
-void CLear::Move()
+void Clear::Move()
 {
 	target_ = clearAddPos;
 
-	float addRot = (float)PI / 640.0f * timer;
+	float addRot = (float)PI / 640.0f * phaseTimer;
 
 	eye_.x = enemyPos.x + (-addRot * playerTargetDistance);
 	eye_.y = enemyPos.y + (+((float)PI * 15 / 40) * playerTargetDistance);

@@ -64,7 +64,7 @@ public: //メンバ関数
 	/// <summary>
 	///スプライト更新
 	/// </summary>
-	void UpdateSprite();
+	void UpdateSprite() {};
 
 	/// <summary>
 	///パーティクル更新
@@ -131,20 +131,6 @@ public:	//メンバ変数
 	float lightTarget[3] = { 0.0f,0.0f,0.0f };
 	float lightFactorAngle[2] = { 20.0f,30.0f, };
 	float lightAtten[3] = { 0.0f,0.0f,0.0f };
-
-	//黒いスプライト
-	std::unique_ptr<Sprite>blackSprite1;
-	std::unique_ptr<Sprite>blackSprite2;
-	//黒いスプライト 座標 スケール
-	XMFLOAT2 black1Pos = { 0.0f, 0.0f };
-	XMFLOAT2 black1Scale = { 1280.0f, 720.0f };
-	XMFLOAT2 black2Pos = { 0.0f, 0.0f };
-	XMFLOAT2 black2Scale = { 1280.0f, 720.0f };
-	//クリアシーン用スプライト
-	std::unique_ptr<Sprite>clear1Sprite;
-	//クリアシーン用スプライト 座標 スケール
-	XMFLOAT2 clear1Pos = { 150.0f, 300.0f };
-	XMFLOAT2 clear1Scale = { 860.0f, 77.0f };
 
 	//タイマー
 	float gameTimer = 0.0f;

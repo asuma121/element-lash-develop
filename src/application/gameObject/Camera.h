@@ -15,6 +15,8 @@
 
 using namespace DirectX;
 
+//クラスの前方宣言
+class CameraState;
 class Camera
 {
 public://静的メンバ変数
@@ -22,7 +24,7 @@ public://静的メンバ変数
 	/// <summary>
 	///入力セット
 	/// </summary>
-	static void SetKeyManager(KeyManager* keyManager) { Camera::keyManager = keyManager; }
+	static void SetKeyManager(KeyManager* keyManager);
 
 	//コンストラクタ デストラクタ
 	Camera();
@@ -44,31 +46,6 @@ public:
 	///更新
 	/// </summary>
 	void Update();
-
-	/// <summary>
-	///タイトルの更新
-	/// </summary>
-	void TitleUpdate(XMFLOAT3 playerPos, XMFLOAT3 playerRot, float timer);
-
-	/// <summary>
-	///プレイヤー追尾の更新
-	/// </summary>
-	void UpdatePlayer(XMFLOAT3 playerPos, XMFLOAT3 playerRot);
-
-	/// <summary>
-	///プレイヤー追尾の更新
-	/// </summary>
-	void UpdateMovePhase();
-
-	/// <summary>
-	///チュートリアルの更新
-	/// </summary>
-	void UpdateTutorial(int tutorialTimer);
-
-	/// <summary>
-	///クリア画面の更新
-	/// </summary>
-	void UpdateClear(XMFLOAT3 enemyPos, float timer);
 
 	/// <summary>
 	///視点座標取得
@@ -106,6 +83,11 @@ public:
 	XMMATRIX GetMatViewProjection();
 
 	/// <summary>
+	///ビルボード用ビュー変換行列取得
+	/// </summary>
+	XMMATRIX GetMatBillboard();
+
+	/// <summary>
 	///ゲームシーンタイマーのセット
 	/// </summary>
 	void SetPhaseTimer(int timer);
@@ -126,9 +108,21 @@ public:
 	void SetPlayerRot(XMFLOAT3 playerRot);
 
 	/// <summary>
+	///敵の座標セット
+	///</summary>
+	void SetEnemyPos(XMFLOAT3 enemyPos);
+
+	/// <summary>
 	///ステートの変更 
 	/// </summary>
 	void ChangeState(CameraState* newState);
+
+	//カメラのセット
+	void SetTitle();
+	void SetTutorial();
+	void SetMovePhase();
+	void SetClear();
+	void SetFollowPlayer();
 
 private:
 	//入力
@@ -137,66 +131,6 @@ private:
 
 	//カメラステート
 	CameraState* cameraState = nullptr;
-	////射影変換
-	//XMMATRIX matProjection_ = XMMatrixIdentity();
-	////ビュー変換行列
-	//XMMATRIX matView_ = XMMatrixIdentity();
-	//XMFLOAT3 eye_ = { 0, 20, -100 };
-	//XMFLOAT3 target_ = { 0, 0, 0 };
-	//XMFLOAT3 up_ = { 0, 1, 0 };
-	//XMFLOAT3 debugEye_ = { 0, 100, -100 };
-	//XMFLOAT3 debugTarget_ = { 0, 0, 0 };
-	//XMFLOAT3 debugUp_ = { 0, 100, 0 };
-	////ビルボード行列
-	//XMMATRIX matBillboard_ = XMMatrixIdentity();
-	////カメラの向いてる角度
-	//XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-
-	////ターゲットまでの距離
-	//float DebugTargetDistance = 40.0f;
-	////加算用
-	//float DebugChangeRot = (float)PI;
-	//float DebugChangeRot2 = (float)PI * (13.0f / 40.0f);
-	//float maxDebugChangeRot2 = (float)PI * (19.0f / 40.0f);
-	//float minDebugChangeRot2 = (float)PI * (8.0f / 40.0f);
-	//float DebugChangeDistance = 0.0f;
-
-	////コライダーデータ
-	//JSONLoader::ColliderData colliderData;
-	//XMFLOAT3 colliderScale = { 0.00001f,0.00001f,0.00001f };
-	//XMFLOAT3 colliderRotation = { 0.0f,0.0f,0.0f };
-	////オブジェクトのコライダーデータ
-	//std::vector<JSONLoader::ColliderData> objectColliderData;
-	////オブジェクト衝突時の押し戻し
-	//float knockBackSpeed = 0.1f;
-
-	////プレイヤー
-	////ターゲットまでの距離
-	//float playerTargetDistance = 50.0f;
-	////加算用
-	//float playerChangeRot = (float)PI;
-	//float playerChangeRot2 = 0.5f;
-	//float playerChangeDistance = 0.0f;
-	//float playerAddRot = 0.0f;
-	//float rotSpeed = (float)PI * 1.5f / 180.0f;
-
-	////シーン遷移用
-	//XMFLOAT3 originalPlayerPos = { 0.0f,0.0f,0.0f };
-	//XMFLOAT3 originalPlayerRot = { 0.0f,0.0f,0.0f };
-
-	////ゲームシーンタイマー
-	//int phaseTimer = 0;
-
-	////フェーズ移動の注視点、座標
-	//XMFLOAT3 movePhaseTarget = { -8.0f, 26.0f, 0.0f };
-	//XMFLOAT3 movePhaseEye = { 37.0f, 20.0f, -100.0f };
-
-	////デバッグ用
-	//bool debugFlag = false;
-	//float debugEye[3] = { 0.0f,0.0f,0.0f };
-	//float debugTarget[3] = { 0.0f,0.0f,0.0f };
-
-	//XMFLOAT3 clearAddPos = { 0.0f,60.0f,0.0f };
 };
 
 class CameraState
@@ -216,6 +150,8 @@ public:	//メンバ関数
 	void Update();
 	//角度更新
 	void UpdateRotation();
+	//ビルボード行列の更新>
+	void BillboardUpdate();
 	//カメラと壁との当たり判定
 	void UpdateHitWall(JSONLoader::ColliderData objectColliderData);
 	//シーンタイマーのセット
@@ -226,6 +162,10 @@ public:	//メンバ関数
 	void SetPlayerPos(XMFLOAT3 playerPos) { this->playerPos = playerPos; };
 	//プレイヤーの角度セット
 	void SetPlayerRot(XMFLOAT3 playerRot) { this->playerRot = playerRot; };
+	//敵の座標セット
+	void SetEnemyPos(XMFLOAT3 enemyPos) { this->enemyPos = enemyPos; };
+	//キーマネージャーセット
+	static void SetKeyManager(KeyManager* keyManager) {CameraState::keyManager = keyManager;}
 
 	//ゲッター
 	//視点座標取得
@@ -242,14 +182,19 @@ public:	//メンバ関数
 	XMMATRIX GetMatView() { return matView_; };
 	//ビュープロジェクション取得
 	XMMATRIX GetMatViewProjection() { return matView_ * matProjection_; };
+	//ビルボード用ビュー変換行列取得
+	XMMATRIX GetMatBillboard() { return matBillboard_; }
 
-protected:	//メンバ関数
+protected:	//静的メンバ変数
 
-	//静的メンバ変数
+	//キーボード
+	static KeyManager* keyManager;
 	//射影変換
 	static XMMATRIX matProjection_;
 	//ビュー変換行列
 	static XMMATRIX matView_;
+	//ビルボード行列
+	static XMMATRIX matBillboard_;
 	//視点座標、注視点、上方向、角度
 	static XMFLOAT3 eye_;
 	static XMFLOAT3 target_;
@@ -259,22 +204,14 @@ protected:	//メンバ関数
 	//コライダーデータ
 	static JSONLoader::ColliderData colliderData;
 
-	////射影変換
-	//XMMATRIX matProjection_ = XMMatrixIdentity();
-	////ビュー変換行列
-	//XMMATRIX matView_ = XMMatrixIdentity();
-	//XMFLOAT3 eye_ = { 0, 20, -100 };
-	//XMFLOAT3 target_ = { 0, 0, 0 };
-	//XMFLOAT3 up_ = { 0, 1, 0 };
-	/*XMFLOAT3 debugEye_ = { 0, 100, -100 };
-	XMFLOAT3 debugTarget_ = { 0, 0, 0 };
-	XMFLOAT3 debugUp_ = { 0, 100, 0 };*/
-	//カメラの向いてる角度
-	/*XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };*/
+protected:	//メンバ変数
 
 	//プレイヤーの座標、角度
 	XMFLOAT3 playerPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 playerRot = { 0.0f,0.0f,0.0f };
+
+	//敵の座標
+	XMFLOAT3 enemyPos = { 0.0f,0.0f,0.0f };
 
 	//ターゲットまでの距離
 	float DebugTargetDistance = 40.0f;
@@ -312,11 +249,6 @@ protected:	//メンバ関数
 	//フェーズ移動の注視点、座標
 	XMFLOAT3 movePhaseTarget = { -8.0f, 26.0f, 0.0f };
 	XMFLOAT3 movePhaseEye = { 37.0f, 20.0f, -100.0f };
-
-	//デバッグ用
-	bool debugFlag = false;
-	float debugEye[3] = { 0.0f,0.0f,0.0f };
-	float debugTarget[3] = { 0.0f,0.0f,0.0f };
 
 	XMFLOAT3 clearAddPos = { 0.0f,60.0f,0.0f };
 };

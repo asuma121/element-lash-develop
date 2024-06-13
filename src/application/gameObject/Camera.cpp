@@ -13,9 +13,10 @@
 #include "CamaeraStateManager.h"
 #define PI 3.14159265359
 
-KeyManager* Camera::keyManager = nullptr;
+KeyManager* CameraState::keyManager = nullptr;
 XMMATRIX CameraState::matProjection_;
 XMMATRIX CameraState::matView_;
+XMMATRIX CameraState::matBillboard_;
 XMFLOAT3 CameraState::eye_;
 XMFLOAT3 CameraState::target_;
 XMFLOAT3 CameraState::up_;
@@ -28,9 +29,16 @@ Camera* Camera::GetInstance()
 	return &instance;
 }
 
+void Camera::SetKeyManager(KeyManager* keyManager)
+{
+	CameraState::SetKeyManager(keyManager);
+}
+
 Camera::Camera()
 {
 	cameraState = new Title();
+	//ステートの初期化
+	cameraState->Initialize();
 }
 
 Camera::~Camera()
@@ -40,8 +48,6 @@ Camera::~Camera()
 
 void Camera::Initialize()
 {
-	//ステートの初期化
-	cameraState->Initialize();
 }
 
 
@@ -85,6 +91,11 @@ XMMATRIX Camera::GetMatViewProjection()
 	return cameraState->GetMatView() * cameraState->GetMatProjection();
 }
 
+XMMATRIX Camera::GetMatBillboard()
+{
+	return cameraState->GetMatBillboard();
+}
+
 void Camera::SetPhaseTimer(int timer)
 {
 	cameraState->SetPhaseTimer(timer);
@@ -105,10 +116,40 @@ void Camera::SetPlayerRot(XMFLOAT3 playerRot)
 	cameraState->SetPlayerRot(playerRot);
 }
 
+void Camera::SetEnemyPos(XMFLOAT3 enemyPos)
+{
+	cameraState->SetPlayerRot(enemyPos);
+}
+
 void Camera::ChangeState(CameraState* newState)
 {
 	delete cameraState;
 	cameraState = newState;
+}
+
+void Camera::SetTitle()
+{
+	ChangeState(new Title());
+}
+
+void Camera::SetTutorial()
+{
+	ChangeState(new Tutorial());
+}
+
+void Camera::SetMovePhase()
+{
+	ChangeState(new MovePhase1());
+}
+
+void Camera::SetClear()
+{
+	ChangeState(new Clear());
+}
+
+void Camera::SetFollowPlayer()
+{
+	ChangeState(new FollowPlayer());
 }
 
 void CameraState::Initialize()
@@ -117,6 +158,8 @@ void CameraState::Initialize()
 	matProjection_ = XMMatrixIdentity();
 	//ビュー変換行列の初期化
 	matView_ = XMMatrixIdentity();
+	//ビルボード行列の初期化
+	matBillboard_ = XMMatrixIdentity();
 
 	//視点座標、注視点、上方向、角度の初期化
 	eye_ = { 0, 0, 0 };
@@ -146,6 +189,9 @@ void CameraState::Initialize()
 
 void CameraState::Update()
 {
+	//ビルボード行列の更新
+	BillboardUpdate();
+
 	//動き
 	Move();
 
@@ -166,6 +212,49 @@ void CameraState::UpdateRotation()
 
 	//カメラの角度取得
 	rotation = getVectorRotation(vec);
+}
+
+void CameraState::BillboardUpdate()
+{
+	XMFLOAT3 eye = eye_;
+	XMFLOAT3 target = target_;
+	XMFLOAT3 up = up_;
+	//視点座標
+	XMVECTOR eyePosition = XMLoadFloat3(&eye);
+	//注視点座標
+	XMVECTOR targetPosition = XMLoadFloat3(&target);
+	//(仮の)上方向
+	XMVECTOR upVector = XMLoadFloat3(&up);
+
+	//カメラZ軸
+	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
+	//0ベクトルだと向きが定まらないので除外
+	assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
+	assert(!XMVector3IsInfinite(cameraAxisZ));
+	assert(!XMVector3Equal(upVector, XMVectorZero()));
+	assert(!XMVector3IsInfinite(upVector));
+	//ベクトルを正規化
+	cameraAxisZ = XMVector3Normalize(cameraAxisZ);
+
+	//カメラのX軸(右方向)
+	XMVECTOR cameraAxisX;
+	//X軸は上方向→Z軸の外積で決まる
+	cameraAxisX = XMVector3Cross(upVector, cameraAxisZ);
+	//ベクトルを正規化
+	cameraAxisX = XMVector3Normalize(cameraAxisX);
+
+	//カメラのY軸
+	XMVECTOR cameraAxisY;
+	//Y軸はZ軸→X軸の外積で求まる
+	cameraAxisY = XMVector3Cross(cameraAxisZ, cameraAxisX);
+	/*cameraAxisY = XMVector3Normalize(cameraAxisY);*/
+
+	//全方向ビルボード行列の計算
+	//ビルボード行列
+	matBillboard_.r[0] = cameraAxisX;
+	matBillboard_.r[1] = cameraAxisY;
+	matBillboard_.r[2] = cameraAxisZ;
+	matBillboard_.r[3] = XMVectorSet(0, 0, 0, 1);
 }
 
 void CameraState::UpdateHitWall(JSONLoader::ColliderData objectColliderData)
