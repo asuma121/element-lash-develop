@@ -16,6 +16,11 @@ class Title : public CameraState
 public:
 	//ステートごとの動き
 	void Move();
+private:
+	//視点座標用
+	XMFLOAT3 addTitleEye = { -10.0f,6.0f,50.0f };
+	//注視点用
+	XMFLOAT3 addTitleTarget = { 30.0f,40.0f,0.0f };
 };
 
 //チュートリアル

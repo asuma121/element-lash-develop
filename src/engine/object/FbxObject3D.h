@@ -179,6 +179,11 @@ public://メンバ関数
 	void SetScale(XMFLOAT3 sca) { scale = sca; }
 
 	/// <summary>
+	///タイマーセット
+	/// </summary>
+	void SetTimer1(float timer) { timer1 = timer; }
+
+	/// <summary>
 	///オブジェクトデータ取得
 	/// </summary>
 	void SetObjectData(const JSONLoader::ObjectData& objectData);

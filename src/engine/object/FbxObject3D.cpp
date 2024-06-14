@@ -80,9 +80,6 @@ void FbxObject3D::Initialize(FbxModel* model, const JSONLoader::TextureData& tex
 
 void FbxObject3D::Update()
 {
-	//タイマー更新
-	UpdateTimer();
-
 	HRESULT result;
 	//アニメーション
 	if (isPlay)

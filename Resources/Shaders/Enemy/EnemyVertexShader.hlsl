@@ -95,6 +95,15 @@ VSOutput main(VSInput input)
 		output.flag = 0;
 	}
 
+	if(timer1 == 0)
+	{
+		output.texFlag = false;
+	}
+	if(timer1 == 1000.0f)
+	{
+		output.texFlag = true;
+	}
+
 	//ワールド座標x
 	return output;
 }

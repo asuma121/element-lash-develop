@@ -20,7 +20,16 @@ PSOutput main(VSOutput input) : SV_TARGET
 	
 	//テクスチャマッピング
 	//炎1
-    float4 texcoord1 = tex3.Sample(smp, input.uv);
+    float4 texcoord1;
+	texcoord1 = tex3.Sample(smp, input.uv);
+	if(input.texFlag == false)
+	{
+    	texcoord1 = tex3.Sample(smp, input.uv);
+	}
+	if(input.texFlag == true)
+	{
+    	texcoord1 = tex.Sample(smp, input.uv);
+	}
 	//Lambert反射
 	float3 light = normalize(float3(1,-1,1));	//右下奥 向きのライト
 	float diffuse = saturate(dot(-light, input.normal));
@@ -44,12 +53,12 @@ PSOutput main(VSOutput input) : SV_TARGET
 	output.target0.z *= shadowWeight;
 	output.target1 = float4(1,1,1,1);
 
-	if(input.flag == 0)
+	if(input.flag == 0 && input.texFlag == false)
 	{
 		output.target0.w = 0.7;
 	}
 
-	if(input.flag != 0)
+	if(input.flag != 0  && input.texFlag == false)
 	{
 		output.target0.x = 1.0f;
 		output.target0.y = 0.0f;

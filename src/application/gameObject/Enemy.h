@@ -66,6 +66,11 @@ public://メンバ関数
 	/// <summary>
 	///更新
 	/// </summary>
+	void UpdateTitle();
+
+	/// <summary>
+	///更新
+	/// </summary>
 	void UpdateMovePhase();
 
 	/// <summary>
@@ -82,6 +87,11 @@ public://メンバ関数
 	///ステート更新
 	/// </summary>
 	void UpdateStateGame();
+
+	/// <summary>
+	///ステート更新 タイトル用
+	/// </summary>
+	void UpdateStateTitle();
 
 	/// <summary>
 	///ステート更新 チュートリアル用
@@ -152,6 +162,11 @@ public://メンバ関数
 	///リセット
 	/// </summary>
 	void Reset();
+
+	/// <summary>
+	///タイトルシーンに移る
+	/// </summary>
+	void SetTitle();
 
 	/// <summary>
 	///チュートリアルシーンに移る
@@ -358,6 +373,8 @@ public:	//メンバ関数
 	virtual void Move() = 0;
 	//ステートの変更
 	virtual void UpdateState(Enemy* enemy) = 0;
+	//ステートの変更 タイトルシーン
+	virtual void UpdateStateTitle(Enemy* enemy) {};
 	//ステートの変更 チュートリアルシーン
 	virtual void UpdateStateTutorial(Enemy* enemy) {};
 	//ステートの変更 フェーズ移動
@@ -392,6 +409,8 @@ public:	//メンバ関数
 	void Update();
 	//フェーズ移動用の更新
 	void UpdateMovePhase();
+	//タイトル用の更新
+	void UpdateTitle();
 	//チュートリアル用の更新
 	void UpdateTutorial(int timer);
 	//クリア用の更新
@@ -425,6 +444,8 @@ public:	//メンバ関数
 	size_t GetBullet1Num() { return  bullet->GetBulletNum(); }
 	//リセット
 	void Reset();
+	//タイトルシーンに移る際に呼び出す
+	void SetTitle(Enemy* enemy);
 	//チュートリアルシーンに移る際に呼び出す
 	void SetTutorial(Enemy* enemy);
 	//ゲームシーンに移る際に呼び出す

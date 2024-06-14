@@ -82,4 +82,5 @@ struct VSOutput
 	float2 uv : TEXCOORD;	//uv値
 	float4 tpos : TPOS;
 	float flag : FLAG;
+	bool texFlag : TEXFLAG;
 };

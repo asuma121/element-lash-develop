@@ -8,6 +8,8 @@ DirectXCommon* TitleScene::dxCommon = nullptr;
 Camera* TitleScene::camera = nullptr;
 Light* TitleScene::light = nullptr;
 Player* TitleScene::player = nullptr;
+Enemy* TitleScene::enemy = nullptr;
+Plane* TitleScene::plane = nullptr;
 UI* TitleScene::ui = nullptr;
 Terrain* TitleScene::terrain = nullptr;
 
@@ -26,6 +28,9 @@ void TitleScene::Initialize()
 	{
 		//プレイヤーをタイトル用にセット
 		player->SetTitle();
+
+		//敵をタイトル用にセット
+		enemy->SetTitle();
 
 		//カメラをタイトル用にセット
 		camera->SetTitle();
@@ -89,6 +94,12 @@ void TitleScene::UpdateObject()
 	ui->SetTitleTimer(moveTutorialTimer, titleMoveTime);
 	ui->UpdateTitle();
 
+	//床更新
+	plane->Update();
+
+	//敵更新
+	enemy->UpdateTitle();
+
 	//プレイヤー
 	player->UpdateTitle((float)moveTutorialTimer);
 }
@@ -145,7 +156,11 @@ void TitleScene::Draw()
 void TitleScene::DrawFBX()
 {
 	player->Draw(dxCommon->GetCommandList());
-	terrain->DrawTitle(dxCommon->GetCommandList());
+	plane->Draw(dxCommon->GetCommandList());
+	enemy->Draw(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
+
+	enemy->UpdateStateTitle();
 }
 
 void TitleScene::DrawSprite()
@@ -163,6 +178,7 @@ void TitleScene::DrawParticle()
 void TitleScene::DrawFBXLightView()
 {
 	player->DrawLightView(dxCommon->GetCommandList());
+	enemy->DrawLightView(dxCommon->GetCommandList());
 }
 
 void TitleScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
@@ -172,9 +188,11 @@ void TitleScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)
 	TitleScene::keyManager = keyManager;
 }
 
-void TitleScene::SetGameObject(Player* player, Terrain* terrain, Camera* camera, Light* light, UI* ui)
+void TitleScene::SetGameObject(Player* player, Enemy* enemy, Plane* plane, Terrain* terrain, Camera* camera, Light* light, UI* ui)
 {
 	TitleScene::player = player;
+	TitleScene::enemy = enemy;
+	TitleScene::plane = plane;
 	TitleScene::terrain = terrain;
 	TitleScene::camera = camera;
 	TitleScene::light = light;

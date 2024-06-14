@@ -507,4 +507,9 @@ protected:	//メンバ変数
 	XMFLOAT3 gameScenePos = { 0.0f, 0.0f, -200.0f };
 	//ゲームシーンに移る時の座標
 	XMFLOAT3 clearPos = { 0.0f, 500.0f, -200.0f };
+
+	//タイトルシーンの座標
+	XMFLOAT3 titlePos = { 40.0f,0.0f,120.0f };
+	//タイトルシーンの角度
+	XMFLOAT3 titleRotation = { 0.0f,(float)PI,0.0f };
 };

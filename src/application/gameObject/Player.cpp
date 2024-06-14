@@ -399,6 +399,7 @@ void PlayerState::UpdateObject()
 	object->SetRotation(rotation0 + rotation1);
 	object->SetScale(scale);
 	object->SetDrawShaderNum(form);
+	object->UpdateTimer();
 	object->Update();
 }
 
@@ -710,10 +711,12 @@ void PlayerState::Reset()
 void PlayerState::SetTitle(Player* player)
 {
 	//座標更新
-	position = XMFLOAT3(0.0f, 0.0f,0.0f);
+	position = titlePos;
 
-	//ダッシュ状態に変更
-	player->ChangeState(new Run());
+	rotation1 = titleRotation;
+
+	//立ち状態に変更
+	player->ChangeState(new Wait());
 }
 
 void PlayerState::SetTutorial()

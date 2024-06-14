@@ -103,6 +103,19 @@ void Enemy::UpdateGame2()
 	UpdateDamage();
 }
 
+void Enemy::UpdateTitle()
+{
+	//ステート更新
+	enemyState->SetHitPlayer(hitPlayer);
+	enemyState->UpdateTitle();
+
+	//フラグを戻す
+	hitPlayer = false;
+
+	//ダメージ更新
+	UpdateDamage();
+}
+
 void Enemy::UpdateMovePhase()
 {
 	//ステート更新
@@ -146,6 +159,12 @@ void Enemy::UpdateStateGame()
 {
 	//ステート更新
 	enemyState->UpdateState(this);
+}
+
+void Enemy::UpdateStateTitle()
+{
+	//ステート更新
+	enemyState->UpdateStateTitle(this);
 }
 
 void Enemy::UpdateStateTutorial()
@@ -242,6 +261,11 @@ void Enemy::Reset()
 	enemyState->Reset();
 }
 
+void Enemy::SetTitle()
+{
+	enemyState->SetTitle(this);
+}
+
 void Enemy::SetTutorial()
 {
 	enemyState->SetTutorial(this);
@@ -330,7 +354,7 @@ void EnemyState::Initialize()
 	JSONLoader::TextureData textureData;
 	textureData.textureVol = 2;
 	textureData.shaderVol = 1;
-	textureData.textureNum1 = 71;	//白いテクスチャ
+	textureData.textureNum1 = 89;	//白いテクスチャ
 	textureData.textureNum2 = 88;	//炎のテクスチャ
 	textureData.shaderName = "Enemy";	//シェーダの名前
 
@@ -506,6 +530,27 @@ void EnemyState::UpdateMovePhase()
 	UpdateObject();
 }
 
+void EnemyState::UpdateTitle()
+{
+	//タイマー更新
+	objectTimer++;
+
+	//コライダーデータ更新
+	UpdateColliderDate();
+
+	//弾更新
+	bullet->SetPlayerPos(playerPos);
+	bullet->Update();
+
+	//パーティクル更新
+	explosionParticle1->Update();
+	explosionParticle2->Update();
+	elecParticle->Update();
+
+	//オブジェクト更新
+	UpdateObject();
+}
+
 void EnemyState::UpdateTutorial(int timer)
 {
 	//タイマー更新
@@ -600,6 +645,14 @@ void EnemyState::Reset()
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
+void EnemyState::SetTitle(Enemy* enemy)
+{
+	//攻撃前兆のモデルに変更
+	enemy->ChangeState(new AttackOmen1());
+	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	object->SetTimer1(1000.0f);
+}
+
 void EnemyState::SetTutorial(Enemy* enemy)
 {
 	//立つモデルに変更
@@ -609,6 +662,9 @@ void EnemyState::SetTutorial(Enemy* enemy)
 	//最後しか描画しないため、それまで画面外
 	position = XMFLOAT3(0.0f, 1000.0f, 0.0f);
 	hitPillerFlag = false;
+
+	//タイマーセット
+	object->SetTimer1(0.0f);
 }
 
 void EnemyState::SetGame(Enemy* enemy)
@@ -620,6 +676,9 @@ void EnemyState::SetGame(Enemy* enemy)
 	hitPillerFlag = false;
 	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+	//タイマーセット
+	object->SetTimer1(0.0f);
 }
 
 void EnemyState::SetClear(Enemy* enemy)
@@ -628,6 +687,9 @@ void EnemyState::SetClear(Enemy* enemy)
 	enemy->ChangeState(new AttackOmen1());
 	position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	hitPillerFlag = false;
+
+	//タイマーセット
+	object->SetTimer1(0.0f);
 }
 
 void EnemyState::SetMovePhase(Enemy* enemy)
@@ -637,4 +699,7 @@ void EnemyState::SetMovePhase(Enemy* enemy)
 	rotation = XMFLOAT3(0.0f, (float)PI, 0.0f);
 	position = XMFLOAT3(0.0f, 0.0f, 100.0f);
 	hitPillerFlag = false;
+
+	//タイマーセット
+	object->SetTimer1(0.0f);
 }

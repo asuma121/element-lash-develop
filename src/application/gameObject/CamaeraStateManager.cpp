@@ -1,4 +1,5 @@
 #include "CamaeraStateManager.h"
+#include "mathOriginal.h"
 
 void FollowPlayer::UpdateCollider()
 {
@@ -37,25 +38,9 @@ void FollowPlayer::Move()
 
 void Title::Move()
 {
-	float distance = 60.0f;
-	//シーン遷移タイマーが動いていない時
-	if (phaseTimer < 119)
-	{
-		eye_.x = playerPos.x + (cos(-playerRot.y - ((float)PI / 2)) * distance);
-		eye_.y = playerPos.y + (cos(-playerRot.x + ((float)PI * 15 / 40)) * distance);
-		eye_.z = playerPos.z + (sin(-playerRot.y + ((float)PI / 2)) * distance);
-		originalPlayerPos = playerPos;
-		originalPlayerRot = playerRot;
-		target_ = { playerPos.x,5.0f,playerPos.z };
-	}
-	//シーン遷移タイマーが動いているとき
-	if (phaseTimer > 120)
-	{
-		eye_.x = originalPlayerPos.x + (cos(-originalPlayerRot.y - ((float)PI / 2)) * distance);
-		eye_.y = originalPlayerPos.y + (cos(-originalPlayerRot.x + ((float)PI * 15 / 40)) * distance);
-		eye_.z = originalPlayerPos.z + (sin(-originalPlayerRot.y + ((float)PI / 2)) * distance);
-		target_ = { originalPlayerPos.x,5.0f,originalPlayerPos.z };
-	}
+	eye_ = playerPos + addTitleEye;
+
+	target_ = enemyPos + addTitleTarget;
 }
 
 void Tutorial::Move()

@@ -196,6 +196,11 @@ void AttackOmen1::UpdateState(Enemy* enemy)
 	}
 }
 
+void AttackOmen1::UpdateStateTitle(Enemy* enemy)
+{
+	object->StopAnimation();
+}
+
 void AttackOmen1::UpdateStateTutorial(Enemy* enemy)
 {
 	//アニメーションが終わったら

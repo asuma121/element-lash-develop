@@ -170,6 +170,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	textureManager->LoadFile(86, L"Resources/pictures/UI_Text/tutorial15.png");
 	textureManager->LoadFile(87, L"Resources/pictures/UI_Text/tutorial16.png");
 	textureManager->LoadFile(88, L"Resources/pictures/Object/enemyBody.jpg");
+	textureManager->LoadFile(89, L"Resources/pictures/Object/enemyStoneBody.jpg");
 
 	//スプライト
 	Sprite::SetDevice(dxCommon->GetDevice());
@@ -307,7 +308,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//タイトルシーン
 	TitleScene::SetDevice(dxCommon, keyManager);
-	TitleScene::SetGameObject(player, terrain, camera, light, ui);
+	TitleScene::SetGameObject(player, enemy,plane,terrain, camera, light, ui);
 
 	//チュートリアルシーン
 	TutorialScene::SetDevice(dxCommon, keyManager);

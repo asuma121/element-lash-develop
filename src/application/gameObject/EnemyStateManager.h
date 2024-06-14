@@ -50,6 +50,8 @@ public:
 	void UpdateParticleClear()override;
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
+	//タイトルのステート更新
+	void UpdateStateTitle(Enemy* enemy)override;
 	//チュートリアルのステート更新
 	void UpdateStateTutorial(Enemy* enemy)override;
 	//ゲームのステート更新
