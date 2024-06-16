@@ -614,9 +614,10 @@ protected:	//メンバ変数
 
 	//クリアのタイマー
 	int clearTimer = 0;
+	float clearFromGameTime = 500.0f;
 
 	//爆発用
-	float explosionTime = 5.0f;
+	float explosionTime = 1.0f;
 	float explosionTimer = explosionTime;
 
 	//倒れている間は体の当たり判定をなくす

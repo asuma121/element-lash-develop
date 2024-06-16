@@ -151,11 +151,17 @@ void AttackOmen1::Move()
 
 void AttackOmen1::UpdateParticleClear()
 {
+	//Î‰»‚µ‚Ä‚½‚çƒŠƒ^[ƒ“
+	if (clearTimer >= clearFromGameTime)
+	{
+		return;
+	}
+
 	if ((int)clearTimer % (int)explosionTime == 0)
 	{
 		//—”‚ğ¶¬
 		float xRand, yRand, zRand, randWidth;
-		XMFLOAT3 randVec(20.0f, 20.0f, 20.0f);
+		XMFLOAT3 randVec(30.0f, 30.0f, 30.0f);
 		randWidth = 90.0f;
 		xRand = (GetRand(100.0f - randWidth, 100.0f + randWidth) - 100.0f) / 100.0f;
 		yRand = (GetRand(100.0f - randWidth, 100.0f + randWidth) - 100.0f) / 100.0f;
@@ -223,6 +229,11 @@ void AttackOmen1::UpdateStateMovePhase(Enemy* enemy)
 
 void AttackOmen1::UpdateStateClear(Enemy* enemy)
 {
+	if (clearTimer == clearFromGameTime) 
+	{
+		object->StopAnimation();
+		object->SetTimer1(1000.0f);
+	}
 	return;
 }
 

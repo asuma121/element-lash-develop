@@ -106,7 +106,7 @@ void ClearScene::UpdateObject()
 	player->UpdateGame();
 
 	//ui
-	ui->SetClearTimer(clearFromGameTimer, clearFromGameTime);
+	ui->SetClearTimer((int)clearFromGameTimer, (int)clearFromGameTime);
 	ui->UpdateClear();
 
 	//“G

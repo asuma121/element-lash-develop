@@ -7,7 +7,7 @@
 
 Scene::Scene()
 {
-	sceneState = new TitleScene();
+	sceneState = new ClearScene();
 }
 
 Scene::~Scene()
