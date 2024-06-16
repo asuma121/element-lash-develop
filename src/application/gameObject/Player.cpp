@@ -65,55 +65,11 @@ void Player::Initialize()
 	playerState->InitializeState();
 
 }
-void Player::UpdateGame()
+
+void Player::Update()
 {
 	//フォルム更新
 	UpdateForm();
-
-	//ロックオンの更新
-	lockOn->SetPlayerRotation(playerState->GetRotation0());
-	lockOn->SetPlayerPosition(playerState->GetPosition());
-	if (form == Elec && playerState->GetElecAttackFlag() != true)
-	{
-		for (int i = 0; i < enemyPos.size(); i++)
-		{
-			lockOn->AddEnemyPos(enemyPos[i],enemyAddPos[i]);
-		}
-		lockOn->Update();
-	}
-
-	//プレイヤーステート更新
-	playerState->SetKeyManager(keyManager);
-	playerState->SetPlayerForm(form);
-	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->SetHP((int)HP);
-	playerState->Update();
-
-	//1フレーム前のフォルムを代入
-	preForm = form;
-
-	//敵クリア
-	enemyPos.clear();
-	enemyAddPos.clear();
-}
-
-void Player::UpdateMovePhase()
-{
-	//プレイヤーステート更新
-	playerState->SetKeyManager(keyManager);
-	playerState->SetPlayerForm(form);
-	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->UpdateMovePhase();
-
-	//敵クリア
-	enemyPos.clear();
-	enemyAddPos.clear();
-}
-
-void Player::UpdateTutorial()
-{
-	//フォルム更新
-	UpdateFormTutorial();
 
 	//ロックオンの更新
 	lockOn->SetPlayerRotation(playerState->GetRotation0());
@@ -131,35 +87,9 @@ void Player::UpdateTutorial()
 	playerState->SetKeyManager(keyManager);
 	playerState->SetPlayerForm(form);
 	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->UpdateTutorial(tutorialFlag);
-
-	//1フレーム前のフォルムを代入
-	preForm = form;
-
-	//敵クリア
-	enemyPos.clear();
-	enemyAddPos.clear();
-}
-
-void Player::UpdateTitle(float timer)
-{
-	//ロックオンの更新
-	lockOn->SetPlayerRotation(playerState->GetRotation0());
-	lockOn->SetPlayerPosition(playerState->GetPosition());
-	if (1)
-	{
-		for (int i = 0; i < enemyPos.size(); i++)
-		{
-			lockOn->AddEnemyPos(enemyPos[i], enemyAddPos[i]);
-		}
-		lockOn->Update();
-	}
-
-	//プレイヤーステート更新
-	playerState->SetKeyManager(keyManager);
-	playerState->SetPlayerForm(form);
-	playerState->SetLockOn(lockOn->GetLockOnFlag(), lockOn->GetTarget());
-	playerState->UpdateTitle(timer);
+	playerState->SetHP((int)HP);
+	playerState->SetMovePhaseFlag(movePhaseFlag);
+	playerState->Update();
 
 	//1フレーム前のフォルムを代入
 	preForm = form;
@@ -220,8 +150,8 @@ void Player::UpdateForm()
 	//Lボタンでフォルムチェンジフラグを立てる
 	if (keyManager->TriggerKey(KeyManager::PAD_LEFT_SHOULDER) && formChangeFlag == false)
 	{
-		if (preForm == Fire)form = Elec;	//炎だったら電気に変える
-		else if (preForm == Elec)form = Fire;	//電気だったら炎に帰る
+		if (preForm == Fire && tutorialFlag > 5)form = Elec;	//炎だったら電気に変える
+		else if (preForm == Elec && tutorialFlag != 6 && tutorialFlag != 7 && tutorialFlag != 8)form = Fire;	//電気だったら炎に帰る
 		formChangeFlag = true;
 	}
 	//フォルムチェンジフラグがたったら
@@ -242,29 +172,6 @@ void Player::UpdateState()
 {
 	//ステート更新
 	playerState->UpdateState(this);
-}
-
-void Player::UpdateFormTutorial()
-{
-	//Lボタンでフォルムチェンジフラグを立てる
-	if (keyManager->TriggerKey(KeyManager::PAD_LEFT_SHOULDER) && formChangeFlag == false)
-	{
-		if (preForm == Fire && tutorialFlag > 5)form = Elec;	//炎だったら電気に変える
-		else if (preForm == Elec && tutorialFlag != 6 && tutorialFlag != 7 && tutorialFlag != 8)form = Fire;	//電気だったら炎に帰る
-		formChangeFlag = true;
-	}
-	//フォルムチェンジフラグがたったら
-	if (formChangeFlag == true)
-	{
-		//タイマー更新
-		formTimer++;
-		//タイマー最大まで経ったら
-		if (formTimer >= formMaxTime)
-		{
-			formChangeFlag = false;
-			formTimer = 0;
-		}
-	}
 }
 
 void Player::HitBullet1(int num)
@@ -301,23 +208,28 @@ void Player::SetTutorial()
 {
 	form = Fire;
 	playerState->SetTutorial();
+	tutorialFlag = 1;
+	movePhaseFlag = false;
 }
 
 void Player::SetGameScene()
 {
 	HP = MaxHP;
 	playerState->SetGameScene();
-	tutorialFlag = 1;
+	tutorialFlag = 15;
+	movePhaseFlag = false;
 }
 
 void Player::SetMovePhase()
 {
 	playerState->SetMovePhase(this);
+	movePhaseFlag = true;
 }
 
 void Player::SetClear()
 {
 	playerState->SetClear(this);
+	movePhaseFlag = false;
 }
 
 XMFLOAT3 Player::GetPosition()
@@ -376,9 +288,12 @@ void Player::ChangeState(PlayerState* newState)
 
 void PlayerState::DrawParticle(ID3D12GraphicsCommandList* cmdList)
 {
-	bullet->DrawParticle(cmdList);
-	elecParticle1->Draw(cmdList);
-	elecParticle2->Draw(cmdList);
+	if (movePhaseFlag == false)
+	{
+		bullet->DrawParticle(cmdList);
+		elecParticle1->Draw(cmdList);
+		elecParticle2->Draw(cmdList);
+	}
 }
 
 void PlayerState::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -429,89 +344,10 @@ void PlayerState::Update()
 	elecParticle2->Update();
 
 	//動き
-	Move();
+	if(movePhaseFlag == false)Move();
 
 	//当たりフラグを元に戻す
 	hitFlag = false;
-}
-
-void PlayerState::UpdateTitle(float titleTimer)
-{
-	//タイマー更新
-	objectTimer++;
-
-	//オブジェクト更新
-	UpdateObject();
-
-	//ダウン状態更新
-	UpdateDown();
-
-	//コライダーデータ更新
-	colliderData.rotation = rotation0;
-	colliderData.center = position;
-
-	//攻撃更新
-	UpdateAttack();
-
-	//弾更新
-	bullet->Update();
-
-	//パーティクル更新
-	elecParticle1->Update();
-	elecParticle2->Update();
-
-	//動き
-	MoveTitle(titleTimer);
-
-	//当たりフラグを元に戻す
-	hitFlag = false;
-}
-
-void PlayerState::UpdateTutorial(int tutorialFlag)
-{
-	//タイマー更新
-	objectTimer++;
-
-	//オブジェクト更新
-	UpdateObject();
-
-	//ダウン状態更新
-	UpdateDown();
-
-	//コライダーデータ更新
-	colliderData.rotation = rotation0;
-	colliderData.center = position;
-
-	//攻撃更新
-	UpdateAttack();
-
-	//弾更新
-	bullet->Update();
-
-	//パーティクル更新
-	elecParticle1->Update();
-	elecParticle2->Update();
-
-	if (tutorialFlag > 14)
-	{
-		position = XMFLOAT3(0.0f, 0.0f, 100.0f);
-		return;
-	}
-
-	//動き
-	Move();
-
-	//当たりフラグを元に戻す
-	hitFlag = false;
-}
-
-void PlayerState::UpdateMovePhase()
-{
-	//タイマー更新
-	objectTimer++;
-
-	//オブジェクト更新
-	UpdateObject();
 }
 
 void PlayerState::UpdateCollider()

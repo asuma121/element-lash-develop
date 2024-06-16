@@ -66,24 +66,9 @@ public:
 	void Initialize();
 
 	/// <summary>
-	///更新 ゲームシーン
+	///更新
 	/// </summary>
-	void UpdateGame();
-	
-	/// <summary>
-	///更新 フェーズ移動
-	/// </summary>
-	void UpdateMovePhase();
-
-	/// <summary>
-	///更新 チュートリアルシーン
-	/// </summary>
-	void UpdateTutorial();
-	 
-	/// <summary>
-	///更新 タイトルシーン
-	/// </summary>
-	void UpdateTitle(float timer);
+	void Update();
 
 	/// <summary>
 	///更新 コライダー
@@ -124,11 +109,6 @@ public:
 	///更新 ステート
 	/// </summary>
 	void UpdateState();
-
-	/// <summary>
-	///更新 フォルム
-	/// </summary>
-	void UpdateFormTutorial();
 
 	/// <summary>
 	///座標セット
@@ -309,6 +289,8 @@ private:
 	//死亡フラグ
 	bool isDead = false;
 
+	//フェーズ移動中のフラグ
+	bool movePhaseFlag = false;
 
 	//デバッグ用
 	float debugTimer[1] = { 0 };
@@ -330,8 +312,6 @@ public:	//メンバ関数
 	virtual void UpdateAttack() {};
 	//移動処理
 	virtual void Move();
-	//タイトル専用の移動処理
-	virtual void MoveTitle(float timer) {};
 	//ステートの変更
 	virtual void UpdateState(Player* player) = 0;
 
@@ -351,12 +331,6 @@ public:	//メンバ関数
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
 	void Update();
-	//タイトル専用の更新
-	void UpdateTitle(float titleTimer);
-	//チュートリアル専用の更新
-	void UpdateTutorial(int tutorialFlag);
-	//フェーズ移動専用の更新
-	void UpdateMovePhase();
 	//判定更新
 	void UpdateCollider();
 	//ダウン状態更新
@@ -402,6 +376,8 @@ public:	//メンバ関数
 	void SetMovePhase(Player* player);
 	//クリアに移る際に呼び出す
 	void SetClear(Player* player);
+	//フェーズ移動のフラグ
+	void SetMovePhaseFlag(bool flag) { movePhaseFlag = flag; }
 
 	//プレイヤー本体からセットする系
 	void SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos);
@@ -498,6 +474,9 @@ protected:	//メンバ変数
 	//チュートリアルのフェーズ
 	int tutorialFlag = 0;
 
+	//フェーズ移動のフラグ
+	bool movePhaseFlag = false;
+
 	//雷攻撃中のフラグ ロックオンの更新に使用
 	bool elecAttackFlag = false;
 
@@ -506,7 +485,7 @@ protected:	//メンバ変数
 	//ゲームシーンに移る時の座標
 	XMFLOAT3 gameScenePos = { 0.0f, 0.0f, -200.0f };
 	//ゲームシーンに移る時の座標
-	XMFLOAT3 clearPos = { 0.0f, 500.0f, -200.0f };
+	XMFLOAT3 clearPos = { 0.0f, 500.0f, 500.0f };
 
 	//タイトルシーンの座標
 	XMFLOAT3 titlePos = { 40.0f,0.0f,120.0f };

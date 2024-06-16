@@ -95,52 +95,6 @@ void Run::UpdateState(Player* player)
 	}
 }
 
-void Run::MoveTitle(float timer)
-{
-	//シーン遷移が始まってない場面
-	//通常のタイトルシーン
-	if (timer == 0)
-	{
-		//角度ベクトル調整
-		rotVelocity.y = 0.01f;
-		//角度ベクトルを加算
-		rotation0 = rotation0 + rotVelocity;
-
-		//座標加算
-		posVelocity.x = 0.9f;
-		posVelocity.z = -0.1f;
-	}
-
-	//シーン遷移タイマーが始動したら
-	if (timer > 0)
-	{
-		if (timer == 1)
-		{
-			//最初に加算する角度を取得
-			addRot = rotation0.y - (float)PI / 2.0f; 
-			originalRot = rotation0.y;
-			//ベクトルを固定
-			posVelocity.x = 0.0;
-			posVelocity.z = 0.0;
-		}
-		//角度加算 プレイヤーが背を向けるように
-		if (timer < 120)
-		{
-			rotation0.y = (originalRot - addRot) * easeOutCirc(timer / 120.0f);
-		}
-		if (timer > 120)
-		{
-			posVelocity.x = 0.0;
-			posVelocity.z += 3.0;
-		}
-	}
-
-	//進行ベクトルを回転
-	posVelocity = rollRotation(posVelocity, rotation0);
-	//進行ベクトルを加算
-	position = position + posVelocity;
-}
-
 void Attack1::InitializeState()
 {
 	//アニメーションの設定

@@ -98,10 +98,10 @@ void TitleScene::UpdateObject()
 	plane->Update();
 
 	//敵更新
-	enemy->UpdateTitle();
+	enemy->Update();
 
 	//プレイヤー
-	player->UpdateTitle((float)moveTutorialTimer);
+	player->Update();
 }
 
 void TitleScene::UpdateSprite()
@@ -160,7 +160,7 @@ void TitleScene::DrawFBX()
 	enemy->Draw(dxCommon->GetCommandList());
 	terrain->Draw(dxCommon->GetCommandList());
 
-	enemy->UpdateStateTitle();
+	enemy->UpdateState();
 }
 
 void TitleScene::DrawSprite()

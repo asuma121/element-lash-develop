@@ -97,11 +97,6 @@ public:
 	void Move();
 
 	/// <summary>
-	///ショットフラグが真ならば弾生成
-	/// </summary>
-	void CreateBullet();
-
-	/// <summary>
 	///弾を削除する処理
 	/// </summary>
 	void DeleteBullet();

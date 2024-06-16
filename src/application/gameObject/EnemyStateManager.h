@@ -1,5 +1,105 @@
 #include "Enemy.h"
 
+//チュートリアルシーン
+class TitleAttackOmen1 : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
+//チュートリアルの棒立ち
+class TutorialStand : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
+//チュートリアルの攻撃前兆
+class TutorialAttackOmen1 : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
+//フェーズ移動 攻撃前兆
+class MovePhaseAttackOmen1 : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
+//フェーズ移動 敵呼び出し
+class MovePhaseCallMiniEnemy : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+	//攻撃更新
+	void UpdateAttack()override;
+};
+
+//フェーズ移動 転ぶ
+class MovePhaseFallDown : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
+//フェーズ移動 起き上がり
+class MovePhaseGetUp : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
+//クリア 
+class ClearAttackOmen1 : public EnemyState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートごとの動き
+	void Move();
+	//クリア専用更新
+	void UpdateParticleClear()override;
+	//ステートの更新
+	void UpdateState(Enemy* enemy);
+};
+
 //棒立ち
 class Stand : public EnemyState
 {
@@ -10,8 +110,6 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
-	//チュートリアルのステート更新
-	void UpdateStateTutorial(Enemy* enemy)override;
 };
 
 //歩き
@@ -46,18 +144,8 @@ public:
 	void InitializeState();
 	//ステートごとの動き
 	void Move();
-	//クリア専用更新
-	void UpdateParticleClear()override;
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
-	//タイトルのステート更新
-	void UpdateStateTitle(Enemy* enemy)override;
-	//チュートリアルのステート更新
-	void UpdateStateTutorial(Enemy* enemy)override;
-	//ゲームのステート更新
-	void UpdateStateMovePhase(Enemy* enemy)override;
-	//ゲームのステート更新
-	void UpdateStateClear(Enemy* enemy)override;
 	//攻撃更新
 	void UpdateAttack()override;
 };
@@ -99,12 +187,8 @@ class CallMiniEnemy : public EnemyState
 		void Move();
 		//ステートの更新
 		void UpdateState(Enemy* enemy);
-		//ゲームのステート更新
-		void UpdateStateMovePhase(Enemy* enemy)override;
 		//攻撃更新
 		void UpdateAttack()override;
-		//フェーズ移動の処理
-		void UpdateAttackMovePhase()override;
 };
 
 //転ぶ
@@ -117,8 +201,6 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
-	//ゲームのステート更新
-	void UpdateStateMovePhase(Enemy* enemy)override;
 	//コライダーデータの処理
 	void UpdateColliderDate()override;
 };
@@ -133,6 +215,4 @@ public:
 	void Move();
 	//ステートの更新
 	void UpdateState(Enemy* enemy);
-	//ゲームのステート更新
-	void UpdateStateMovePhase(Enemy* enemy)override;
 };

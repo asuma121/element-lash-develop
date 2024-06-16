@@ -56,57 +56,12 @@ public://メンバ関数
 	/// <summary>
 	///更新
 	/// </summary>
-	void UpdateGame1();
-
-	/// <summary>
-	///更新
-	/// </summary>
-	void UpdateGame2();
-
-	/// <summary>
-	///更新
-	/// </summary>
-	void UpdateTitle();
-
-	/// <summary>
-	///更新
-	/// </summary>
-	void UpdateMovePhase();
-
-	/// <summary>
-	///チュートリアルの時の更新
-	/// </summary>
-	void UpdateTutorial(int tutorialTimer);
-
-	/// <summary>
-	///チュートリアルの時の更新
-	/// </summary>
-	void UpdateClear(int clearTimer);
+	void Update();
 
 	/// <summary>
 	///ステート更新
 	/// </summary>
-	void UpdateStateGame();
-
-	/// <summary>
-	///ステート更新 タイトル用
-	/// </summary>
-	void UpdateStateTitle();
-
-	/// <summary>
-	///ステート更新 チュートリアル用
-	/// </summary>
-	void UpdateStateTutorial();
-
-	/// <summary>
-	///ステート更新 ゲーム用
-	/// </summary>
-	void UpdateStateMovePhase();
-
-	/// <summary>
-	///ステート更新 クリア用
-	/// </summary>
-	void UpdateStateClear();
+	void UpdateState();
 
 	/// <summary>
 	///描画
@@ -189,6 +144,11 @@ public://メンバ関数
 	void SetClear();
 
 	/// <summary>
+	///フェーズ移動セット
+	/// </summary>
+	void SetMovePhaseFlag();
+
+	/// <summary>
 	///座標取得
 	/// </summary>
 	XMFLOAT3 GetPosition();
@@ -267,6 +227,16 @@ public://メンバ関数
 	///倒れている間は体の当たり判定をなくす
 	/// </summary>
 	bool HitBodyFlag() { return hitBodyFlag;}
+
+	/// <summary>
+	///チュートリアルのタイマーセット
+	/// </summary>
+	void SetTutorialTimer(int timer);
+
+	/// <summary>
+	///クリアのタイマーセット
+	/// </summary>
+	void SetClearTimer(int timer);
 
 	//静的メンバ変数
 private:
@@ -352,6 +322,9 @@ private:
 
 	//高さ
 	XMFLOAT3 addPos = { 0.0f,0.0f,0.0f };
+
+	//フェーズ移動のフラグ
+	bool movePhaseFlag = false;
 };
 
 class EnemyState
@@ -367,20 +340,10 @@ public:	//メンバ関数
 	virtual void InitializeState() = 0;
 	//攻撃処理
 	virtual void UpdateAttack() {};
-	//攻撃処理
-	virtual void UpdateAttackMovePhase() {};
 	//移動処理
 	virtual void Move() = 0;
 	//ステートの変更
 	virtual void UpdateState(Enemy* enemy) = 0;
-	//ステートの変更 タイトルシーン
-	virtual void UpdateStateTitle(Enemy* enemy) {};
-	//ステートの変更 チュートリアルシーン
-	virtual void UpdateStateTutorial(Enemy* enemy) {};
-	//ステートの変更 フェーズ移動
-	virtual void UpdateStateMovePhase(Enemy* enemy) {};
-	//ステートの変更 クリアシーン
-	virtual void UpdateStateClear(Enemy* enemy) {};
 	//クリア専用更新
 	virtual void UpdateParticleClear() {};
 	//壁との当たり判定処理 歩き、ダッシュのみ 
@@ -399,24 +362,12 @@ public:	//メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ライト目線描画
 	void DrawLightView(ID3D12GraphicsCommandList* cmdList);
-	//SRVセット
-	void SetSRV(ID3D12DescriptorHeap* SRV);
 	//オブジェクトの更新
 	void UpdateObject();
 	//パーティクル描画
 	void DrawParticle(ID3D12GraphicsCommandList* cmdList);
 	//更新
 	void Update();
-	//フェーズ移動用の更新
-	void UpdateMovePhase();
-	//タイトル用の更新
-	void UpdateTitle();
-	//チュートリアル用の更新
-	void UpdateTutorial(int timer);
-	//クリア用の更新
-	void UpdateClear(int timer);
-	//チュートリアルの動き
-	void MoveTutorail();
 	//判定更新
 	void UpdateCollider();
 	//オブジェクトの当たり判定セット
@@ -429,6 +380,12 @@ public:	//メンバ関数
 	void SetPhaseTimer(int phaseTimer) { EnemyState::phaseTimer = phaseTimer; }
 	//敵呼び出しフラグを呼び出す
 	void SetCallMiniEnemy() { nextCallMiniEnemy = true; }
+	//チュートリアルタイマーセット
+	void SetTutorialTimer(int timer) { tutorialTimer = timer; }
+	//クリアタイマーセット
+	void SetClearTimer(int timer) { clearTimer = timer; }
+	//フェーズ移動セット
+	void SetMovePhaseFlag(bool flag) { movePhaseFlag = flag; }
 
 	//座標取得
 	XMFLOAT3 GetPosition() { return position; }
@@ -512,6 +469,9 @@ protected:	//静的メンバ変数
 	static bool hitPillerFlag;
 	//最後に当たった柱の番号
 	static int hitPillerNum;
+
+	//フェーズ移動のフラグ
+	static bool movePhaseFlag;
 
 protected:	//メンバ変数
 

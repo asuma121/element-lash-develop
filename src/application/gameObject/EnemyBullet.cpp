@@ -126,10 +126,6 @@ void EnemyBullet::Move()
 	}
 }
 
-void EnemyBullet::CreateBullet()
-{
-}
-
 void EnemyBullet::DeleteBullet()
 {
 	//íœ

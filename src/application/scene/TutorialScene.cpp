@@ -88,7 +88,8 @@ void TutorialScene::UpdateObject()
 	light->Update();
 
 	//敵
-	enemy->UpdateTutorial(tutorial13Timer);
+	enemy->SetTutorialTimer(tutorial13Timer);
+	enemy->Update();
 
 	//チュートリアルの敵
 	tutorialEnemy->SetPlayerPos(player->GetPosition());
@@ -112,7 +113,7 @@ void TutorialScene::UpdateObject()
 	//プレイヤー
 	player->SetEnemyPos(tutorialEnemy->GetPosition(), tutorialEnemy->GetAddPos());
 	player->SetTutorialFlag(tutorialSpriteFlag);
-	player->UpdateTutorial();
+	player->Update();
 
 	//床
 	plane->Update();
@@ -395,7 +396,7 @@ void TutorialScene::DrawFBX()
 
 	//ステート更新
 	player->UpdateState();
-	enemy->UpdateStateTutorial();
+	enemy->UpdateState();
 }
 
 void TutorialScene::DrawSprite()

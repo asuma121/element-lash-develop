@@ -63,7 +63,7 @@ void Phase1::UpdateObject()
 	//敵
 	enemy->SetPlayerPos(player->GetPosition());
 	enemy->SetPhaseTimer(phaseTimer);
-	enemy->UpdateGame1();
+	enemy->Update();
 
 	//UI
 	ui->SetPlayerForm(player->GetPlayerForm(), player->GetFormChangeFlag());
@@ -73,7 +73,7 @@ void Phase1::UpdateObject()
 
 	//プレイヤー
 	player->SetEnemyPos(enemy->GetPosition(), enemy->GetAddPos());
-	player->UpdateGame();
+	player->Update();
 
 	//床
 	plane->Update();
@@ -155,7 +155,7 @@ void Phase1::DrawFBX()
 
 	//ステート更新
 	player->UpdateState();
-	enemy->UpdateStateGame();
+	enemy->UpdateState();
 }
 
 void Phase1::DrawSprite()
@@ -238,7 +238,7 @@ void Phase2::UpdateObject()
 	enemy->SetPlayerPos(player->GetPosition());
 	enemy->SetPhaseTimer(phaseTimer);
 	if(tutorialEnemy->GetCallFlag() == true)enemy->SetCallMiniEnemy();
-	enemy->UpdateGame2();
+	enemy->Update();
 
 	//小さい敵
 	if (enemy->GetCallEnemyFlag())
@@ -256,7 +256,7 @@ void Phase2::UpdateObject()
 
 	//プレイヤー
 	player->SetEnemyPos(enemy->GetPosition(), enemy->GetAddPos());
-	player->UpdateGame();
+	player->Update();
 
 	//床
 	plane->Update();
@@ -373,7 +373,7 @@ void Phase2::DrawFBX()
 
 	//ステート更新
 	player->UpdateState();
-	enemy->UpdateStateGame();
+	enemy->UpdateState();
 }
 
 void Phase2::DrawSprite()
@@ -436,7 +436,7 @@ void MovePhase::UpdateObject()
 	//敵
 	enemy->SetPlayerPos(player->GetPosition());
 	enemy->SetPhaseTimer(phaseTimer);
-	enemy->UpdateMovePhase();
+	enemy->Update();
 
 	//小さい敵
 	if (enemy->GetCallEnemyFlag())
@@ -453,7 +453,7 @@ void MovePhase::UpdateObject()
 
 	//プレイヤー
 	player->SetEnemyPos(enemy->GetPosition(), enemy->GetAddPos());
-	player->UpdateMovePhase();
+	player->Update();
 
 	//床
 	plane->Update();
@@ -486,7 +486,7 @@ void MovePhase::DrawFBX()
 	terrain->Draw(dxCommon->GetCommandList());
 
 	//ステート更新
-	enemy->UpdateStateMovePhase();
+	enemy->UpdateState();
 }
 
 void MovePhase::DrawSprite()

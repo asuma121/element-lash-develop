@@ -103,14 +103,16 @@ void ClearScene::UpdateObject()
 	light->Update();
 
 	//プレイヤー
-	player->UpdateGame();
+	player->Update();
 
 	//ui
 	ui->SetClearTimer((int)clearFromGameTimer, (int)clearFromGameTime);
 	ui->UpdateClear();
 
 	//敵
-	enemy->UpdateClear((int)clearFromGameTimer);
+	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetClearTimer((int)clearFromGameTimer);
+	enemy->Update();
 
 	//地面
 	plane->Update();
@@ -148,7 +150,7 @@ void ClearScene::DrawSprite()
 	ui->DrawClear(dxCommon->GetCommandList());
 
 	//ステート更新
-	enemy->UpdateStateClear();
+	enemy->UpdateState();
 }
 
 void ClearScene::DrawParticle()

@@ -18,8 +18,6 @@ public:
 	void InitializeState();
 	//ステートの更新
 	void UpdateState(Player* player);
-	//タイトルのみの処理
-	void MoveTitle(float timer) override;
 };
 
 //攻撃1 雷
