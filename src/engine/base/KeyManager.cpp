@@ -32,6 +32,11 @@ void KeyManager::UpdateState()
     keyState->UpdateState(this);
 }
 
+bool KeyManager::PushKeyboard(BYTE keyNumber)
+{
+    return keyState->PushKeyboard(keyNumber);
+}
+
 bool KeyManager::PushKey(const Pad& pad)
 {
     return keyState->PushKey(pad);
@@ -66,6 +71,11 @@ void KeyManager::ChangeState(KeyState* newState)
 {
     delete keyState;
     keyState = newState;
+}
+
+bool KeyState::PushKeyboard(BYTE keyNumber)
+{
+    return input->PushKey(keyNumber);
 }
 
 bool KeyState::GetConnectFlag()

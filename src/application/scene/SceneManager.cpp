@@ -4,10 +4,11 @@
 #include "GameScene.h"
 #include "TutorialScene.h"
 #include "ClearScene.h"
+#include "DevelopScene.h"
 
 Scene::Scene()
 {
-	sceneState = new GameScene();
+	sceneState = new DevelopScene();
 }
 
 Scene::~Scene()

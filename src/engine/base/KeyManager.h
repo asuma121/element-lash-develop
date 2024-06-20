@@ -72,6 +72,11 @@ public:// メンバ関数
     void UpdateState();
 
     /// <summary>
+    ///キーボード入力取得
+    /// </summary>  
+    bool PushKeyboard(BYTE keyNumber);
+
+    /// <summary>
     ///ボタン取得
     /// </summary>  
     bool PushKey(const Pad& pad);
@@ -123,6 +128,9 @@ public: // メンバ関数
 
     //スティックを真上から見た際の角度取得(ラジアン)
     virtual float GetStickRot(const KeyManager::Stick& stick) = 0;
+
+    ///キーボード入力取得
+    bool PushKeyboard(BYTE keyNumber);
 
     //コントローラーがつながっているか
     bool GetConnectFlag();

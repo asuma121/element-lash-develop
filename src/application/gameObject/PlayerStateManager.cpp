@@ -220,7 +220,6 @@ void Attack2::UpdateState(Player* player)
 	}
 }
 
-
 void Attack2::UpdateAttack()
 {
 	//ロックオンの更新を止める
@@ -381,4 +380,141 @@ void Down::Move()
 	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
+}
+
+void DevelopWait::InitializeState()
+{
+	//アニメーションの設定
+	object->StopAnimation();
+	object->SetModel(modelWait);
+	object->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void DevelopWait::UpdateState(Player* player)
+{
+	if (keyManager->PushKeyboard(DIK_X))
+	{
+		player->ChangeState(new DevelopRun());
+		return;
+	}
+	if (keyManager->PushKeyboard(DIK_C))
+	{
+		player->ChangeState(new DevelopDown());
+		return;
+	}
+	if (keyManager->PushKeyboard(DIK_V))
+	{
+		player->ChangeState(new DevelopAttack3());
+		return;
+	}
+}
+
+void DevelopRun::InitializeState()
+{
+	//アニメーションの設定
+	object->StopAnimation();
+	object->SetModel(modelRun);
+	object->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void DevelopRun::UpdateState(Player* player)
+{
+	if (keyManager->PushKeyboard(DIK_Z))
+	{
+		player->ChangeState(new DevelopWait());
+		return;
+	}
+	if (keyManager->PushKeyboard(DIK_C))
+	{
+		player->ChangeState(new DevelopDown());
+		return;
+	}
+	if (keyManager->PushKeyboard(DIK_V))
+	{
+		player->ChangeState(new DevelopAttack3());
+		return;
+	}
+}
+
+void DevelopDown::InitializeState()
+{
+	//アニメーションの設定
+	object->StopAnimation();
+	object->SetModel(modelDown);
+	object->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void DevelopDown::UpdateState(Player* player)
+{
+	//ヒットフラグが戻ったら
+	if (objectTimer >= frameDown)
+	{
+		player->ChangeState(new DevelopStandUp());
+		return;
+	}
+}
+
+void DevelopAttack3::InitializeState()
+{
+	//アニメーションの設定
+	object->StopAnimation();
+	object->SetModel(modelAttack3);
+	object->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void DevelopAttack3::UpdateState(Player* player)
+{
+	if (keyManager->PushKeyboard(DIK_Z))
+	{
+		player->ChangeState(new DevelopWait());
+		return;
+	}
+	if (keyManager->PushKeyboard(DIK_X))
+	{
+		player->ChangeState(new DevelopRun());
+		return;
+	}
+	if (keyManager->PushKeyboard(DIK_C))
+	{
+		player->ChangeState(new DevelopDown());
+		return;
+	}
+}
+
+void DevelopStandUp::InitializeState()
+{
+	//アニメーションの設定
+	object->StopAnimation();
+	object->SetModel(modelStandUp);
+	object->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void DevelopStandUp::UpdateState(Player* player)
+{
+	//ヒットフラグが戻ったら
+	if (objectTimer >= frameStandUp)
+	{
+		player->ChangeState(new DevelopWait());
+		return;
+	}
 }

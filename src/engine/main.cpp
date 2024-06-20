@@ -23,6 +23,7 @@
 #include "TutorialScene.h"
 #include "GameScene.h"
 #include "ClearScene.h"
+#include "DevelopScene.h"
 #include "ShadowMap.h"
 #include "ObjObject3D.h"
 #include "KeyManager.h"
@@ -321,6 +322,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//クリアシーン
 	ClearScene::SetDevice(dxCommon, keyManager);
 	ClearScene::SetGameObject(player, enemy, plane,terrain, camera, light, ui);
+
+	//開発、デバッグシーン
+	DevelopScene::SetDevice(dxCommon, keyManager);
+	DevelopScene::SetGameObject(player, enemy, plane, terrain, camera, light, ui);
 
 	//シーン
 	Scene* scene = nullptr;

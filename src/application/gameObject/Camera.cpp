@@ -152,6 +152,11 @@ void Camera::SetFollowPlayer()
 	ChangeState(new FollowPlayer());
 }
 
+void Camera::SetDevelop()
+{
+	ChangeState(new Develop());
+}
+
 void CameraState::Initialize()
 {
 	//射影変換の初期化

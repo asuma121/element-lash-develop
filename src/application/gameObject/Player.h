@@ -166,6 +166,11 @@ public:
 	void SetClear();
 
 	/// <summary>
+	///デバッグに移る際に呼び出す
+	/// </summary>
+	void SetDevelop();
+
+	/// <summary>
 	///チュートリアルのフェーズセット
 	/// </summary>
 	void SetTutorialFlag(int tutorialFlag) { this->tutorialFlag = tutorialFlag; }
@@ -376,6 +381,8 @@ public:	//メンバ関数
 	void SetMovePhase(Player* player);
 	//クリアに移る際に呼び出す
 	void SetClear(Player* player);
+	//デバッグに移る際に呼び出す
+	void SetDevelop(Player* player);
 	//フェーズ移動のフラグ
 	void SetMovePhaseFlag(bool flag) { movePhaseFlag = flag; }
 
@@ -395,6 +402,7 @@ protected:	//静的メンバ変数
 	static FbxModel* modelAttack2;
 	static FbxModel* modelAttack3;
 	static FbxModel* modelDown;
+	static FbxModel* modelStandUp;
 
 	//オブジェクト
 	static FbxObject3D* object;
@@ -456,7 +464,9 @@ protected:	//メンバ変数
 	bool hitElecFlag = false;
 
 	//被ダメージアニメーションのフレーム数
-	float frameDown = 138.0f;
+	float frameDown = 131.0f;
+	//起き上がりのアニメーションのフレーム数
+	float frameStandUp = 110.0f;
 	//進行ベクトル
 	XMFLOAT3 posVelocity = { 0.0f,0.0f,0.0f };
 	//角度ベクトル
@@ -491,4 +501,9 @@ protected:	//メンバ変数
 	XMFLOAT3 titlePos = { 40.0f,0.0f,120.0f };
 	//タイトルシーンの角度
 	XMFLOAT3 titleRotation = { 0.0f,(float)PI,0.0f };
+
+	//デバッグに移る時の座標
+	XMFLOAT3 developPos = { 0.0f, 0.0f, 0.0f };
+	//デバッグの角度
+	XMFLOAT3 developRot = { 0.0f,(float)PI,0.0f };
 };

@@ -75,3 +75,64 @@ void Clear::Move()
 	eye_.y = enemyPos.y + (+((float)PI * 15 / 40) * playerTargetDistance);
 	eye_.z = enemyPos.z + (-((float)PI / 2) * playerTargetDistance);
 }
+
+Develop::Develop()
+{
+	//視点、注視点を初期位置に
+	eye_ = startPos;
+	target_ = startTarget;
+}
+
+void Develop::Move()
+{
+	//視点座標を変更
+	if (keyManager->PushKeyboard(DIK_LEFT))
+	{
+		DebugChangeRot -= (float)addRot;
+	}
+	if (keyManager->PushKeyboard(DIK_RIGHT))
+	{
+		DebugChangeRot += (float)addRot;
+	}
+	if (keyManager->PushKeyboard(DIK_UP))
+	{
+		DebugChangeRot2 -= (float)addRot;
+	}
+	if (keyManager->PushKeyboard(DIK_DOWN))
+	{
+		DebugChangeRot2 += (float)addRot;
+	}
+
+	//ターゲットまでの距離を変更
+	if (keyManager->PushKeyboard(DIK_O))
+	{
+		DebugTargetDistance -= 0.2f;
+	}
+	if (keyManager->PushKeyboard(DIK_P))
+	{
+		DebugTargetDistance += 0.2f;
+	}
+
+	//ターゲットを変更
+	if (keyManager->PushKeyboard(DIK_A))
+	{
+		target_.x -= addTarget;
+	}
+	if (keyManager->PushKeyboard(DIK_D))
+	{
+		target_.x += addTarget;
+	}
+	if (keyManager->PushKeyboard(DIK_W))
+	{
+		target_.y -= addTarget;
+	}
+	if (keyManager->PushKeyboard(DIK_S))
+	{
+		target_.y += addTarget;
+	}
+
+	//視点座標に代入
+	eye_.x = sin(DebugChangeRot) * DebugTargetDistance + target_.x;
+	eye_.y = sin(DebugChangeRot2) * DebugTargetDistance + target_.y;
+	eye_.z = cos(DebugChangeRot) * DebugTargetDistance + target_.z;
+}

@@ -123,6 +123,7 @@ public:
 	void SetMovePhase();
 	void SetClear();
 	void SetFollowPlayer();
+	void SetDevelop();
 
 private:
 	//入力

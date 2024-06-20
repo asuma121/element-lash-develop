@@ -26,6 +26,7 @@ FbxModel* PlayerState::modelAttack1 = nullptr;
 FbxModel* PlayerState::modelAttack2 = nullptr;
 FbxModel* PlayerState::modelAttack3 = nullptr;
 FbxModel* PlayerState::modelDown = nullptr;
+FbxModel* PlayerState::modelStandUp = nullptr;
 //コライダーデータ
 JSONLoader::ColliderData PlayerState::colliderData;
 //シェーダのデータ
@@ -202,6 +203,7 @@ void Player::Reset()
 void Player::SetTitle()
 {
 	playerState->SetTitle(this);
+	movePhaseFlag = true;
 }
 
 void Player::SetTutorial()
@@ -229,7 +231,14 @@ void Player::SetMovePhase()
 void Player::SetClear()
 {
 	playerState->SetClear(this);
-	movePhaseFlag = false;
+	movePhaseFlag = true;
+}
+
+void Player::SetDevelop()
+{
+	form = Elec;
+	playerState->SetDevelop(this);
+	movePhaseFlag = true;
 }
 
 XMFLOAT3 Player::GetPosition()
@@ -437,6 +446,8 @@ void PlayerState::Initialize()
 	modelAttack3 = FbxLoader::GetInstance()->LoadModelFromFile("playerAttack3");
 	modelDown = new FbxModel();
 	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("playerDown");
+	modelStandUp = new FbxModel();
+	modelStandUp = FbxLoader::GetInstance()->LoadModelFromFile("playerStandUp");
 
 	//コライダーの設定
 	colliderData.type = "Sphere";	//判定を球体で取るため
@@ -496,6 +507,7 @@ void PlayerState::Finalize()
 	delete modelAttack2;
 	delete modelAttack3;
 	delete modelDown;
+	delete modelStandUp;
 	delete bullet;
 	delete elecParticle1;
 	delete elecParticle2;
@@ -583,6 +595,14 @@ void PlayerState::SetClear(Player* player)
 	rotation0 = { 0.0f,0.0f,0.0f };
 	rotation1 = { 0.0f,0.0f,0.0f };
 	player->ChangeState(new Wait());
+}
+
+void PlayerState::SetDevelop(Player* player)
+{
+	position = developPos;
+	rotation0 = { 0.0f,0.0f,0.0f };
+	rotation1 = developRot;
+	player->ChangeState(new DevelopWait());
 }
 
 void PlayerState::SetLockOn(bool lockOnFlag, XMFLOAT3 lockOnPos)

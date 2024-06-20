@@ -137,3 +137,53 @@ public:
 	//動き
 	void Move() override;
 };
+
+//棒立ちデバッグ
+class DevelopWait : public PlayerState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートの更新
+	void UpdateState(Player* player);
+};
+
+//走ってる状態デバッグ
+class DevelopRun : public PlayerState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートの更新
+	void UpdateState(Player* player);
+};
+
+//ダウンデバッグ
+class DevelopDown : public PlayerState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートの更新
+	void UpdateState(Player* player);
+};
+
+//炎攻撃デバッグ
+class DevelopAttack3 : public PlayerState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートの更新
+	void UpdateState(Player* player);
+};
+
+//立ち上がりデバッグ
+class DevelopStandUp : public PlayerState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートの更新
+	void UpdateState(Player* player);
+};

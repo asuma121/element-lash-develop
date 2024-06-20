@@ -45,6 +45,7 @@
     <ClCompile Include="src\application\particle\ParticleManager.cpp" />
     <ClCompile Include="src\application\particle\PlayerBulletParticle.cpp" />
     <ClCompile Include="src\application\scene\ClearScene.cpp" />
+    <ClCompile Include="src\application\scene\DevelopScene.cpp" />
     <ClCompile Include="src\application\scene\GameScene.cpp" />
     <ClCompile Include="src\application\scene\PhaseList.cpp" />
     <ClCompile Include="src\application\scene\SceneManager.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="src\application\particle\ParticleManager.h" />
     <ClInclude Include="src\application\particle\PlayerBulletParticle.h" />
     <ClInclude Include="src\application\scene\ClearScene.h" />
+    <ClInclude Include="src\application\scene\DevelopScene.h" />
     <ClInclude Include="src\application\scene\GameScene.h" />
     <ClInclude Include="src\application\scene\PhaseList.h" />
     <ClInclude Include="src\application\scene\SceneManager.h" />
