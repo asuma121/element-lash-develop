@@ -192,6 +192,23 @@ void TutorialEnemy::UpdateObjectCollider()
 	}
 }
 
+void TutorialEnemy::UpdateObjectCollider2()
+{
+	for (int i = 0; i < objectColliderData.size(); i++)
+	{
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 4) == "wall")
+		{
+			UpdateHitWall(objectColliderData[i]);
+		}
+		//壁との当たり判定処理
+		if (objectColliderData[i].objectName.substr(0, 6) == "piller")
+		{
+			UpdateHitPiller2(objectColliderData[i]);
+		}
+	}
+}
+
 void TutorialEnemy::UpdateDamage()
 {
 	//炎攻撃をくらった際
@@ -486,6 +503,25 @@ void TutorialEnemy::UpdateHitPiller(JSONLoader::ColliderData objectColliderData)
 	}
 	//フラグを立てる
 	hitObjectFlag = true;
+}
+
+void TutorialEnemy::UpdateHitPiller2(JSONLoader::ColliderData objectColliderData)
+{
+	//柱に衝突してなかったら処理終了
+	if (ColliderManager::CheckCollider(colliderData, objectColliderData) == false)return;
+
+	//柱にめり込んでいる間
+	while (ColliderManager::CheckCollider(colliderData, objectColliderData) == true)
+	{
+		//柱からプレイヤーのベクトル
+		XMFLOAT3 vec = objectColliderData.center - colliderData.center;
+		//プレイヤーから原点のベクトルを正規化
+		vec = normalize(vec);
+		//壁の中に戻るまで加算
+		position = position - (vec * knockBackSpeed);
+		//コライダーデータの座標更新
+		colliderData.center = position;
+	}
 }
 
 void TutorialEnemy::UpdateHitObject()

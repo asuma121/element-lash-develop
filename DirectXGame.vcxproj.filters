@@ -435,7 +435,7 @@
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
     <ClInclude Include="src\application\scene\DevelopScene.h">
-      <Filter>ソース ファイル\scene</Filter>
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

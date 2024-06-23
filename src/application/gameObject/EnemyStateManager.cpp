@@ -26,9 +26,6 @@ void TitleAttackOmen1::Move()
 	{
 		//プレイヤーと敵のベクトル取得
 		XMFLOAT3 velo = playerPos - position;
-
-		//敵がプレイヤーの向きを向くようにする
-		rotation.y = getVectorRotation(velo).y;
 	}
 }
 
@@ -266,7 +263,7 @@ void MovePhaseFallDown::Move()
 void MovePhaseFallDown::UpdateState(Enemy* enemy)
 {
 	//時間が立ったら立ちあがるアニメーションへ
-	if (objectTimer >= frameFallDownEnemy)
+	if (objectTimer >= frameFallDownEnemy - 1)
 	{
 		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new MovePhaseGetUp());

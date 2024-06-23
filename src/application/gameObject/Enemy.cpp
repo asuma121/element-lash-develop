@@ -475,6 +475,7 @@ void EnemyState::SetTutorial(Enemy* enemy)
 	tutorialTimer = 0;
 	//最後しか描画しないため、それまで画面外
 	position = XMFLOAT3(0.0f, 1000.0f, 0.0f);
+	rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	hitPillerFlag = false;
 
 	//タイマーセット

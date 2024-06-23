@@ -278,6 +278,10 @@ void Phase2::UpdateCollider()
 	enemy->SetObjectCollider(terrain->GetColliderData());
 	enemy->UpdateCollider();
 
+	//“G‚Ì“–‚½‚è”»’èXV
+	tutorialEnemy->SetObjectCollider(terrain->GetColliderData());
+	tutorialEnemy->UpdateObjectCollider();
+
 	//“G‚Ì’e‚ÆŽž‹@‚Ì“–‚½‚è”»’è
 	if (player->GetInvincibleFlag() == false)
 	{

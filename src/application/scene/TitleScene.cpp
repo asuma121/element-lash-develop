@@ -76,14 +76,8 @@ void TitleScene::UpdateObject()
 	camera->Update();
 
 	//ライト
-	lightTarget[0] = player->GetPosition().x + 25;
-	lightTarget[1] = player->GetPosition().y + 25;
-	lightTarget[2] = player->GetPosition().z + 25;
-	lightPos[0] = player->GetPosition().x;
-	lightPos[1] = player->GetPosition().y;
-	lightPos[2] = player->GetPosition().z;
-	light->SetEye(XMFLOAT3(lightPos));
-	light->SetTarget(XMFLOAT3(lightTarget));
+	light->SetEye(XMFLOAT3(lightPos) + player->GetPosition());
+	light->SetTarget(XMFLOAT3(lightTarget) + player->GetPosition());
 	light->SetDir(XMFLOAT3(lightDir));
 	light->Update();
 
@@ -111,7 +105,7 @@ void TitleScene::UpdateSprite()
 void TitleScene::UpdateMoveScene()
 {
 	//スペースかAボタン押されたら
-	if (keyManager->TriggerKey(KeyManager::PAD_A) && sceneTimer >= 100)
+	if (keyManager->TriggerKey(KeyManager::PAD_A) && sceneTimer >= 10)
 	{
 		//シーン遷移フラグオン
 		moveTutorialFlag2 = true;

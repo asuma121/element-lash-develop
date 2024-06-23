@@ -520,6 +520,7 @@ void PlayerState::Move()
 	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
+	rotation1 = rotation1 - rotVelocity;
 
 	//左スティック入力による角度変更
 	//左スティックの入力がある場合

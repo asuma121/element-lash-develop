@@ -394,6 +394,7 @@ void Down::Move()
 	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
+	rotation1 = rotation1 - rotVelocity;
 }
 
 void StandUp::InitializeState()
@@ -426,6 +427,7 @@ void StandUp::Move()
 	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
 	//角度ベクトルを加算
 	rotation0 = rotation0 + rotVelocity;
+	rotation1 = rotation1 - rotVelocity;
 }
 
 void DevelopWait::InitializeState()

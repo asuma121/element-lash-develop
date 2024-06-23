@@ -81,6 +81,11 @@ public://メンバ関数
 	void UpdateObjectCollider();
 
 	/// <summary>
+	///コライダー
+	/// </summary>
+	void UpdateObjectCollider2();
+
+	/// <summary>
 	///ダメージ系全般
 	/// </summary>
 	void UpdateDamage();
@@ -266,6 +271,11 @@ public://メンバ関数
 	/// <summary>
 	//柱との当たり判定処理
 	/// <summary>
+	void UpdateHitPiller2(JSONLoader::ColliderData objectColliderData);
+
+	/// <summary>
+	//柱との当たり判定処理
+	/// <summary>
 	void UpdateHitObject();
 
 	//チュートリアル12用の更新
@@ -354,7 +364,7 @@ public:
 	float speed = 0.7f;
 
 	//ダウンのアニメーション
-	int deadTime = 130;
+	int deadTime = 128;
 	int deadTimer = 0;
 
 	//呼び出しに入るか
@@ -366,7 +376,7 @@ public:
 	bool hitObjectFlag = false;
 
 	//オブジェクト衝突時の押し戻し
-	float knockBackSpeed = 0.001f;
+	float knockBackSpeed = 0.1f;
 
 	//転ぶ状態のアニメーションのフレーム
 	float frameFallDownEnemy = 125.0f - 10.0f;
