@@ -138,6 +138,18 @@ public:
 	void Move() override;
 };
 
+//立ち上がり
+class StandUp : public PlayerState
+{
+public:
+	//オブジェクトごとの初期化
+	void InitializeState();
+	//ステートの更新
+	void UpdateState(Player* player);
+	//動き
+	void Move() override;
+};
+
 //棒立ちデバッグ
 class DevelopWait : public PlayerState
 {

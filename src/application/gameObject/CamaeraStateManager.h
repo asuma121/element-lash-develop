@@ -63,5 +63,5 @@ public:
 	//1フレームあたりの移動量 視点座標
 	float addRot = (float)PI / 240.0f;
 	//1フレームあたりの移動量 注視点座標
-	float addTarget = 0.05f;
+	float addTarget = 1.0f;
 };

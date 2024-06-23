@@ -40,12 +40,13 @@ void TutorialEnemy::Initialize()
 	modelDown = FbxLoader::GetInstance()->LoadModelFromFile("enemyDown");
 	modelStand = FbxLoader::GetInstance()->LoadModelFromFile("enemyStand");
 
-	//テクスチャ
+	//プレイヤーのシェーダを別に設定
 	JSONLoader::TextureData textureData;
-	textureData.textureVol = 1;
+	textureData.textureVol = 2;
 	textureData.shaderVol = 1;
-	textureData.textureNum1 = 88;	//白いテクスチャ
-	textureData.shaderName = "null";	//シェーダの名前
+	textureData.textureNum1 = 89;	//白いテクスチャ
+	textureData.textureNum2 = 88;	//炎のテクスチャ
+	textureData.shaderName = "Enemy";	//シェーダの名前
 
 	//オブジェクト
 	object = new FbxObject3D;

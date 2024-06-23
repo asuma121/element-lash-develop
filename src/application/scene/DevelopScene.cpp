@@ -87,8 +87,8 @@ void DevelopScene::UpdateObject()
 	//床更新
 	plane->Update();
 
-	//敵更新
-	enemy->Update();
+	////敵更新
+	//enemy->Update();
 
 	//プレイヤー
 	player->Update();
@@ -145,12 +145,12 @@ void DevelopScene::Draw()
 
 void DevelopScene::DrawFBX()
 {
-	player->Draw(dxCommon->GetCommandList());
-	/*plane->Draw(dxCommon->GetCommandList());*/
+	/*player->Draw(dxCommon->GetCommandList());*/
+	plane->Draw(dxCommon->GetCommandList());
 	/*enemy->Draw(dxCommon->GetCommandList());*/
-	/*terrain->Draw(dxCommon->GetCommandList());*/
+	terrain->Draw(dxCommon->GetCommandList());
 
-	player->UpdateState();
+	/*player->UpdateState();*/
 	enemy->UpdateState();
 }
 
@@ -166,8 +166,8 @@ void DevelopScene::DrawParticle()
 
 void DevelopScene::DrawFBXLightView()
 {
-	player->DrawLightView(dxCommon->GetCommandList());
-	enemy->DrawLightView(dxCommon->GetCommandList());
+	//player->DrawLightView(dxCommon->GetCommandList());
+	//enemy->DrawLightView(dxCommon->GetCommandList());
 }
 
 void DevelopScene::SetDevice(DirectXCommon* dxCommon, KeyManager* keyManager)

@@ -44,11 +44,19 @@ public:
 		XMMATRIX lightviewproj;
 		float timer1;
 		float timer2;
+		float interpolationFrame;
 	};
 	//定数バッファ用データ構造体(スキニング)
 	struct ConstBufferDataSkin
 	{
+		bool flag;
 		XMMATRIX bones[MAX_BONES];
+	};
+
+	//定数バッファ用データ構造体(スキニング)
+	struct ConstBufferDataPreSkin
+	{
+		XMMATRIX preBones[MAX_BONES];
 	};
 
 public:	//静的メンバ関数
@@ -209,6 +217,16 @@ public://メンバ関数
 	void SetDrawShaderNum(int num) { drawShaderNum = num; }
 
 	/// <summary>
+	///補間セット
+	/// </summary>
+	void SetInterpolation(float time);
+
+	/// <summary>
+	///補間更新
+	/// </summary>
+	void UpdateInterpolation();
+
+	/// <summary>
 	///座標取得
 	/// </summary>
 	XMFLOAT3 GetPosition() { return position; }
@@ -274,6 +292,7 @@ private:
 
 	//定数バッファ
 	ComPtr<ID3D12Resource>constBuffSkin;
+	ComPtr<ID3D12Resource>constBuffPreSkin;
 
 	//1フレームの時間
 	FbxTime frameTime;
@@ -321,4 +340,12 @@ private:
 	float maxTime2 = 1.0f;
 	float minTime2 = 0.1f;
 	float fTime2 = 0.02f;
+
+	//補間を行うかのフラグ
+	bool interpolationFlag = false;
+	//補間用タイマー
+	float interpolationTimer = 0;
+	float interpolationTime = 0;
+	//前のアニメーション情報
+	std::vector<XMMATRIX> preBones;
 };

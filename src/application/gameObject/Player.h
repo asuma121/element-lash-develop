@@ -506,4 +506,7 @@ protected:	//メンバ変数
 	XMFLOAT3 developPos = { 0.0f, 0.0f, 0.0f };
 	//デバッグの角度
 	XMFLOAT3 developRot = { 0.0f,(float)PI,0.0f };
+
+	//アニメーション遷移用のフレーム数
+	float frameInterpolation = 15.0f;
 };

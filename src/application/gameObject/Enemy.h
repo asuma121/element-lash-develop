@@ -503,7 +503,9 @@ protected:	//メンバ変数
 	//敵呼び出し状態のアニメーションのフレーム
 	float frameCallMiniEnemy = 190.0f;
 	//転ぶ状態のアニメーションのフレーム
-	float frameFallDownEnemy = 250.0f;
+	float frameFallDownEnemy = 129.0f;
+	//倒れている間
+	float downAddFrame = 50.0f;
 	//立ち上がる状態のアニメーションのフレーム
 	float frameGetUpEnemy = 163.0f;
 	//柱の判定を取らない時間
@@ -591,4 +593,7 @@ protected:	//メンバ変数
 	XMFLOAT3 fallDownAddPos = { 0.0f,10.0f,-40.0f };
 	//高さの加算
 	XMFLOAT3 addAddPos = { 0.0f,0.0f,0.0f };
+
+	//アニメーション遷移用のフレーム数
+	float frameInterpolation = 15.0f;
 };

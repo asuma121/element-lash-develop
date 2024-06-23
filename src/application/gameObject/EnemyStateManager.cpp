@@ -76,6 +76,7 @@ void TutorialStand::UpdateState(Enemy* enemy)
 	//しばらく立ってる
 	if (tutorialTimer > tutorialStandFrame)
 	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new TutorialAttackOmen1());
 		return;
 	}
@@ -108,6 +109,7 @@ void TutorialAttackOmen1::UpdateState(Enemy* enemy)
 	//アニメーションが終わったら
 	if (objectTimer >= frameAttackOmen1)
 	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new TutorialStand());
 		return;
 	}
@@ -148,6 +150,7 @@ void MovePhaseAttackOmen1::UpdateState(Enemy* enemy)
 	// アニメーションが終わったら
 	if (objectTimer >= frameAttackOmen1)
 	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new Stand());
 		return;
 	}
@@ -190,6 +193,7 @@ void MovePhaseCallMiniEnemy::UpdateState(Enemy* enemy)
 		{
 			nextDash = true;
 		}
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new MovePhaseAttackOmen1());
 		return;
 	}
@@ -264,6 +268,7 @@ void MovePhaseFallDown::UpdateState(Enemy* enemy)
 	//時間が立ったら立ちあがるアニメーションへ
 	if (objectTimer >= frameFallDownEnemy)
 	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new MovePhaseGetUp());
 		return;
 	}
@@ -304,6 +309,7 @@ void MovePhaseGetUp::UpdateState(Enemy* enemy)
 	{
 		//次の攻撃を弾に設定
 		nextAttack01 = true;
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new MovePhaseCallMiniEnemy());
 		return;
 	}
@@ -469,6 +475,7 @@ void Attack01::UpdateState(Enemy* enemy)
 		{
 			nextDash = true;
 		}
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new AttackOmen1());
 		return;
 	}
@@ -513,6 +520,7 @@ void AttackOmen1::UpdateState(Enemy* enemy)
 		if (nextCallMiniEnemy)
 		{
 			nextCallMiniEnemy = false;
+			object->SetInterpolation(frameInterpolation);
 			enemy->ChangeState(new CallMiniEnemy());
 			return;
 		}
@@ -520,6 +528,7 @@ void AttackOmen1::UpdateState(Enemy* enemy)
 		if (nextDash)
 		{
 			nextDash = false;
+			object->SetInterpolation(frameInterpolation);
 			enemy->ChangeState(new Dash());
 			return;
 		}
@@ -527,6 +536,7 @@ void AttackOmen1::UpdateState(Enemy* enemy)
 		if (nextAttack01)
 		{
 			nextAttack01 = false;
+			object->SetInterpolation(frameInterpolation);
 			enemy->ChangeState(new Attack01());
 			return;
 		}
@@ -613,6 +623,7 @@ void Dash::UpdateState(Enemy* enemy)
 	//オブジェクトに衝突したら倒れるモーションへ
 	if (hitObjectFlag == true)
 	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new FallDown());
 		return;
 	}
@@ -694,6 +705,7 @@ void CallMiniEnemy::UpdateState(Enemy* enemy)
 	//アニメーションが終わったら
 	if (objectTimer >= frameCallMiniEnemy)
 	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new AttackOmen1());
 		return;
 	}
@@ -769,9 +781,16 @@ void FallDown::Move()
 
 void FallDown::UpdateState(Enemy* enemy)
 {
-	//時間が立ったら立ちあがるアニメーションへ
-	if (objectTimer >= frameFallDownEnemy)
+	//倒れている間アニメーションをストップ
+	if (objectTimer >= frameFallDownEnemy - 1.0f)
 	{
+		object->StopAnimation();
+	}
+
+	//時間が立ったら立ちあがるアニメーションへ
+	if (objectTimer >= frameFallDownEnemy + downAddFrame)
+	{
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new GetUp());
 		return;
 	}
@@ -821,6 +840,7 @@ void GetUp::UpdateState(Enemy* enemy)
 	{
 		//次の攻撃を弾に設定
 		nextAttack01 = true;
+		object->SetInterpolation(frameInterpolation);
 		enemy->ChangeState(new AttackOmen1());
 		return;
 	}

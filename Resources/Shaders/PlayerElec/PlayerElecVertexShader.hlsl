@@ -1,74 +1,180 @@
 #include "PlayerElecHeader.hlsli"
 
-//ƒXƒLƒjƒ“ƒOŒã‚Ì’¸“_–@ü‚ª“ü‚é
+//ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½Ì’ï¿½ï¿½_ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 struct SkinOutput
 {
 	float4 pos;
 	float3 normal;
 };
 
-//ƒXƒLƒjƒ“ƒOŒvZ
-SkinOutput ComputeSkin(VSInput input)
+//èºåº¦æœ€å°ãƒ¢ãƒ‡ãƒ«
+float MinimumJerk(float t) 
 {
-	//ƒ[ƒƒNƒŠƒA
+    if (t < 0.0f) 
+	{
+        t = 0.0f;
+    } 
+	else if (t > 1.0f) 
+	{
+        t = 1.0f;
+    }
+
+    float t3 = t * t * t;
+    float t4 = t3 * t;
+    float t5 = t4 * t;
+    return 10.0f * t3 - 15.0f * t4 + 6.0f * t5;
+}
+
+//è£œé–“ãªã—ã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+SkinOutput StandardComputeSkin(VSInput input)
+{
+	//ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
 	SkinOutput output = (SkinOutput)0;
 
-	uint iBone;	//ŒvZ‚·‚éƒ{[ƒ“”Ô†
-	float weight;	//ƒ{[ƒ“ƒEƒFƒCƒg
-	matrix m;	//ƒXƒLƒjƒ“ƒOs—ñ	
+	uint iBone;	//ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½Ôï¿½
+	float weight;	//ï¿½{ï¿½[ï¿½ï¿½ï¿½Eï¿½Fï¿½Cï¿½g
+	matrix m;	//ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½sï¿½ï¿½	
 
-	//ƒ{[ƒ“0
+	//ï¿½{ï¿½[ï¿½ï¿½0
 	iBone = input.boneIndices.x;
 	weight = input.boneWeights.x;
 	m = matSkinning[iBone];
 	output.pos += weight * mul(m, input.pos);
 	output.normal += weight * mul((float3x3)m, input.normal);
 
-	//ƒ{[ƒ“1
+	//ï¿½{ï¿½[ï¿½ï¿½1
 	iBone = input.boneIndices.y;
 	weight = input.boneWeights.y;
 	m = matSkinning[iBone];
 	output.pos += weight * mul(m, input.pos);
 	output.normal += weight * mul((float3x3)m, input.normal);
 
-	//ƒ{[ƒ“2
+	//ï¿½{ï¿½[ï¿½ï¿½2
 	iBone = input.boneIndices.z;
 	weight = input.boneWeights.z;
 	m = matSkinning[iBone];
 	output.pos += weight * mul(m, input.pos);
 	output.normal += weight * mul((float3x3)m, input.normal);
 
-	//ƒ{[ƒ“3
+	//ï¿½{ï¿½[ï¿½ï¿½3
 	iBone = input.boneIndices.w;
 	weight = input.boneWeights.w; 
 	m = matSkinning[iBone];
 	output.pos += weight * mul(m, input.pos);
 	output.normal += weight * mul((float3x3)m, input.normal);
+	
+	return output;
+}
+
+//è£œé–“ã‚ã‚Šã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+SkinOutput InterpolationComputeSkin(VSInput input)
+{
+	//ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
+	SkinOutput skining = (SkinOutput)0;
+	SkinOutput preSkining = (SkinOutput)0;
+
+	uint iBone;	//ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½Ôï¿½
+	float weight;	//ï¿½{ï¿½[ï¿½ï¿½ï¿½Eï¿½Fï¿½Cï¿½g
+	matrix m;	//ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½sï¿½ï¿½	
+	matrix preM;	//ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½sï¿½ï¿½	
+
+	//ãƒœãƒ¼ãƒ³0
+	iBone = input.boneIndices.x;
+	weight = input.boneWeights.x;
+	//ç¾åœ¨ã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	m = matSkinning[iBone];
+	skining.pos += weight * mul(m, input.pos);
+	skining.normal += weight * mul((float3x3)m, input.normal);
+	//è£œé–“ã®å‚ç…§ã«ã™ã‚‹ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	preM = preMatSkinning[iBone];
+	preSkining.pos += weight * mul(preM, input.pos);
+	preSkining.normal += weight * mul((float3x3)preM, input.normal);
+
+	//ãƒœãƒ¼ãƒ³1
+	iBone = input.boneIndices.y;
+	weight = input.boneWeights.y;
+	//ç¾åœ¨ã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	m = matSkinning[iBone];
+	skining.pos += weight * mul(m, input.pos);
+	skining.normal += weight * mul((float3x3)m, input.normal);
+	//è£œé–“ã®å‚ç…§ã«ã™ã‚‹ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	preM = preMatSkinning[iBone];
+	preSkining.pos += weight * mul(preM, input.pos);
+	preSkining.normal += weight * mul((float3x3)preM, input.normal);
+
+	//ãƒœãƒ¼ãƒ³2
+	iBone = input.boneIndices.z;
+	weight = input.boneWeights.z;
+	//ç¾åœ¨ã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	m = matSkinning[iBone];
+	skining.pos += weight * mul(m, input.pos);
+	skining.normal += weight * mul((float3x3)m, input.normal);
+	//è£œé–“ã®å‚ç…§ã«ã™ã‚‹ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	preM = preMatSkinning[iBone];
+	preSkining.pos += weight * mul(preM, input.pos);
+	preSkining.normal += weight * mul((float3x3)preM, input.normal);
+
+	//ãƒœãƒ¼ãƒ³3
+	iBone = input.boneIndices.w;
+	weight = input.boneWeights.w; 
+	//ç¾åœ¨ã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	m = matSkinning[iBone];
+	skining.pos += weight * mul(m, input.pos);
+	skining.normal += weight * mul((float3x3)m, input.normal);
+	//è£œé–“ã®å‚ç…§ã«ã™ã‚‹ã‚¹ã‚­ãƒ‹ãƒ³ã‚°
+	preM = preMatSkinning[iBone];
+	preSkining.pos += weight * mul(preM, input.pos);
+	preSkining.normal += weight * mul((float3x3)preM, input.normal);
+
+	//ç¾åœ¨ã®ã‚¹ã‚­ãƒ‹ãƒ³ã‚°ã¨å‚ç…§ã«ã™ã‚‹ã‚¹ã‚­ãƒ‹ãƒ³ã‚°ã®å·®åˆ†
+	float4 addPos = skining.pos - preSkining.pos;
+	//å·®åˆ†ã‚’èºåº¦æœ€å°ãƒ¢ãƒ‡ãƒ«ã‚’ç”¨ã„ã¦å¤‰åŒ–
+	addPos = addPos * MinimumJerk(interpolationFrame);
+	//å·®åˆ†ã‚’è¶³ã™
+	preSkining.pos = preSkining.pos + addPos;
+	
+	return preSkining;
+}
+
+//ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½vï¿½Z
+SkinOutput ComputeSkin(VSInput input)
+{
+	//ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
+	SkinOutput output = (SkinOutput)0;
+
+	if(flag == false)
+	{
+		output = StandardComputeSkin(input);
+	}
+	if(flag == true)
+	{
+		output = InterpolationComputeSkin(input);
+	}
 
 	return output;
 }
 
-//ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg
+//ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½|ï¿½Cï¿½ï¿½ï¿½g
 VSOutput main(VSInput input)
 {
-	//ƒXƒLƒjƒ“ƒOŒvZ
+	//ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½vï¿½Z
 	SkinOutput skinned = ComputeSkin(input);
-	//–@ü‚Éƒ[ƒ‹ƒhs—ñ‚É‚æ‚éƒXƒP[ƒŠƒ“ƒO ‰ñ“]‚ğ“K—p
+	//ï¿½@ï¿½ï¿½ï¿½Éƒï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½É‚ï¿½ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½O ï¿½ï¿½]ï¿½ï¿½Kï¿½p
 	float4 wnormal = normalize(mul(world, float4(skinned.normal, 0)));
 	float4 wpos = mul(world, skinned.pos);
 	wpos = mul(world, wpos);
-	//ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚É“n‚·’l
+	//ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½É“nï¿½ï¿½ï¿½l
 	VSOutput output;
-	//s—ñ‚É‚æ‚éÀ•W•ÔŠÒ
+	//ï¿½sï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½Wï¿½ÔŠï¿½
 	output.svpos = mul(mul(viewproj, world), skinned.pos);
-	//ƒ[ƒ‹ƒh–@ü‚ğŸ‚ÌƒXƒe[ƒW‚É“n‚·
+	//ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒXï¿½eï¿½[ï¿½Wï¿½É“nï¿½ï¿½
 	output.normal = wnormal.xyz;
-	//“ü—Í’l‚ğ‚»‚Ì‚Ü‚ÜŸ‚ÌƒXƒe[ƒW“n‚·
+	//ï¿½ï¿½ï¿½Í’lï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Ü‚Üï¿½ï¿½ÌƒXï¿½eï¿½[ï¿½Wï¿½nï¿½ï¿½
 	output.uv = input.uv;
 
 	output.worldpos = wpos;
 
 	output.tpos = mul(mul(lightviewproj, world), skinned.pos);
-	//ƒ[ƒ‹ƒhÀ•Wx
+	//ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Wx
 	return output;
 }

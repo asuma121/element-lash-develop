@@ -115,7 +115,7 @@ void FbxModel::DrawTexture2(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
 	//ルートパラメーター6番にセット
-	srvManager->SetGraphicsRootDescriptorTable(6, textureNum2);
+	srvManager->SetGraphicsRootDescriptorTable(7, textureNum2);
 }
 
 void FbxModel::DrawTexture3(ID3D12GraphicsCommandList* cmdList, int textureNum1, int textureNum2, int textureNum3)
@@ -128,9 +128,9 @@ void FbxModel::DrawTexture3(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
 	//ルートパラメーター6番にセット
-	srvManager->SetGraphicsRootDescriptorTable(6, textureNum2);
+	srvManager->SetGraphicsRootDescriptorTable(7, textureNum2);
 	//ルートパラメーター7番にセット
-	srvManager->SetGraphicsRootDescriptorTable(7, textureNum3);
+	srvManager->SetGraphicsRootDescriptorTable(8, textureNum3);
 }
 
 void FbxModel::DrawTexture4(ID3D12GraphicsCommandList* cmdList, int textureNum1, int textureNum2, int textureNum3, int textureNum4)
@@ -143,11 +143,11 @@ void FbxModel::DrawTexture4(ID3D12GraphicsCommandList* cmdList, int textureNum1,
 	//ルートパラメーター1番にセット
 	srvManager->SetGraphicsRootDescriptorTable(1, textureNum1);
 	//ルートパラメーター6番にセット
-	srvManager->SetGraphicsRootDescriptorTable(6, textureNum2);
+	srvManager->SetGraphicsRootDescriptorTable(7, textureNum2);
 	//ルートパラメーター7番にセット
-	srvManager->SetGraphicsRootDescriptorTable(7, textureNum3);
-	//ルートパラメーター8番にセット
 	srvManager->SetGraphicsRootDescriptorTable(8, textureNum3);
+	//ルートパラメーター8番にセット
+	srvManager->SetGraphicsRootDescriptorTable(9, textureNum3);
 }
 
 void FbxModel::PreDraw(ID3D12GraphicsCommandList* cmdList)

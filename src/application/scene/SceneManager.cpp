@@ -8,7 +8,7 @@
 
 Scene::Scene()
 {
-	sceneState = new DevelopScene();
+	sceneState = new TutorialScene();
 }
 
 Scene::~Scene()

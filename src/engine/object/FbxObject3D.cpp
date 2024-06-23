@@ -42,6 +42,7 @@ void FbxObject3D::Initialize()
 	CD3DX12_HEAP_PROPERTIES v1 = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	CD3DX12_RESOURCE_DESC v2 = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataTransform) + 0xff) & ~0xff);
 	CD3DX12_RESOURCE_DESC v3 = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataSkin) + 0xff) & ~0xff);
+	CD3DX12_RESOURCE_DESC v4 = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataPreSkin) + 0xff) & ~0xff);
 	result = device->CreateCommittedResource(
 		&v1,
 		D3D12_HEAP_FLAG_NONE,
@@ -58,15 +59,14 @@ void FbxObject3D::Initialize()
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin)
 	);
-
-	//定数バッファへデータ転送
-	ConstBufferDataSkin* constMapSkin = nullptr;
-	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
-	for (int i = 0; i < MAX_BONES; i++)
-	{
-		constMapSkin->bones[i] = XMMatrixIdentity();
-	}
-	constBuffSkin->Unmap(0, nullptr);
+	result = device->CreateCommittedResource(
+		&v1,	//アップロード可能
+		D3D12_HEAP_FLAG_NONE,
+		&v3,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuffPreSkin)
+	);
 
 }
 
@@ -93,6 +93,9 @@ void FbxObject3D::Update()
 		}
 	}
 
+	//アニメーション補間更新
+	UpdateInterpolation();
+
 	//ボーン配列
 	std::vector<FbxModel::Bone>& bones = model->GetBones();
 	//定数バッファへデータ転送
@@ -106,13 +109,33 @@ void FbxObject3D::Update()
 		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
 		//XMMATRIX1に変換
 		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		
 		//合成してスキニング行列に
 		constMapSkin->bones[i] = model->GetModelTransform() * bones[i].invInitialPose * matCurrentPose;
 	}
+	//フラグを代入
+	constMapSkin->flag = interpolationFlag;
 	constBuffSkin->Unmap(0, nullptr);
 
-	XMMATRIX matScale, matRot, matTrans;
+	//定数バッファへデータ転送
+	ConstBufferDataPreSkin* constMapPreSkin = nullptr;
+	result = constBuffPreSkin->Map(0, nullptr, (void**)&constMapPreSkin);
+	for (int i = 0; i < bones.size(); i++)
+	{
+		if (interpolationFlag == true)
+		{
+			//補間の参照にするスキニング行列
+			constMapPreSkin->preBones[i] = preBones[i];
+		}
+		else
+		{
+			//合成してスキニング行列に
+			constMapPreSkin->preBones[i] = XMMatrixIdentity();
+		}
+	}
+	constBuffPreSkin->Unmap(0, nullptr);
 
+	XMMATRIX matScale, matRot, matTrans;
 
 	//blenderと軸が違うため角度を変える
 	XMFLOAT3 rot = rotation;
@@ -162,6 +185,7 @@ void FbxObject3D::Update()
 		constMap->lightviewproj = light->GetMatViewProjection();
 		constMap->timer1 = timer1;
 		constMap->timer2 = timer2;
+		constMap->interpolationFrame = interpolationTimer / interpolationTime;
 		constBuffTransform->Unmap(0, nullptr);
 	}
 
@@ -210,6 +234,7 @@ void FbxObject3D::DrawLightView(ID3D12GraphicsCommandList* cmdList)
 	//定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffTransform->GetGPUVirtualAddress());
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffSkin->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(3, constBuffPreSkin->GetGPUVirtualAddress());
 
 	//モデル描画
 	model->Draw(cmdList, textureNum1);
@@ -266,15 +291,16 @@ void FbxObject3D::Draw(ID3D12GraphicsCommandList* cmdList)
 	//定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffTransform->GetGPUVirtualAddress());
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffSkin->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(3, constBuffPreSkin->GetGPUVirtualAddress());
 	//ライト描画
-	lightGroup->Draw(cmdList, 5);
+	lightGroup->Draw(cmdList, 6);
 
 	//深度値をセット
 	//描画用のデスクリプタヒープ設定
 	srvManager->PreDraw();
 	//ルートパラメーター4番にセット
-	srvManager->SetGraphicsRootDescriptorTable(3, srvManager->GetShadowDepthIndexNum()[0]);
-	srvManager->SetGraphicsRootDescriptorTable(4, srvManager->GetShadowDepthIndexNum()[1]);
+	srvManager->SetGraphicsRootDescriptorTable(4, srvManager->GetShadowDepthIndexNum()[0]);
+	srvManager->SetGraphicsRootDescriptorTable(5, srvManager->GetShadowDepthIndexNum()[1]);
 
 	//モデル描画
 	if (textureVol == 1)model->DrawTexture1(cmdList, textureNum1);
@@ -416,13 +442,15 @@ void FbxObject3D::CreateGraphicsPipelineLightView()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[4];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV(スキニング)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
+	//CBV(スキニング)
+	rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -601,18 +629,20 @@ void FbxObject3D::CreateGraphicsPipeline()
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV(スキニング)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-	//テクスチャレジスタ1番
-	rootparams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[3].DescriptorTable.pDescriptorRanges = &descriptorRange1;
-	rootparams[3].DescriptorTable.NumDescriptorRanges = 1;
-	rootparams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//CBV(スキニング)
+	rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャレジスタ1番
 	rootparams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange1;
 	rootparams[4].DescriptorTable.NumDescriptorRanges = 1;
 	rootparams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//テクスチャレジスタ1番
+	rootparams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootparams[5].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[5].DescriptorTable.NumDescriptorRanges = 1;
+	rootparams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	//定数バッファ(ライト)
-	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -800,25 +830,27 @@ void FbxObject3D::CreateGraphicsPipelineTexture1()
 	descriptorRange2.BaseShaderRegister = 2;
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[6];
+	CD3DX12_ROOT_PARAMETER rootparams[7];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV(スキニング)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-	//テクスチャレジスタ1番
-	rootparams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[3].DescriptorTable.pDescriptorRanges = &descriptorRange1;
-	rootparams[3].DescriptorTable.NumDescriptorRanges = 1;
-	rootparams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//CBV(スキニング)
+	rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャレジスタ1番
 	rootparams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange1;
 	rootparams[4].DescriptorTable.NumDescriptorRanges = 1;
 	rootparams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//テクスチャレジスタ1番
+	rootparams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootparams[5].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[5].DescriptorTable.NumDescriptorRanges = 1;
+	rootparams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	//定数バッファ(ライト)
-	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -1010,27 +1042,29 @@ void FbxObject3D::CreateGraphicsPipelineTexture2()
 	descRangeSRV1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 3); // t3 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[7];
+	CD3DX12_ROOT_PARAMETER rootparams[8];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV(スキニング)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-	//テクスチャレジスタ1番
-	rootparams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[3].DescriptorTable.pDescriptorRanges = &descriptorRange1;
-	rootparams[3].DescriptorTable.NumDescriptorRanges = 1;
-	rootparams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//CBV(スキニング)
+	rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャレジスタ1番
 	rootparams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange1;
 	rootparams[4].DescriptorTable.NumDescriptorRanges = 1;
 	rootparams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//テクスチャレジスタ1番
+	rootparams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootparams[5].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[5].DescriptorTable.NumDescriptorRanges = 1;
+	rootparams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	//定数バッファ(ライト)
-	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ2枚目）
-	rootparams[6].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[7].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -1226,29 +1260,31 @@ void FbxObject3D::CreateGraphicsPipelineTexture3()
 	descRangeSRV2.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 4); // t4 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[8];
+	CD3DX12_ROOT_PARAMETER rootparams[9];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV(スキニング)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-	//テクスチャレジスタ1番
-	rootparams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[3].DescriptorTable.pDescriptorRanges = &descriptorRange1;
-	rootparams[3].DescriptorTable.NumDescriptorRanges = 1;
-	rootparams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//CBV(スキニング)
+	rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャレジスタ1番
 	rootparams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange1;
 	rootparams[4].DescriptorTable.NumDescriptorRanges = 1;
 	rootparams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//テクスチャレジスタ1番
+	rootparams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootparams[5].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[5].DescriptorTable.NumDescriptorRanges = 1;
+	rootparams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	//定数バッファ(ライト)
-	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ2枚目）
-	rootparams[6].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
-	// SRV（テクスチャ3枚目）
-	rootparams[7].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[7].InitAsDescriptorTable(6, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
+	// SRV（テクスチャ3枚目)
+	rootparams[8].InitAsDescriptorTable(7, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -1448,31 +1484,33 @@ void FbxObject3D::CreateGraphicsPipelineTexture4()
 	descRangeSRV3.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 5); // t5 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[9];
+	CD3DX12_ROOT_PARAMETER rootparams[10];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV(スキニング)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-	//テクスチャレジスタ1番
-	rootparams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[3].DescriptorTable.pDescriptorRanges = &descriptorRange1;
-	rootparams[3].DescriptorTable.NumDescriptorRanges = 1;
-	rootparams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//CBV(スキニング)
+	rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャレジスタ1番
 	rootparams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange1;
 	rootparams[4].DescriptorTable.NumDescriptorRanges = 1;
 	rootparams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//テクスチャレジスタ1番
+	rootparams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootparams[5].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+	rootparams[5].DescriptorTable.NumDescriptorRanges = 1;
+	rootparams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	//定数バッファ(ライト)
-	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ2枚目）
-	rootparams[6].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[7].InitAsDescriptorTable(6, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
+	// SRV（テクスチャ3枚目
+	rootparams[8].InitAsDescriptorTable(7, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ3枚目）
-	rootparams[7].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
-	// SRV（テクスチャ3枚目）
-	rootparams[8].InitAsDescriptorTable(1, &descRangeSRV3, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[9].InitAsDescriptorTable(8, &descRangeSRV3, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -1674,27 +1712,29 @@ void FbxObject3D::CreateGraphicsPipelineShader2Texture2()
 		descRangeSRV1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 3); // t3 レジスタ
 
 		// ルートパラメータ
-		CD3DX12_ROOT_PARAMETER rootparams[7];
+		CD3DX12_ROOT_PARAMETER rootparams[8];
 		// CBV（座標変換行列用）
 		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 		// SRV（テクスチャ）
 		rootparams[1].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
 		//CBV(スキニング)
 		rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-		//テクスチャレジスタ1番
-		rootparams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		rootparams[3].DescriptorTable.pDescriptorRanges = &descriptorRange1;
-		rootparams[3].DescriptorTable.NumDescriptorRanges = 1;
-		rootparams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		//CBV(スキニング)
+		rootparams[3].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);
 		//テクスチャレジスタ1番
 		rootparams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+		rootparams[4].DescriptorTable.pDescriptorRanges = &descriptorRange1;
 		rootparams[4].DescriptorTable.NumDescriptorRanges = 1;
 		rootparams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		//テクスチャレジスタ1番
+		rootparams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		rootparams[5].DescriptorTable.pDescriptorRanges = &descriptorRange2;
+		rootparams[5].DescriptorTable.NumDescriptorRanges = 1;
+		rootparams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 		//定数バッファ(ライト)
-		rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
+		rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 		// SRV（テクスチャ2枚目）
-		rootparams[6].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
+		rootparams[7].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
 
 		// スタティックサンプラー
 		CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -1843,5 +1883,45 @@ void FbxObject3D::SetTextureData(const JSONLoader::TextureData& textureData)
 			CreateGraphicsPipelineShader2Texture2();
 			shaderFlag = true;
 		}
+	}
+}
+
+void FbxObject3D::SetInterpolation(float time)
+{
+	//前のアニメーション情報をクリア
+	preBones.clear();
+
+	//フラグを立てる
+	interpolationFlag = true;
+	//引数からタイムを代入
+	interpolationTime = time;
+
+	//ボーン配列
+	std::vector<FbxModel::Bone>& bones = model->GetBones();
+	for (int i = 0; i < bones.size(); i++)
+	{
+		//今の姿勢行列
+		XMMATRIX matCurrentPose/* = XMMatrixIdentity()*/;
+		//今の姿勢行列を取得
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		//XMMATRIX1に変換
+		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		//ボーンを保存
+		preBones.emplace_back(model->GetModelTransform() * bones[i].invInitialPose * matCurrentPose);
+	}
+}
+
+void FbxObject3D::UpdateInterpolation()
+{
+	//フラグが立っている間タイマー更新
+	if (interpolationFlag == true)
+	{
+		interpolationTimer += 1.0f;
+	}
+	//タイマーが終了したらフラグを戻す
+	if (interpolationTimer >= interpolationTime)
+	{
+		interpolationFlag = false;
+		interpolationTimer = 0.0f;
 	}
 }

@@ -6,13 +6,15 @@ cbuffer cbuff0 : register(b0)
 	matrix viewproj;	//ビュープロジェクション行列
 	matrix world;	//ワールド行列
 	float3 cameraPos;	//カメラ座標
-	matrix lightviewproj;	//ビュープロジェクション行列
+	matrix lightviewproj;	//ビュープロジェクション行列ｚｚ
     float timer1;	//タイマー
     float timer2; //タイマー
+	float interpolationFrame; //�^�C�}�[
 };
 
 cbuffer skinning:register(b3)	//ボーンのスキニング行列が入る
 {
+	bool flag;
 	matrix matSkinning[MAX_BONES];
 };
 
@@ -61,6 +63,11 @@ cbuffer cbuff4 : register(b4)
 	PointLight pointLights[pointLightNum];
 	SpotLight spotLights[spotLightNum];
 	CircleShadow circleShadows[circleShadowNum];
+};
+
+cbuffer skinning2:register(b5)	//�{�[���̃X�L�j���O�s�񂪓���
+{
+ 	matrix preMatSkinning[MAX_BONES];
 };
 
 //バーテックスバッファの入力

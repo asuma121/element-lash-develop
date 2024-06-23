@@ -31,9 +31,10 @@ void Plane::Initialize()
 	//オブジェクト
 	object = new FbxObject3D;
 	object->Initialize(model, textureData);
+	object->StopAnimation();
 
 	//コライダーの設定
-	colliderData.type = "Plame";	//判定を球体で取るため
+	colliderData.type = "Plane";	//判定を球体で取るため
 	colliderData.objectName = "plane";
 	colliderData.scale = scale;
 	colliderData.rotation = rotation;

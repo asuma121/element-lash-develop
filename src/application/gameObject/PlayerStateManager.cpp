@@ -65,6 +65,7 @@ void Run::UpdateState(Player* player)
 	//ヒットフラグが立っていたら	被ダメージモーションへ
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Down());
 		return;
 	}
@@ -72,6 +73,7 @@ void Run::UpdateState(Player* player)
 	//炎状態でRボタンを押していたら攻撃3へ
 	if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) == 1 && form == Player::Fire) 
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Attack3());
 		return;
 	}
@@ -79,12 +81,14 @@ void Run::UpdateState(Player* player)
 	//Rボタンで攻撃1
 	else if (form == Player::Elec && keyManager->TriggerKey(KeyManager::PAD_RIGHT_SHOULDER))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Attack1());
 		return;
 	}
 	//立ち止まっている場合
 	else if (length(posVelocity) <= 0.01f)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Wait());
 		return;
 	}
@@ -112,6 +116,7 @@ void Attack1::UpdateState(Player* player)
 	//ヒットフラグが立っていたら	被ダメージモーションへ
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Down());
 		return;
 	}
@@ -120,12 +125,14 @@ void Attack1::UpdateState(Player* player)
 	if (keyManager->TriggerKey(KeyManager::PAD_RIGHT_SHOULDER) && 0 <=
 		attack1Time - objectTimer && attack1Time - objectTimer <= AttackIntervalTime)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Attack2());
 		return;
 	}
 	//攻撃が終わって立ち止まっている場合
 	else if (objectTimer >= attack1Time && length(posVelocity) <= 0.01f)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Wait());
 		return;
 	}
@@ -203,18 +210,21 @@ void Attack2::UpdateState(Player* player)
 	//ヒットフラグが立っていたら	被ダメージモーションへ
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Down());
 		return;
 	}
 	//攻撃が終わって立ち止まっている場合
 	else if (objectTimer >= attack2Time && length(posVelocity) <= 0.01f)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Wait());
 		return;
 	}
 	//攻撃が終わって普通に走っている場合
 	else if (objectTimer >= attack2Time)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Run());
 		return;
 	}
@@ -285,6 +295,7 @@ void Attack3::UpdateState(Player* player)
 	//ヒットフラグが立っていたら	被ダメージモーションへ
 	if (hitTimer <= frameDown && invincibleFlag == true)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Down());
 		return;
 	}
@@ -292,12 +303,14 @@ void Attack3::UpdateState(Player* player)
 	//立ち止まっている場合
 	else if (keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) != 1 && length(posVelocity) <= 0.01f)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Wait());
 		return;
 	}
 	//普通に走っている場合
 	else if(keyManager->PushKey(KeyManager::PAD_RIGHT_SHOULDER) != 1)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new Run());
 	}
 }
@@ -368,12 +381,45 @@ void Down::UpdateState(Player* player)
 	//ヒットフラグが戻ったら
 	if (objectTimer >= frameDown)
 	{
-		player->ChangeState(new Wait());
+		object->SetInterpolation(frameInterpolation);
+		player->ChangeState(new StandUp());
 		return;
 	}
 }
 
 void Down::Move()
+{
+	//プレイヤーの元になる角度
+	//AROWキーで角度変更
+	rotVelocity.y = keyManager->GetStick(KeyManager::RStickX) * rot0Speed;
+	//角度ベクトルを加算
+	rotation0 = rotation0 + rotVelocity;
+}
+
+void StandUp::InitializeState()
+{
+	//アニメーションの設定
+	object->StopAnimation();
+	object->SetModel(modelStandUp);
+	object->PlayAnimation();
+
+	//タイマーの設定
+	objectTimer = 0;
+	objectTimeFlag = false;
+}
+
+void StandUp::UpdateState(Player* player)
+{
+	//ヒットフラグが戻ったら
+	if (objectTimer >= frameStandUp)
+	{
+		object->SetInterpolation(frameInterpolation);
+		player->ChangeState(new Wait());
+		return;
+	}
+}
+
+void StandUp::Move()
 {
 	//プレイヤーの元になる角度
 	//AROWキーで角度変更
@@ -398,16 +444,19 @@ void DevelopWait::UpdateState(Player* player)
 {
 	if (keyManager->PushKeyboard(DIK_X))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopRun());
 		return;
 	}
 	if (keyManager->PushKeyboard(DIK_C))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopDown());
 		return;
 	}
 	if (keyManager->PushKeyboard(DIK_V))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopAttack3());
 		return;
 	}
@@ -429,16 +478,19 @@ void DevelopRun::UpdateState(Player* player)
 {
 	if (keyManager->PushKeyboard(DIK_Z))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopWait());
 		return;
 	}
 	if (keyManager->PushKeyboard(DIK_C))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopDown());
 		return;
 	}
 	if (keyManager->PushKeyboard(DIK_V))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopAttack3());
 		return;
 	}
@@ -461,6 +513,7 @@ void DevelopDown::UpdateState(Player* player)
 	//ヒットフラグが戻ったら
 	if (objectTimer >= frameDown)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopStandUp());
 		return;
 	}
@@ -482,16 +535,19 @@ void DevelopAttack3::UpdateState(Player* player)
 {
 	if (keyManager->PushKeyboard(DIK_Z))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopWait());
 		return;
 	}
 	if (keyManager->PushKeyboard(DIK_X))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopRun());
 		return;
 	}
 	if (keyManager->PushKeyboard(DIK_C))
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopDown());
 		return;
 	}
@@ -514,6 +570,7 @@ void DevelopStandUp::UpdateState(Player* player)
 	//ヒットフラグが戻ったら
 	if (objectTimer >= frameStandUp)
 	{
+		object->SetInterpolation(frameInterpolation);
 		player->ChangeState(new DevelopWait());
 		return;
 	}

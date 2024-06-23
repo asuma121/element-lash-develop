@@ -1,34 +1,43 @@
-//ƒ{[ƒ“‚ÌÅ‘å”
+//ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌÅ‘å”
 static const int MAX_BONES = 32;
 
 cbuffer cbuff0 : register(b0)
 {
-	matrix viewproj;	//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
-	matrix world;	//ƒ[ƒ‹ƒhs—ñ
-	float3 cameraPos;	//ƒJƒƒ‰À•W
-	matrix lightviewproj;	//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
+	matrix viewproj;	//ï¿½rï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+	matrix world;	//ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½
+	float3 cameraPos;	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½W
+	matrix lightviewproj;	//ï¿½rï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+	float timer1;	//ï¿½^ï¿½Cï¿½}ï¿½[
+    float timer2; //ï¿½^ï¿½Cï¿½}ï¿½[
+    float interpolationFrame; //ï¿½^ï¿½Cï¿½}ï¿½[
 };
 
-cbuffer skinning:register(b3)	//ƒ{[ƒ“‚ÌƒXƒLƒjƒ“ƒOs—ñ‚ª“ü‚é
+cbuffer skinning:register(b3)	//ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌƒXï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½sï¿½ñ‚ª“ï¿½ï¿½ï¿½
 {
+	bool flag;
 	matrix matSkinning[MAX_BONES];
 };
 
-//ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@‚Ì“ü—Í
-struct VSInput
+cbuffer skinning2:register(b5)	//ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌƒXï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½sï¿½ñ‚ª“ï¿½ï¿½ï¿½
 {
-	float4 pos : POSITION;	//ˆÊ’u
-	float3 normal : NORMAL;	//’¸“_–@ü
-	float2 uv : TEXCOORD;	//ƒeƒNƒXƒ`ƒƒ[À•W
-	uint4 boneIndices : BONEINDICES;	//ƒ{[ƒ“‚Ì”Ô†
-	float4 boneWeights : BONEWEIGHTS;	//ƒ{[ƒ“‚ÌƒXƒLƒ“ƒEƒFƒCƒg
+ 	matrix preMatSkinning[MAX_BONES];
 };
 
-//’¸“_ƒVƒF[ƒ_[‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ö‚Ì‚â‚èæ‚è‚Ég—p‚·‚é\‘¢‘Ì
+//ï¿½oï¿½[ï¿½eï¿½bï¿½Nï¿½Xï¿½oï¿½bï¿½tï¿½@ï¿½Ì“ï¿½ï¿½ï¿½
+struct VSInput
+{
+	float4 pos : POSITION;	//ï¿½Ê’u
+	float3 normal : NORMAL;	//ï¿½ï¿½ï¿½_ï¿½@ï¿½ï¿½
+	float2 uv : TEXCOORD;	//ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½W
+	uint4 boneIndices : BONEINDICES;	//ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì”Ôï¿½
+	float4 boneWeights : BONEWEIGHTS;	//ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌƒXï¿½Lï¿½ï¿½ï¿½Eï¿½Fï¿½Cï¿½g
+};
+
+//ï¿½ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½Ö‚Ì‚ï¿½ï¿½ï¿½ï¿½Égï¿½pï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½
 struct VSOutput
 {
-	float4 svpos : SV_POSITION;	//ƒVƒXƒeƒ€—p’¸“_À•W
-	float4 worldpos : POSITION;	//ƒVƒXƒeƒ€—p’¸“_À•W
-	float3 normal : NORMAL;	//–@ü
-	float2 uv : TEXCOORD;	//uv’l
+	float4 svpos : SV_POSITION;	//ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½W
+	float4 worldpos : POSITION;	//ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½W
+	float3 normal : NORMAL;	//ï¿½@ï¿½ï¿½
+	float2 uv : TEXCOORD;	//uvï¿½l
 };
