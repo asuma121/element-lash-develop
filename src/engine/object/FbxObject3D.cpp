@@ -622,7 +622,7 @@ void FbxObject3D::CreateGraphicsPipeline()
 	descriptorRange2.BaseShaderRegister = 2;
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[6];
+	CD3DX12_ROOT_PARAMETER rootparams[7];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）

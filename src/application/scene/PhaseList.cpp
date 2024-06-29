@@ -413,6 +413,7 @@ void MovePhase::DrawFBXLightView()
 	//ƒ‰ƒCƒg–Úü•`‰æ
 	tutorialEnemy->DrawLightView(dxCommon->GetCommandList());
 	player->DrawLightView(dxCommon->GetCommandList());
+	terrain->Draw(dxCommon->GetCommandList());
 	enemy->DrawLightView(dxCommon->GetCommandList());
 }
 
