@@ -463,7 +463,7 @@ void Attack01::UpdateState(Enemy* enemy)
 	if (objectTimer >= frameAttack1)
 	{
 		//プレイヤーとの距離が近い場合もう一度弾
-		if (dashLength >= length(playerPos - position))
+		if (dashLength >= length(playerPos - position) || InvincibleFlag == true)
 		{
 			nextAttack01 = true;
 		}
@@ -590,19 +590,15 @@ void Dash::Move()
 
 		return;
 	}
-	//プレイヤーと敵のベクトル取得
-	XMFLOAT3 velo = playerPos - position;
-
-	velo = normalize(velo);
 
 	//敵がプレイヤーの向きを向くようにする
-	rotation.y = getVectorRotation(velo).y;
+	rotation.y = getVectorRotation(dashVelo[0]).y;
 
 	//プレイヤーにまだヒットしてない場合
 	if (dashFlag == false)
 	{
 		//プレイヤーに近づく
-		position = position + velo * dashSpeed;
+		position = position + dashVelo[0] * dashSpeed;
 	}
 
 	if (hitPlayerFlag == true && dashFlag == false)

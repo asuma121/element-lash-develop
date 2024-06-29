@@ -8,7 +8,7 @@
 
 Scene::Scene()
 {
-	sceneState = new TitleScene();
+	sceneState = new GameScene();
 }
 
 Scene::~Scene()

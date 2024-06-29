@@ -70,12 +70,6 @@ void DevelopScene::UpdateObject()
 	camera->Update();
 
 	//ƒ‰ƒCƒg
-	lightTarget[0] = player->GetPosition().x + 25;
-	lightTarget[1] = player->GetPosition().y + 25;
-	lightTarget[2] = player->GetPosition().z + 25;
-	lightPos[0] = player->GetPosition().x;
-	lightPos[1] = player->GetPosition().y;
-	lightPos[2] = player->GetPosition().z;
 	light->SetEye(XMFLOAT3(lightPos));
 	light->SetTarget(XMFLOAT3(lightTarget));
 	light->SetDir(XMFLOAT3(lightDir));
@@ -145,7 +139,7 @@ void DevelopScene::Draw()
 
 void DevelopScene::DrawFBX()
 {
-	/*player->Draw(dxCommon->GetCommandList());*/
+	player->Draw(dxCommon->GetCommandList());
 	plane->Draw(dxCommon->GetCommandList());
 	/*enemy->Draw(dxCommon->GetCommandList());*/
 	terrain->Draw(dxCommon->GetCommandList());
@@ -166,7 +160,7 @@ void DevelopScene::DrawParticle()
 
 void DevelopScene::DrawFBXLightView()
 {
-	//player->DrawLightView(dxCommon->GetCommandList());
+	player->DrawLightView(dxCommon->GetCommandList());
 	//enemy->DrawLightView(dxCommon->GetCommandList());
 }
 

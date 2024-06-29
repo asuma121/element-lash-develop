@@ -238,6 +238,11 @@ public://メンバ関数
 	/// </summary>
 	void SetClearTimer(int timer);
 
+	/// <summary>
+	///プレイヤーの無敵フラグ取得
+	/// </summary>
+	void SetPlayerInvincibleFlag(bool flag);
+
 	//静的メンバ変数
 private:
 	//カメラ
@@ -370,6 +375,8 @@ public:	//メンバ関数
 	void Update();
 	//判定更新
 	void UpdateCollider();
+	//ダッシュベクトルの処理
+	void UpdateDashVector();
 	//オブジェクトの当たり判定セット
 	void SetObjectCollider(std::vector<JSONLoader::ColliderData> colliderData) { objectColliderData = colliderData; };
 	//プレイヤーの座標セット
@@ -417,6 +424,8 @@ public:	//メンバ関数
 	bool GetHitBodyFlag() { return hitBodyFlag; }
 	//雷用の高さ取得
 	XMFLOAT3 GetAddPos() { return addPos; }
+	//プレイヤーの無敵フラグ取得
+	void SetPlayerInvincibleFlag(bool flag) { InvincibleFlag = flag; }
 
 protected:	//静的メンバ変数
 
@@ -472,6 +481,9 @@ protected:	//静的メンバ変数
 
 	//フェーズ移動のフラグ
 	static bool movePhaseFlag;
+
+	//ダッシュのベクトル
+	static std::vector<XMFLOAT3> dashVelo;
 
 protected:	//メンバ変数
 
@@ -596,4 +608,10 @@ protected:	//メンバ変数
 
 	//アニメーション遷移用のフレーム数
 	float frameInterpolation = 15.0f;
+
+	//プレイヤーの無敵フラグ
+	bool InvincibleFlag = false;
+
+	//ダッシュのベクトルを保存しておくフレーム
+	float dashFrame = 5.0f;
 };

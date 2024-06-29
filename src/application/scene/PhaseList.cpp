@@ -62,6 +62,7 @@ void Phase1::UpdateObject()
 
 	//“G
 	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetPlayerInvincibleFlag(player->GetInvincibleFlag());
 	enemy->SetPhaseTimer(phaseTimer);
 	enemy->Update();
 
@@ -236,6 +237,7 @@ void Phase2::UpdateObject()
 
 	//“G
 	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetPlayerInvincibleFlag(player->GetInvincibleFlag());
 	enemy->SetPhaseTimer(phaseTimer);
 	if(tutorialEnemy->GetCallFlag() == true)enemy->SetCallMiniEnemy();
 	enemy->Update();
@@ -439,6 +441,7 @@ void MovePhase::UpdateObject()
 
 	//“G
 	enemy->SetPlayerPos(player->GetPosition());
+	enemy->SetPlayerInvincibleFlag(player->GetInvincibleFlag());
 	enemy->SetPhaseTimer(phaseTimer);
 	enemy->Update();
 

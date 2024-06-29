@@ -55,6 +55,8 @@ bool EnemyState::hitPillerFlag = false;
 //最後に当たった柱の番号
 int EnemyState::hitPillerNum = 0;
 bool EnemyState::movePhaseFlag = false;
+//ダッシュのベクトル
+std::vector<XMFLOAT3> EnemyState::dashVelo;
 
 Enemy::Enemy()
 {
@@ -278,6 +280,11 @@ void Enemy::SetClearTimer(int timer)
 	enemyState->SetClearTimer(timer);
 }
 
+void Enemy::SetPlayerInvincibleFlag(bool flag)
+{
+	enemyState->SetPlayerInvincibleFlag(flag);
+}
+
 void EnemyState::Initialize()
 {
 	//プレイヤーのシェーダを別に設定
@@ -417,6 +424,9 @@ void EnemyState::Update()
 	//攻撃更新
 	UpdateAttack();
 
+	//ダッシュのベクトルの処理
+	UpdateDashVector();
+
 	//弾更新
 	bullet->SetPlayerPos(playerPos);
 	bullet->Update();
@@ -450,6 +460,21 @@ void EnemyState::UpdateCollider()
 		{
 			UpdateHitPiller(objectColliderData[i],i);
 		}
+	}
+}
+
+void EnemyState::UpdateDashVector()
+{
+	//プレイヤーが無敵でないとき
+	if (InvincibleFlag == false)
+	{
+		//先頭の要素削除
+		if (dashVelo.size() >= dashFrame)
+		{
+			dashVelo.erase(dashVelo.begin());
+		}
+		//末尾に追加
+		dashVelo.emplace_back(normalize(playerPos - position));
 	}
 }
 

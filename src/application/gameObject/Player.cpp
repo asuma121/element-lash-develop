@@ -385,7 +385,7 @@ void PlayerState::UpdateDown()
 	}
 
 	//無敵時間が終わったらフラグを元に戻す
-	if (hitTimer >= frameDown * 2.0f) 
+	if (hitTimer >= frameDown * 4.0f) 
 	{
 		invincibleFlag = false;
 		hitTimer = 0.0f;
