@@ -155,12 +155,7 @@ SkinOutput ComputeSkin(VSInput input)
 	output.flag = false;
 	if(input.boneIndices.x == 5)
 	{
-		//左目
-		if(input.uv.x >= 0.088 && input.uv.x <= 0.09)
-		{
-			output.flag = true;
-		}
-		//右目
+		//目
 		if(input.uv.x >= 0.66 && input.uv.x <= 0.69)
 		{
 			output.flag = true;
