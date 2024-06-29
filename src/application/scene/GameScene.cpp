@@ -18,7 +18,7 @@ UI* PhaseState::ui = nullptr;
 
 GameScene::GameScene()
 {
-	phaseState = new Phase1();
+	phaseState = new MovePhase();
 }
 
 GameScene::~GameScene()

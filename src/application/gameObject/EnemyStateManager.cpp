@@ -708,25 +708,22 @@ void CallMiniEnemy::UpdateAttack()
 {
 	//敵呼び出しフラグをもとに戻す
 	callEnemyFlag = false;
-	if (objectTimer == 1)
-	{
-		callEnemyPos = (playerPos - position) / 2;
-	}
+
+	callEnemyPos = (position + playerPos) / 2;
+
 	//敵呼び出し 2回呼び出す
 	if (objectTimer == frameCallMiniEnemy2)
 	{
 		//フラグを立てる
 		callEnemyFlag = true;
-		//敵を呼び出す場所
-		if (objectTimer == frameCallMiniEnemy2)callEnemyPos = callEnemyPos1;
 	}
 
 	//敵呼び出し 雷パーティクル
 	if (objectTimer == frameCallMiniEnemy2)
 	{
-		elecParticle->AddParticle(elecFrame, callEnemyPos1 + addElecPos1,
-			callEnemyPos1, elecStartSlace1, elecEndSlace1, 60, elecStrength);
-		explosionParticle1->Add(callEnemyPos1);
+		elecParticle->AddParticle(elecFrame, callEnemyPos + addElecPos1,
+			callEnemyPos, elecStartSlace1, elecEndSlace1, 60, elecStrength);
+		explosionParticle1->Add(callEnemyPos);
 	}
 	//敵呼び出し
 	if (objectTimer <= frameCallMiniEnemy2)
@@ -735,8 +732,8 @@ void CallMiniEnemy::UpdateAttack()
 		{
 			for (int i = 0; i < elecVol; i++)
 			{
-				elecParticle->AddParticle(3, callEnemyPos1 + addElecPos2,
-					callEnemyPos1, elecStartSlace2, elecEndSlace2, 15, elecStrength);
+				elecParticle->AddParticle(3, callEnemyPos + addElecPos2,
+					callEnemyPos, elecStartSlace2, elecEndSlace2, 15, elecStrength);
 			}
 		}
 	}
